@@ -1,0 +1,15 @@
+name 					aniID					sprite[]
+bigIdleRight			400						10001
+bigIdleLeft			401						10011
+smaIdleRight			402						10021
+smaIdleLeft			403						10031
+bigWalkRight			500						10001	10002	10003
+bigWalkLeft			501						10011	10012	10013
+smaWalkRight		502						10021	10022	10023
+smaWalkLeft			503						10031	10032	10033
+die						599						10099
+brick						601						20001
+quesBrick				602						40001-40001-40002-40003-40004
+goomba_walk		701						30001-30002
+goomba_die			702						30003
+bigTree					801/807				80001/80007

@@ -1,0 +1,6 @@
+name 		id			ani[]
+mario		1			400-3	500-3	599
+brick 		2			601
+quesBrick	22		602
+goomba		3			701	702
+bigtree		8001->8007			801->807 (7 m)
