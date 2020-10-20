@@ -164,11 +164,11 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
-		vx = MARIO_WALKING_SPEED;
+		vx = MARIO_WALKING_SPEED*5;
 		nx = 1;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-		vx = -MARIO_WALKING_SPEED;
+		vx = -MARIO_WALKING_SPEED*5;
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:

@@ -1,5 +1,0 @@
-name 		type			aniSetID
-mario		0				1
-brick			1				2001-2004
-goomba		2				3
-bigtree		1				8001->8007

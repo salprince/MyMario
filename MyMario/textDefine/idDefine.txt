@@ -1,0 +1,22 @@
+name		id
+
+mario		1
+brick		2
+scenceBrick	9
+brick1		17
+miscBrick 	22
+
+goom		3
+chimney		8
+tree		10
+coin		11
+redB		12
+blue		13
+shadow		14
+green		15
+white		16
+smalltree	18
+bigCloud	19
+smallCloud 	20
+blue P		21
+blue mushroom	22

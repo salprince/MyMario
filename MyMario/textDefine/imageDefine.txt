@@ -1,5 +1,0 @@
-name 							idtext
-mario.png						0
-mics.png						10
-enemies						20
-backGround.png			30
