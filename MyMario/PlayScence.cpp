@@ -7,6 +7,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "backRound.h"
+#include "ColorBrick.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_BACKROUND	4
+#define OBJECT_TYPE_COLORBRICK	5
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -159,6 +161,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BACKROUND: obj = new backRound(); break;
+	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -259,7 +262,6 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-
 	CGame::GetInstance()->SetCamPos(round(cx), 0.0f /*cy*/);
 }
 
@@ -291,10 +293,27 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		mario->SetState(MARIO_STATE_JUMP);
+	{
+		if (!mario->isJumping())
+		{
+			mario->setJumping(true);
+			mario->SetState(MARIO_STATE_JUMP);
+		}
+		//mario->SetState(MARIO_STATE_JUMP);
 		break;
+	}
 	case DIK_A:
 		mario->Reset();
+		break;
+	case DIK_B:
+		mario->SetLevel(MARIO_LEVEL_BIG);
+		mario->SetState(MARIO_STATE_IDLE);
+		mario->SetPosition(mario->x, mario->y -20);
+		break;
+	case DIK_T:
+		mario->SetLevel(MARIO_LEVEL_TAIL);
+		mario->SetState(MARIO_STATE_IDLE);
+		mario->SetPosition(mario->x, mario->y -20);
 		break;
 	}
 }

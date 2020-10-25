@@ -6,7 +6,11 @@
 
 #include "Sprites.h"
 #include "Animations.h"
-
+#define COLLISION_GATE 0
+#define COLLISION_GOOMBA 1
+#define COLLISION_BRICK 2
+#define COLLISION_BACKROUND 3
+#define COLLISION_COLOR_BRICK 4
 
 using namespace std;
 
@@ -53,9 +57,10 @@ public:
 
 	float vx;
 	float vy;
-
+	float ax;	//acceleration of Ox
+	float ay;
 	int nx;
-
+	int ny;
 	int state;
 
 	DWORD dt;

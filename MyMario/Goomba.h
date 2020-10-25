@@ -9,15 +9,19 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_CLEAR 300
 
 #define GOOMBA_ANI_WALKING 0
 #define GOOMBA_ANI_DIE 1
+#define GOOMBA_ANI_CLEAR 2
 
 class CGoomba : public CGameObject
 {
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
+	int width = 16;
+	int height = 16;
 
 public:
 	CGoomba();
