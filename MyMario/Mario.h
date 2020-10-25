@@ -1,11 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-#define MARIO_WALKING_SPEED		0.15f 
+#define MARIO_WALKING_SPEED		0.1f 
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f
+#define MARIO_ACCELERATION		0.002f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
 #define MARIO_STATE_IDLE			0
@@ -24,16 +25,42 @@
 #define MARIO_ANI_SMALL_WALKING_RIGHT		6
 #define MARIO_ANI_SMALL_WALKING_LEFT		7
 
+#define MARIO_ANI_BIG_RUNNING_RIGHT			9
+#define MARIO_ANI_BIG_RUNNING_LEFT			11
+#define MARIO_ANI_BIG_BRAKE_RIGHT			10
+#define MARIO_ANI_BIG_BRAKE_LEFT			12
+#define MARIO_ANI_BIG_JUMPING_LEFT			14
+#define MARIO_ANI_BIG_JUMPING_RIGHT			13
+
+
+#define MARIO_ANI_TAIL_IDLE_RIGHT			17
+#define MARIO_ANI_TAIL_IDLE_LEFT			16
+#define MARIO_ANI_TAIL_WALKING_RIGHT		18
+#define MARIO_ANI_TAIL_WALKING_LEFT			19
+#define MARIO_ANI_TAIL_BRAKE_RIGHT			23
+#define MARIO_ANI_TAIL_BRAKE_LEFT			22
+#define MARIO_ANI_TAIL_JUMPING_LEFT			20
+#define MARIO_ANI_TAIL_JUMPING_RIGHT		21
+
+
 #define MARIO_ANI_DIE				8
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_TAIL	3
 
 #define MARIO_BIG_BBOX_WIDTH  15
 #define MARIO_BIG_BBOX_HEIGHT 27
 
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 15
+
+#define MARIO_COLLISION_GATE 0
+#define MARIO_COLLISION_GOOMBA 1
+#define MARIO_COLLISION_BRICK 2
+#define MARIO_COLLISION_BACKROUND 3
+#define MARIO_COLLISION_COLORBRICK 4
+
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -46,6 +73,8 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y;
+	bool isJump = false;
+
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -54,7 +83,8 @@ public:
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-
+	bool isJumping() { return this->isJump; }
+	void setJumping(bool jump) { this->isJump = jump; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

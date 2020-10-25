@@ -7,19 +7,25 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Sprites.h"
+#include "ColorBrick.h"
 
 CGameObject::CGameObject()
 {
 	x = y = 0;
 	vx = vy = 0;
+	ax = 0;
+	ay = 0;
 	nx = 1;
+	ny = 1;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	this->dt = dt;
+	//dx = vx * dt  + ax*dt*dt;
 	dx = vx * dt;
-	dy = vy * dt;
+	dy = vy * dt ;
+	
 }
 
 /*
@@ -107,6 +113,33 @@ void CGameObject::FilterCollision(
 		if (c->t < min_ty && c->ny != 0) {
 			min_ty = c->t; ny = c->ny; min_iy = i; rdy = c->dy;
 		}
+		int state = -1;
+		if (dynamic_cast<ColorBrick*>(coEvents[i]->obj))
+		{
+				nx = 0;
+				if (ny == 1)
+				{
+					ny = 0;
+				}
+		}
+		/*if (dynamic_cast<ColorBrick*>(c->obj)) state = COLLISION_COLOR_BRICK;
+		switch (state)
+		{
+			case COLLISION_COLOR_BRICK: 
+				{
+					nx = 0;
+					if (ny == 1)
+						ny = 0;
+					break;
+				}
+			default: break;
+		}*/
+		/*if (dynamic_cast<ColorBrick*>(c->obj))
+		{
+			nx = 0;
+			if (ny == 1)
+				ny = 0;
+		}*/
 	}
 
 	if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);

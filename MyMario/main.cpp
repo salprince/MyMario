@@ -30,8 +30,8 @@
 #define MAIN_WINDOW_TITLE L"MYMARIO"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(72, 220, 72)
-#define SCREEN_WIDTH 740
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 600
+#define SCREEN_HEIGHT 328
 
 #define MAX_FRAME_RATE 120
 
@@ -72,7 +72,6 @@ void Render()
 	{
 		// Clear back buffer with a color
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
-
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		CGame::GetInstance()->GetCurrentScene()->Render();
@@ -181,8 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"mario-sample.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH , SCREEN_HEIGHT , SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-
+	SetWindowPos(hWnd, 0, 150, 70, SCREEN_WIDTH*2 , SCREEN_HEIGHT*2, SWP_NOOWNERZORDER | SWP_NOZORDER );
 	Run();
 
 	return 0;

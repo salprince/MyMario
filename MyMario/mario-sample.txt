@@ -2,6 +2,8 @@
 start	1
 #scene list
 [SCENES]
+#1	scene1.txt
 1	testScence.txt
-2	scene1.txt
-3	scene-test.txt
+2	testScence.txt
+3	scene1.txt
+4	scene-test.txt
