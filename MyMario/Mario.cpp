@@ -10,6 +10,7 @@
 #include "Brick.h"
 #include "backRound.h"
 #include "ColorBrick.h"
+#include "Coin.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -96,6 +97,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				stateCollision = MARIO_COLLISION_COLORBRICK;
 			else if (dynamic_cast<CBrick*>(e->obj))
 				stateCollision = MARIO_COLLISION_BRICK;
+			else if (dynamic_cast<Coin*>(e->obj))
+				stateCollision = MARIO_COLLISION_COIN;
 			switch (stateCollision)
 			{
 				case MARIO_COLLISION_GATE:
@@ -149,6 +152,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
+					break;
+				}
+				case MARIO_COLLISION_COIN:
+				{
+					Coin* coin = dynamic_cast<Coin*>(e->obj);
+					coin->SetState(COIN_STATE_DIE);
+					DebugOut(L"colisson coin");
 					break;
 				}
 				default:break;

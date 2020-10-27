@@ -1,2 +1,15 @@
-﻿  Goomba.cpp
+﻿  Game.cpp
+  Goomba.cpp
+  Mario.cpp
+  PlayScence.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(78,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(100,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(123,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(124,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(153,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(154,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(256,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(265,20): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

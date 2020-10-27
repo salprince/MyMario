@@ -7,6 +7,8 @@
 40	textures\scence1.png	255	128	192
 50	textures\Item&MicsBlock.png	166	185	255
 60	textures\backGroundForScence1.png	255	255	255
+70	textures\enemies-2.png	0	128	128
+80	textures\enemy3.png	255	255	255
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 #NOTHING
@@ -203,6 +205,23 @@
 
 #blueMusroom
 220001	137	137	153	153	30
+
+#GREEN KOOPAS
+#walk left
+230001	205	191	221	217	70
+230002	222	191	238	217	70
+#walk right
+230003	187	191	202	217	70
+230004	170	191	185	217	70
+#die
+230005	152	202	168	217	70
+#renew 
+230006	222	381	276	429	80
+
+#running shell
+230007	256	202	272	218	70
+230008	273	202	289	218	70
+230009	290	202	306	218	70
 #backround
 999999	0	0	2832	432	60
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
@@ -363,6 +382,18 @@
 2101	210001	100
 #blueMusroom
 2201	220001	100
+#GREEN KOOPAS
+#walk left
+2301	230001	100	230002	100
+#walk right
+2302	230003	100	230004	100
+#die
+2303	230005	100
+#renew 
+2304	230006	100
+#running shell
+2305	230007	100	230008	100	230009	100
+
 #backround
 9999	999999	100
 #
@@ -400,7 +431,7 @@
 10006	1006
 10007	1007
 #coin
-11001	1101
+11001	1101	0909
 #redBrick
 12001	1201
 12002	1202
@@ -468,7 +499,8 @@
 21001	2101
 #blueMusroom
 22001	2201
-
+#greenKOOPA 
+23001	2301	2302	2303	2304	2305
 #backround
 99999	9999
 [OBJECTS]
@@ -917,8 +949,8 @@
 
 
 #coin1
-1	192	171	11001
-1	208	171	11001
+6	192	171	11001
+6	208	171	11001
 
 
 #mics Brick2
@@ -927,7 +959,7 @@
 
 
 #coin2
-1	240	123	11001
+6	240	123	11001
 
 
 #blue brick 
@@ -1505,15 +1537,12 @@
 4	2345	138	19003
 4	2360	138	19004
 
+#KOOPAS
+2	195	215	23001
 # MARIO
 0	50.0	0	1
 #
-# GOOMBA
-2	200	235	3
-2	260	235	3
-2	320	235	3
-1	480	235	3
-1	500	235	3
+
 # --- SCENE PORTAL ----
 
 # type	l	t	ani_set_id	r	b	scene_id

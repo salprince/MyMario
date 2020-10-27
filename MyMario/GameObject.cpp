@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Sprites.h"
 #include "ColorBrick.h"
+#include "Coin.h"
 
 CGameObject::CGameObject()
 {
@@ -121,6 +122,11 @@ void CGameObject::FilterCollision(
 				{
 					ny = 0;
 				}
+		}
+		if (dynamic_cast<Coin*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			ny = 0;
 		}
 		/*if (dynamic_cast<ColorBrick*>(c->obj)) state = COLLISION_COLOR_BRICK;
 		switch (state)
