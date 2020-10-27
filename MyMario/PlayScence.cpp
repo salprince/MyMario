@@ -144,7 +144,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
+	case OBJECT_TYPE_KOOPAS: obj = new Koopas(); break;
 	case OBJECT_TYPE_BACKROUND: obj = new backRound(); break;
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;

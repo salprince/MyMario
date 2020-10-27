@@ -6,6 +6,7 @@
 #include "Game.h"
 
 #include "Goomba.h"
+#include "Koopas.h"
 #include "Portal.h"
 #include "Brick.h"
 #include "backRound.h"
@@ -99,6 +100,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				stateCollision = MARIO_COLLISION_BRICK;
 			else if (dynamic_cast<Coin*>(e->obj))
 				stateCollision = MARIO_COLLISION_COIN;
+			else if (dynamic_cast<Koopas*>(e->obj))
+				stateCollision = MARIO_COLLISION_KOOPA;
 			switch (stateCollision)
 			{
 				case MARIO_COLLISION_GATE:
@@ -125,6 +128,48 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (untouchable == 0)
 						{
 							if (goomba->GetState() != GOOMBA_STATE_DIE)
+							{
+								if (level > MARIO_LEVEL_SMALL)
+								{
+									level = MARIO_LEVEL_SMALL;
+									StartUntouchable();
+								}
+								else
+									SetState(MARIO_STATE_DIE);
+							}
+						}
+					}
+					break;
+				}
+				case MARIO_COLLISION_KOOPA:
+				{
+					Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
+					// jump on top >> kill Goomba and deflect a bit 
+					if (e->ny < 0)
+					{
+						if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
+						{
+							koopa->SetState(KOOPAS_STATE_SHELL);							
+							if (koopa ->isShell== false)
+								koopa->y += 8;
+							koopa->isShell = true;
+						}
+					}
+					else if (e->nx != 0)
+					{
+						if (untouchable == 0)
+						{
+							if (koopa->GetState() == KOOPAS_STATE_SHELL)
+							{								
+								koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
+							}
+							else if (koopa->GetState() == KOOPAS_STATE_SHELL_RUNNING)
+							{
+								if(nx <0)
+									koopa->vx = 0.1;
+								else koopa->vx = -0.1;
+							}
+							else if (koopa->GetState() != KOOPAS_STATE_DIE)
 							{
 								if (level > MARIO_LEVEL_SMALL)
 								{
