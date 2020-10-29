@@ -248,7 +248,9 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	CGame::GetInstance()->SetCamPos(round(cx), 0.0f /*cy*/);
+	//CGame::GetInstance()->SetCamPos(round(cx), 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(round(cx), -150);
+	DebugOut(L" %d\n", cy);
 }
 
 void CPlayScene::Render()
@@ -280,12 +282,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 	{
-		if (!mario->isJumping())
+		/*if (!mario->isJumping())
 		{
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);
-		}
-		//mario->SetState(MARIO_STATE_JUMP);
+		}*/
+		mario->SetState(MARIO_STATE_JUMP);
 		break;
 	}
 	case DIK_A:

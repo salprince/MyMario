@@ -29,6 +29,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
+	
 
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
@@ -150,8 +151,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
 						{
 							koopa->SetState(KOOPAS_STATE_SHELL);							
-							if (koopa ->isShell== false)
-								koopa->y += 8;
+							/*if (koopa ->isShell== false)
+								koopa->y += 8;*/
 							koopa->isShell = true;
 						}
 					}
@@ -216,7 +217,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 
 void CMario::Render()
-{
+{	
+	//CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 	int ani = -1;
 	//DebugOut(L"\nmario acceleration  ax ay %d, %d, %d \n", ax, ay, state);
 	if (state == MARIO_STATE_DIE)
@@ -328,7 +330,7 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
-		vx = MARIO_WALKING_SPEED ;
+		vx = MARIO_WALKING_SPEED *10;
 		nx = 1;
 		ax = MARIO_ACCELERATION ;
 		ay = 0;
