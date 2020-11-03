@@ -1,19 +1,25 @@
 #pragma once
 #include "GameObject.h"
 
-#define MARIO_WALKING_SPEED		0.1f 
+#define MARIO_WALKING_SPEED				0.08f
 //0.1f
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_DEFLECT_SPEED 0.2f
-#define MARIO_GRAVITY			0.002f
-#define MARIO_ACCELERATION		0.002f
-#define MARIO_DIE_DEFLECT_SPEED	 0.5f
+#define MARIO_JUMP_SPEED_Y				0.5f
+#define MARIO_JUMP_DEFLECT_SPEED		0.2f
+#define MARIO_GRAVITY					0.0017f
+#define MARIO_STOP_ACCELERATION			0.003f
+#define MARIO_ACCELERATION				0.00025f
+#define MARIO_DIE_DEFLECT_SPEED			0.5f
+#define MARIO_MAX_WALKING_SPEED			0.16f
+
 
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
 #define MARIO_STATE_JUMP			300
-#define MARIO_STATE_DIE				400
+#define MARIO_STATE_FLY			400
+
+#define MARIO_STATE_DIE				500
+
 
 #define MARIO_ANI_BIG_IDLE_RIGHT		0
 #define MARIO_ANI_BIG_IDLE_LEFT			1
@@ -37,11 +43,12 @@
 #define MARIO_ANI_TAIL_IDLE_LEFT			16
 #define MARIO_ANI_TAIL_WALKING_RIGHT		18
 #define MARIO_ANI_TAIL_WALKING_LEFT			19
-#define MARIO_ANI_TAIL_BRAKE_RIGHT			23
-#define MARIO_ANI_TAIL_BRAKE_LEFT			22
+#define MARIO_ANI_TAIL_BRAKE_RIGHT			22
+#define MARIO_ANI_TAIL_BRAKE_LEFT			23
 #define MARIO_ANI_TAIL_JUMPING_LEFT			20
 #define MARIO_ANI_TAIL_JUMPING_RIGHT		21
-
+#define MARIO_ANI_TAIL_FLYING_LEFT			24
+#define MARIO_ANI_TAIL_FLYING_RIGHT			25
 
 #define MARIO_ANI_DIE				8
 
@@ -62,7 +69,7 @@
 #define MARIO_COLLISION_COLORBRICK 4
 #define MARIO_COLLISION_COIN 5
 #define MARIO_COLLISION_KOOPA 6
-
+#define MARIO_COLLISION_MICSBRICK 7
 #define MARIO_UNTOUCHABLE_TIME 5000
 
 
@@ -75,17 +82,20 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 	bool isJump = false;
+	bool isFly = false;
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
-
+	float acceleration = 0;
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	bool isJumping() { return this->isJump; }
 	void setJumping(bool jump) { this->isJump = jump; }
+	bool isFlying() { return isFly; }
+	void setFlying(bool value) { this->isFly = value; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

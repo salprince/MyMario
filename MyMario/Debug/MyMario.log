@@ -1,10 +1,3 @@
-﻿  PlayScence.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(78,20): warning C4018: '<': signed/unsigned mismatch
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(100,20): warning C4018: '<': signed/unsigned mismatch
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(123,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(124,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(153,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(154,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(258,20): warning C4018: '<': signed/unsigned mismatch
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(267,20): warning C4018: '<': signed/unsigned mismatch
+﻿  Mario.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(81,16): warning C4390: ';': empty controlled statement found; is this the intent?
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

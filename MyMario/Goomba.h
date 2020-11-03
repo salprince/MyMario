@@ -12,10 +12,9 @@
 #define GOOMBA_STATE_CLEAR 300
 
 #define GOOMBA_ANI_WALKING_LEFT 0
-#define GOOMBA_ANI_WALKING_RIGHT 1
-#define GOOMBA_ANI_DIE 3
-#define GOOMBA_ANI_RENEW 4
-#define GOOMBA_ANI_SHELL 5
+#define GOOMBA_ANI_WALKING_RIGHT 0
+#define GOOMBA_ANI_DIE 1
+#define GOOMBA_ANI_CLEAR 2
 
 class CGoomba : public CGameObject
 {
@@ -24,8 +23,17 @@ class CGoomba : public CGameObject
 	virtual void Render();
 	int width = 16;
 	int height = 16;
+	int startDying = 0;
+	int endDying = 0;
+	bool isDie = false;
 
 public:
 	CGoomba();
 	virtual void SetState(int state);
+	void setStartDying(int time) { this->startDying = time; }
+	void setEndDying(int time) { this->endDying = time; }
+	int getStartDying() { return this->startDying; }
+	int getEndDying() { return this->endDying; }
+	bool getIsDie(){ return isDie; }
+	void setIsDie(bool a) { isDie = a; }
 };

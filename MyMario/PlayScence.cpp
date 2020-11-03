@@ -9,6 +9,7 @@
 #include "backRound.h"
 #include "ColorBrick.h"
 #include "Coin.h"
+#include "MicsBrick.h"
 
 using namespace std;
 
@@ -148,6 +149,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BACKROUND: obj = new backRound(); break;
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
+	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -249,8 +251,9 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 	//CGame::GetInstance()->SetCamPos(round(cx), 0.0f /*cy*/);
-	CGame::GetInstance()->SetCamPos(round(cx), 250);
-	DebugOut(L" %d\n", cy);
+	CGame::GetInstance()->SetCamPos(round(cx), 00);
+	//DebugOut(L" %d\n", cy);
+	//player->nx = 1;
 }
 
 void CPlayScene::Render()
@@ -282,12 +285,22 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 	{
-		/*if (!mario->isJumping())
+		if (mario->vx == MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
+		{
+			mario->setFlying(true);
+			mario->SetState(MARIO_STATE_FLY);
+			
+		}
+		if (!mario->isJumping())
 		{
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);
-		}*/
-		mario->SetState(MARIO_STATE_JUMP);
+		}
+		else
+		{
+			mario->vy = -0.2;
+		}
+		//mario->SetState(MARIO_STATE_JUMP);
 		break;
 	}
 	case DIK_A:
@@ -310,7 +323,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-
+	if (game->IsKeyDown(DIK_LEFT) || game->IsKeyDown(DIK_RIGHT))
+	{
+		mario->acceleration=0.05;
+	}
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
