@@ -69,6 +69,9 @@
     <ClInclude Include="MicsBrick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChimneyPortal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Brick.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MicsBrick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChimneyPortal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

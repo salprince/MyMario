@@ -10,6 +10,7 @@
 #include "ColorBrick.h"
 #include "Coin.h"
 #include "MicsBrick.h"
+#include "ChimneyPortal.h"
 
 using namespace std;
 
@@ -150,6 +151,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
+	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -246,13 +248,21 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	//CGame::GetInstance()->SetCamPos(round(cx), 0.0f /*cy*/);
-	CGame::GetInstance()->SetCamPos(round(cx), 00);
-	//DebugOut(L" %d\n", cy);
+	if (cy < -130)
+	{
+		for(int i=0; i <100; i++)
+			CGame::GetInstance()->SetCamPos(round(cx), -i);
+	}	
+	else if (cy > 160)
+	{
+		for (int i = 0; i < 100; i++)
+			CGame::GetInstance()->SetCamPos(round(cx), 160+i);
+	}
+	else CGame::GetInstance()->SetCamPos(round(cx), 00);
+	//DebugOut(L" %f \n", cy);
 	//player->nx = 1;
 }
 
@@ -285,13 +295,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 	{
-		if (mario->vx == MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
+		if (abs(mario->vx) == MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
 		{
-			mario->setFlying(true);
-			mario->SetState(MARIO_STATE_FLY);
+			if (!mario->isJumping())
+			{
+				mario->setFlying(true);
+				mario->SetState(MARIO_STATE_FLY);
+			}
+			
 			
 		}
-		if (!mario->isJumping())
+		if (!mario->isJumping() && !mario->isFlying())
 		{
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);

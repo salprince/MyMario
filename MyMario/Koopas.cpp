@@ -1,6 +1,16 @@
 #include "Koopas.h"
 #include "Utils.h"
+#include "Mario.h"
+#include "Game.h"
 
+#include "Goomba.h"
+#include "Koopas.h"
+#include "Portal.h"
+#include "Brick.h"
+#include "backRound.h"
+#include "ColorBrick.h"
+#include "Coin.h"
+#include "MicsBrick.h"
 Koopas::Koopas()
 {
 	SetState(KOOPAS_STATE_WALKING);
@@ -16,8 +26,9 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	bottom = y + height;	
 }
 
-void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+/*void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -51,16 +62,73 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
+		//if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
 			
 	}
-
+	
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];		
 	//DebugOut(L"shell %d\n", isShell);
-}
+}*/
 
+void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
+	//if (state != KOOPAS_STATE_DIE)
+	{
+		vy += 0.0008 * dt;
+	}
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	if (state != KOOPAS_STATE_DIE)
+		CalcPotentialCollisions(coObjects,coEvents);
+	
+	if (x < 0 && vx < 0) {
+		x = 0; vx = -vx;
+	}
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		if (ny != 0)
+		{
+			vy = 0;
+		}
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (ny == 0 && nx != 0)
+			{
+				nx = -nx;
+				vx = -vx;
+			}
+		}
+		// block object
+		x += min_tx * dx + nx * 0.4f;
+
+	}
+	if (state == KOOPAS_STATE_SHELL_RUNNING )
+	{
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];			
+			if (dynamic_cast<Koopas*>(e->obj))
+			{
+				e->obj->SetState(KOOPAS_STATE_SHELL);
+			}
+		}
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+}
 void Koopas::Render()
 {
 	int ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
