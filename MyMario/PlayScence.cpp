@@ -241,19 +241,21 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	if (cy < -130)
+	if (cx < 290)
+		CGame::GetInstance()->SetCamPos(15, 00);
+	else if (cy < -130)
 	{
 		for(int i=0; i <100; i++)
 			CGame::GetInstance()->SetCamPos(round(cx), -i);
 	}	
-	else if (cy > 160)
+	else if (cy < 0)
 	{
 		for (int i = 0; i < 100; i++)
-			CGame::GetInstance()->SetCamPos(round(cx), 160+i);
+			CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 	}
 	else CGame::GetInstance()->SetCamPos(round(cx), 00);
-	//CGame::GetInstance()->SetCamPos(2235, 300);
-	//DebugOut(L" %f \n", cy);
+	//CGame::GetInstance()->SetCamPos(2300, 0);
+	//DebugOut(L" %f \n", cx);
 	//player->nx = 1;
 }
 

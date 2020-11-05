@@ -18,7 +18,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-	
 	// Simple fall down
 	if (!getIsOnSky())
 		vy += MARIO_GRAVITY * dt;
@@ -26,10 +25,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_GRAVITY*1.25;
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
-
-	//DebugOut(L"\n FLY %d \n", isFlying());
+	if (vx > 0 && x > 2810) x = 2810;
+	DebugOut(L"\n %f \n", x);
 	//DebugOut(L" JUPM %d \n", isJumping());
-	DebugOut(L"%d \n", vy);
+	//DebugOut(L"%d \n", vy);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	
@@ -62,7 +61,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block every object first!
-		x += (min_tx * dx + nx * 0.3f);
+		x += (min_tx * dx + nx * 0.4f);
 		y += min_ty * dy + ny * 0.4f;
 
 		//if (nx != 0) vx = 0;
