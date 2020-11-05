@@ -295,15 +295,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 	{
-		if (abs(mario->vx) == MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
+		if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
 		{
 			if (!mario->isJumping())
 			{
 				mario->setFlying(true);
 				mario->SetState(MARIO_STATE_FLY);
-			}
-			
-			
+			}			
 		}
 		if (!mario->isJumping() && !mario->isFlying())
 		{

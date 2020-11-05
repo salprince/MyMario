@@ -17,6 +17,7 @@
 #define MARIO_STATE_WALKING_LEFT	200
 #define MARIO_STATE_RUN				300
 #define MARIO_STATE_JUMP			400
+#define MARIO_STATE_JUMP_WAVE_TAIL	450
 #define MARIO_STATE_FLY				500
 #define MARIO_STATE_DIE				1000
 
@@ -55,6 +56,8 @@
 #define MARIO_ANI_SMALL_BRAKE_RIGHT			28
 #define MARIO_ANI_SMALL_JUMPING_LEFT		31
 #define MARIO_ANI_SMALL_JUMPING_RIGHT		30
+#define MARIO_ANI_TAIL_IS_JUMPING_LEFT		32
+#define MARIO_ANI_TAIL_IS_JUMPING_RIGHT		33
 
 #define MARIO_ANI_DIE				8
 
@@ -98,6 +101,7 @@ public:
 	float acceleration = 0;
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
+	int getLevel() { return this->level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	bool isJumping() { return this->isJump; }
 	void setJumping(bool jump) { this->isJump = jump; }

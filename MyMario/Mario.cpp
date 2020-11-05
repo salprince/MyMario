@@ -37,6 +37,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += MARIO_GRAVITY * dt;
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
+
+	DebugOut(L"\n FLY %d \n", isFlying());
+	DebugOut(L" JUPM %d \n", isJumping());
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	
@@ -112,6 +115,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 			case MARIO_COLLISION_CHIMNEYPORTAL:
 			{
+				if (this->isJumping())
+					this->setJumping(false);
+				if (this->isFlying())
+					this->setFlying(false);
 				if (y < 100)
 				{					
 						y = 300;
@@ -163,7 +170,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
 				// jump on top >> kill Goomba and deflect a bit 
-				//if (e->ny > 0)
+				if (e->ny < 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
@@ -214,7 +221,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			case MARIO_COLLISION_COLORBRICK:
 			{
-				if (e->ny > 0)
+				if (e->ny != 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
@@ -226,7 +233,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_BRICK:
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				if (e->ny < 0)
+				if (e->nx != 0)
+				{
+					(vx = 0);
+					SetState(MARIO_STATE_IDLE);
+				}
+				if (e->ny != 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
@@ -239,7 +251,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_COIN:
 			{
 				Coin* coin = dynamic_cast<Coin*>(e->obj);
-				//coin->SetState(COIN_STATE_DIE);
+				coin->SetState(COIN_STATE_DIE);
 				//DebugOut(L"colisson coin %d %d\n", coin->x,coin->y);
 				//DebugOut(L"MARIO %d %d \n", dx, dy);
 				break;
@@ -247,19 +259,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_MICSBRICK:
 			{
 				MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);				
-				if (e->ny > 0)
+				if (e->ny != 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
 					if (this->isFlying())
 						this->setFlying(false);
-				}
-				if (e->ny > 0)
-				{
-					//DebugOut(L"colisson coin %d %d\n", coin->x, coin->y);					
-					//DebugOut(L"MICS BRICK %d %d \n", micsBrick->x, micsBrick->y);
-					//DebugOut(L"MARIO %d %d \n", dx, dy);
-				}
+				}				
 				break;
 			}
 			default:break;
@@ -295,11 +301,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	// clean up collision events
-	//DebugOut(L" %d   %d \n", nx, ny);
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	//DebugOut(L"  %d %f \n", nx, vx);
-	
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];	
 }
 
 void CMario::Render()
@@ -446,11 +448,18 @@ void CMario::Render()
 			{
 				if (nx > 0)
 				{
-					ani = MARIO_ANI_TAIL_JUMPING_RIGHT;
+					/*if(state == MARIO_STATE_JUMP_WAVE_TAIL)
+						ani = MARIO_ANI_TAIL_IS_JUMPING_RIGHT;
+					else ani = MARIO_ANI_TAIL_JUMPING_RIGHT;*/
+					ani = MARIO_ANI_TAIL_IS_JUMPING_RIGHT;
 				}
 				else
 				{
-					ani = MARIO_ANI_TAIL_JUMPING_LEFT;
+					/*if (state == MARIO_STATE_JUMP_WAVE_TAIL)
+						ani = MARIO_ANI_TAIL_IS_JUMPING_LEFT;
+					else
+						ani = MARIO_ANI_TAIL_JUMPING_LEFT;*/
+					ani = MARIO_ANI_TAIL_IS_JUMPING_LEFT;
 				}
 			}
 			
@@ -481,6 +490,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		vy = -MARIO_JUMP_SPEED_Y;
+		ny = -1;
+		break;
+	case MARIO_STATE_JUMP_WAVE_TAIL:
+		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
+		//vy -= 0.02;
 		ny = -1;
 		break;
 	case MARIO_STATE_FLY:
