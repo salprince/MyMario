@@ -16,6 +16,6 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
-	int width = 0;
-	int height = 0;
+	int width = 16;
+	int height = 16;
 };

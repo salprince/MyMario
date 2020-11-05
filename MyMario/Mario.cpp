@@ -34,12 +34,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	
 	// Simple fall down
-	vy += MARIO_GRAVITY * dt;
+	if (!getIsOnSky())
+		vy += MARIO_GRAVITY * dt;
+	/*else
+		vy += MARIO_GRAVITY*1.25;*/
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 
-	DebugOut(L"\n FLY %d \n", isFlying());
-	DebugOut(L" JUPM %d \n", isJumping());
+	//DebugOut(L"\n FLY %d \n", isFlying());
+	//DebugOut(L" JUPM %d \n", isJumping());
+	DebugOut(L"%d \n", vy);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	
@@ -72,7 +76,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block every object first!
-		x += min_tx * dx + nx * 0.4f;
+		x += (min_tx * dx + nx * 0.3f);
 		y += min_ty * dy + ny * 0.4f;
 
 		//if (nx != 0) vx = 0;
@@ -119,6 +123,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->setJumping(false);
 				if (this->isFlying())
 					this->setFlying(false);
+				if (this->getIsOnSky())
+					this->setIsOnSky(false);
 				if (y < 100)
 				{					
 						y = 300;
@@ -176,6 +182,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setJumping(false);
 					if (this->isFlying())
 						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
 				}
 				if (e->ny < 0)
 				{
@@ -227,6 +235,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setJumping(false);
 					if (this->isFlying())
 						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
 				}
 				break;
 			}
@@ -244,6 +254,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setJumping(false);
 					if (this->isFlying())
 						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
 				}
 				
 				break;
@@ -265,6 +277,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setJumping(false);
 					if (this->isFlying())
 						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
 				}				
 				break;
 			}
@@ -300,6 +314,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 		}
 	}
+	/*if (isJumping() && level== MARIO_LEVEL_TAIL )
+		SetState(MARIO_STATE_JUMP_WAVE_TAIL);*/
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];	
 }
@@ -448,20 +464,28 @@ void CMario::Render()
 			{
 				if (nx > 0)
 				{
-					/*if(state == MARIO_STATE_JUMP_WAVE_TAIL)
+					if(getIsOnSky())
 						ani = MARIO_ANI_TAIL_IS_JUMPING_RIGHT;
-					else ani = MARIO_ANI_TAIL_JUMPING_RIGHT;*/
-					ani = MARIO_ANI_TAIL_IS_JUMPING_RIGHT;
+					else ani = MARIO_ANI_TAIL_JUMPING_RIGHT;
+					//ani = MARIO_ANI_TAIL_IS_JUMPING_RIGHT;
 				}
 				else
 				{
-					/*if (state == MARIO_STATE_JUMP_WAVE_TAIL)
+					if (getIsOnSky())
 						ani = MARIO_ANI_TAIL_IS_JUMPING_LEFT;
 					else
-						ani = MARIO_ANI_TAIL_JUMPING_LEFT;*/
-					ani = MARIO_ANI_TAIL_IS_JUMPING_LEFT;
+						ani = MARIO_ANI_TAIL_JUMPING_LEFT;
+					//ani = MARIO_ANI_TAIL_IS_JUMPING_LEFT;
 				}
 			}
+			else if (getIsSpin())
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_SPIN_LEFT;
+				else 
+					ani = MARIO_ANI_TAIL_SPIN_RIGHT;
+			}
+				
 			
 		}
 	}
@@ -495,6 +519,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP_WAVE_TAIL:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		//vy -= 0.02;
+		//vy = -MARIO_JUMP_SPEED_Y;
 		ny = -1;
 		break;
 	case MARIO_STATE_FLY:

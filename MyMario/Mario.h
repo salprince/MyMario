@@ -58,6 +58,8 @@
 #define MARIO_ANI_SMALL_JUMPING_RIGHT		30
 #define MARIO_ANI_TAIL_IS_JUMPING_LEFT		32
 #define MARIO_ANI_TAIL_IS_JUMPING_RIGHT		33
+#define MARIO_ANI_TAIL_SPIN_LEFT			34
+#define MARIO_ANI_TAIL_SPIN_RIGHT			35
 
 #define MARIO_ANI_DIE				8
 
@@ -93,6 +95,8 @@ class CMario : public CGameObject
 	float start_y;
 	bool isJump = false;
 	bool isFly = false;
+	bool isOnSky = false;
+	bool isSpin = false;
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -107,6 +111,10 @@ public:
 	void setJumping(bool jump) { this->isJump = jump; }
 	bool isFlying() { return isFly; }
 	void setFlying(bool value) { this->isFly = value; }
+	void setIsOnSky(bool value) { isOnSky = value; }
+	bool getIsOnSky() { return isOnSky; }
+	void setIsSpin(bool value) { isSpin = value; }
+	bool getIsSpin() { return this->isSpin; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

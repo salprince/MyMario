@@ -2,7 +2,6 @@
 #include "Utils.h"
 #include "Mario.h"
 #include "Game.h"
-
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Portal.h"
@@ -75,18 +74,47 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	//if (state != KOOPAS_STATE_DIE)
-	{
-		vy += 0.0008 * dt;
-	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-
 	if (state != KOOPAS_STATE_DIE)
-		CalcPotentialCollisions(coObjects,coEvents);
-	
-	if (x < 0 && vx < 0) {
-		x = 0; vx = -vx;
+	{
+		vy += 0.0008 * dt;
+		CalcPotentialCollisions(coObjects, coEvents);
+	}	
+
+	if (x < 15 && vx < 0) {
+		x = 15; vx = -vx;
+	}
+
+	//make koopa waling after some seconds
+	if (isShell == true && state != KOOPAS_STATE_SHELL_RUNNING)
+	{
+		if (getShellIn() == 0)
+		{
+			setShellIn(GetTickCount());
+			setShellOut(GetTickCount());
+		}
+
+		else
+		{
+			if (getShellOut() - getShellIn() < 4000)
+			{
+				setShellOut(getShellOut() + 10);
+			}
+			else
+			{ 
+				SetState(KOOPAS_STATE_WALKING);
+				height = 26;
+				y -= 16;
+				isShell = false;				
+				CalcPotentialCollisions(coObjects, coEvents);
+			}				
+		}
+	}
+	else
+	{
+		setShellIn(0);
+		setShellOut(0);
 	}
 	if (coEvents.size() == 0)
 	{
@@ -99,10 +127,13 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		if (ny != 0)
-		{
-			vy = 0;
-		}
+		CalcPotentialCollisions(coObjects, coEvents);
+		x += min_tx * dx + nx * 0.4f;
+		//y += min_ty * dy + ny * 0.4f;
+
+		//if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		if (nx != 0);
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -113,10 +144,10 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		// block object
-		x += min_tx * dx + nx * 0.4f;
+		//x += min_tx * dx + nx * 0.4f;
 
 	}
-	if (state == KOOPAS_STATE_SHELL_RUNNING )
+	/*if (state == KOOPAS_STATE_SHELL_RUNNING )
 	{
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -126,8 +157,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				e->obj->SetState(KOOPAS_STATE_SHELL);
 			}
 		}
-	}
+	}*/
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	
+
 }
 void Koopas::Render()
 {

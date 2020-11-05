@@ -293,7 +293,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_S:
 	{
 		if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
 		{
@@ -308,11 +308,26 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);
 		}
-		else
+		else if (mario->isJumping())
 		{
+			mario->setIsOnSky(true);
+			mario->vy = 0.00001;
+		}		
+		else 
+		{
+			
 			mario->vy = -0.2;
+			//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
 		}
 		//mario->SetState(MARIO_STATE_JUMP);
+		break;
+	}
+	case DIK_Z:
+	{
+		if (mario->getLevel() == MARIO_LEVEL_TAIL)
+		{			
+			mario->setIsSpin(!mario->getIsSpin());
+		}
 		break;
 	}
 	case DIK_A:

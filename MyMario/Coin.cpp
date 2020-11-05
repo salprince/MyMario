@@ -20,4 +20,9 @@ void Coin::Render()
 void Coin::SetState(int state)
 {
 	CGameObject::SetState(state);	
+	if (state == COIN_STATE_DIE)
+	{
+		width = 0;
+		height = 0;
+	}
 }
