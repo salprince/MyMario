@@ -1,14 +1,4 @@
-#include <d3dx9.h>
-#include <algorithm>
-
-
-#include "Utils.h"
-#include "Textures.h"
-#include "Game.h"
-#include "GameObject.h"
-#include "Sprites.h"
-#include "ColorBrick.h"
-#include "Coin.h"
+#include "Include.h"
 
 CGameObject::CGameObject()
 {
@@ -128,24 +118,12 @@ void CGameObject::FilterCollision(
 			nx = 0;
 			ny = 0;
 		}
-		/*if (dynamic_cast<ColorBrick*>(c->obj)) state = COLLISION_COLOR_BRICK;
-		switch (state)
-		{
-			case COLLISION_COLOR_BRICK: 
-				{
-					nx = 0;
-					if (ny == 1)
-						ny = 0;
-					break;
-				}
-			default: break;
-		}*/
-		/*if (dynamic_cast<ColorBrick*>(c->obj))
+		if (dynamic_cast<LevelMushroom*>(coEvents[i]->obj))
 		{
 			nx = 0;
-			if (ny == 1)
-				ny = 0;
-		}*/
+			ny = 0;
+		}
+		
 	}
 
 	if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);

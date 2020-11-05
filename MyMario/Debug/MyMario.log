@@ -1,7 +1,25 @@
-﻿  Koopas.cpp
+﻿  Game.cpp
+  GameObject.cpp
+  Koopas.cpp
 D:\ProjectGame\MyNewMario\MyMario\MyMario\Koopas.cpp(81,20): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 D:\ProjectGame\MyNewMario\MyMario\MyMario\Koopas.cpp(136,15): warning C4390: ';': empty controlled statement found; is this the intent?
   Mario.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(84,16): warning C4390: ';': empty controlled statement found; is this the intent?
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(26,27): warning C4305: '+=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(70,16): warning C4390: ';': empty controlled statement found; is this the intent?
+  PlayScence.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(69,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(91,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(114,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(115,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(147,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(148,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(247,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(252,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(262,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(271,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(305,23): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(310,20): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(346,27): warning C4305: '=': truncation from 'double' to 'float'
+  main.cpp
   Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

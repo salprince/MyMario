@@ -1,16 +1,5 @@
-#include <iostream>
-#include <fstream>
+#include "Include.h"
 
-#include "PlayScence.h"
-#include "Utils.h"
-#include "Textures.h"
-#include "Sprites.h"
-#include "Portal.h"
-#include "backRound.h"
-#include "ColorBrick.h"
-#include "Coin.h"
-#include "MicsBrick.h"
-#include "ChimneyPortal.h"
 
 using namespace std;
 
@@ -151,6 +140,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
+	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
@@ -262,6 +252,7 @@ void CPlayScene::Update(DWORD dt)
 			CGame::GetInstance()->SetCamPos(round(cx), 160+i);
 	}
 	else CGame::GetInstance()->SetCamPos(round(cx), 00);
+	//CGame::GetInstance()->SetCamPos(2235, 300);
 	//DebugOut(L" %f \n", cy);
 	//player->nx = 1;
 }

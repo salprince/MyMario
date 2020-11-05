@@ -1,19 +1,5 @@
-#include <algorithm>
-#include <assert.h>
-#include "Utils.h"
+#include "Include.h"
 
-#include "Mario.h"
-#include "Game.h"
-
-#include "Goomba.h"
-#include "Koopas.h"
-#include "Portal.h"
-#include "Brick.h"
-#include "backRound.h"
-#include "ColorBrick.h"
-#include "Coin.h"
-#include "MicsBrick.h"
-#include "ChimneyPortal.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -36,8 +22,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	if (!getIsOnSky())
 		vy += MARIO_GRAVITY * dt;
-	/*else
-		vy += MARIO_GRAVITY*1.25;*/
+	else
+		vy += MARIO_GRAVITY*1.25;
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 
@@ -115,6 +101,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				stateCollision = MARIO_COLLISION_MICSBRICK;
 			else if (dynamic_cast<ChimneyPortal*>(e->obj))
 				stateCollision = MARIO_COLLISION_CHIMNEYPORTAL;
+			else if (dynamic_cast<LevelMushroom*>(e->obj))
+				stateCollision = MARIO_COLLISION_LEVELMUSHROOM;
 			switch (stateCollision)
 			{
 			case MARIO_COLLISION_CHIMNEYPORTAL:
@@ -280,6 +268,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
 				}				
+				break;
+			}
+			case MARIO_COLLISION_LEVELMUSHROOM:
+			{
+				LevelMushroom* mushroom = dynamic_cast<LevelMushroom*>(e->obj);
+				mushroom->SetState(COIN_STATE_DIE);
+				if (level < MARIO_LEVEL_TAIL)
+					level++;
 				break;
 			}
 			default:break;

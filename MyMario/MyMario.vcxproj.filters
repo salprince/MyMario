@@ -72,6 +72,12 @@
     <ClInclude Include="ChimneyPortal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LevelMushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Brick.cpp">
@@ -129,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChimneyPortal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelMushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
