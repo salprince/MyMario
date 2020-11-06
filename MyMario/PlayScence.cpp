@@ -258,9 +258,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		for(int i=0; i <100; i++)
 			CGame::GetInstance()->SetCamPos(round(cx), -i);
-	}	
-	
-	else CGame::GetInstance()->SetCamPos(round(cx), 00);
+	}		
+	else 
+		CGame::GetInstance()->SetCamPos(round(cx), 00);
 	//CGame::GetInstance()->SetCamPos(1300, 0);
 }
 

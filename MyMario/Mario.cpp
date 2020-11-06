@@ -59,6 +59,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			{
+				CalcPotentialCollisions(coObjects, coEvents);
 				// block every object first!
 				x += (min_tx * dx + nx * 0.4f);
 				y += min_ty * dy + ny * 0.4f;
