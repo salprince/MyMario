@@ -75,7 +75,7 @@ public:
 	float GetDistanceX() { return dx; }
 	float GetDisTanceY() { return dy; }
 	int GetState() { return this->state; }
-
+	float length = 0;
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }

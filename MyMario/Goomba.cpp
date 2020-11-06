@@ -26,7 +26,19 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (state == GOOMBA_STATE_WALKING)
 	{
-		vy = 0.2;		
+		vy = 0.15;	
+		if (startx == 0)
+			startx = x;
+		if (vx > 0 && x >= length + startx)
+		{
+			vx = -vx;
+			x = length + startx;
+		}
+		if (vx < 0 && x <= startx - length)
+		{
+			vx = -vx;
+			x = -length + startx;
+		}
 		CalcPotentialCollisions(coObjects, coEvents);
 		this->setStartDying(GetTickCount());
 		this->setEndDying(GetTickCount());
@@ -52,14 +64,16 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		x += dx;
 		y += dy;
-		if (vx < 0 && x < 0) {
-			x = 0; vx = -vx;
+		if (vx > 0 && x >= length + startx)
+		{
+			vx = -vx;
+			x = length + startx;
 		}
-
-		if (vx > 0 && x > 490) {
-			x = 290; vx = -vx;
+		if (vx < 0 && x <= startx - length)
+		{
+			vx = -vx;
+			x = -length + startx;
 		}
-		
 	}
 	else
 	{
@@ -74,8 +88,17 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx*0.4f ;
 		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
+		//if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (ny == 0 && nx != 0)
+			{
+				nx = -nx;
+				vx = -vx;
+			}
+		}
 
 	}
 

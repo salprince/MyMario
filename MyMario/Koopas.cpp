@@ -33,15 +33,33 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state != KOOPAS_STATE_DIE)
 	{
 		vy += 0.0008 * dt;
+		if (startx == 0)
+			startx = x;
+		if (vx < 0 && x < 15)
+		{
+			vx = -vx;
+			x = 15;
+		}
+		if (state != KOOPAS_STATE_SHELL_RUNNING)
+		{
+			if (vx > 0 && x >= length + startx)
+			{
+				vx = -vx;
+				x = length + startx;
+			}
+			if (vx < 0 && x <= startx - length)
+			{
+				vx = -vx;
+				x = -length + startx;
+			}
+		}
+		
 		CalcPotentialCollisions(coObjects, coEvents);
 	}	
-
-	if (x < 15 && vx < 0) {
-		x = 15; vx = -vx;
-	}
-
+	
+	DebugOut(L"%f %f \n", x, startx);
 	//make koopa waling after some seconds
-	if (isShell == true && state != KOOPAS_STATE_SHELL_RUNNING)
+	if (isShell == true && state != KOOPAS_STATE_SHELL_RUNNING  && state != KOOPAS_STATE_HOLD)
 	{
 		if (getIsHold())
 		{
@@ -78,6 +96,12 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		setShellIn(0);
 		setShellOut(0);
 	}
+
+	if (getIsHold())
+		state == KOOPAS_STATE_HOLD;
+	else 
+		state == KOOPAS_STATE_SHELL;
+	
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -90,12 +114,14 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		CalcPotentialCollisions(coObjects, coEvents);
-		x += min_tx * dx + nx * 0.4f;
-		//y += min_ty * dy + ny * 0.4f;
+		if (state != KOOPAS_STATE_HOLD)
+		{
+			x += min_tx * dx + nx * 0.4f;
+			if (ny != 0) vy = 0;
+			if (nx != 0);
+		}
+		
 
-		//if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
-		if (nx != 0);
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -107,29 +133,37 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 	}
-	/*if (state == KOOPAS_STATE_SHELL_RUNNING )
+	
+	if (state == KOOPAS_STATE_SHELL_RUNNING )
 	{
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];			
 			if (dynamic_cast<Koopas*>(e->obj))
 			{
-				e->obj->SetState(KOOPAS_STATE_SHELL);
+				e->obj->SetState(KOOPAS_STATE_DIE);
+				e->obj->y += 12;
+				e->obj->vx += 0.05*ny;
+				SetState(KOOPAS_STATE_DIE);
+				vx = -0.05 * ny;
+			}
+			if (dynamic_cast<CGoomba*>(e->obj))
+			{
+				//e->obj->SetState(GOOMBA_STATE_CLEAR);
+				e->obj->y += 12;
+				e->obj->vx += 0.05 * ny;
 			}
 		}
-	}*/
+	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-
-	
-
 }
 void Koopas::Render()
 {
 	int ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
-	if (state == KOOPAS_STATE_DIE) {
+	if (state == KOOPAS_STATE_DIE || state == KOOPAS_STATE_HOLD) {
 		ani = GREEN_KOOPAS_ANI_DIE;
 	}
-	else if (state == KOOPAS_STATE_SHELL|| state == KOOPAS_STATE_SHELL_RUNNING)
+	else if (state == KOOPAS_STATE_SHELL|| state == KOOPAS_STATE_SHELL_RUNNING )
 		ani = GREEN_KOOPAS_ANI_SHELL;
 	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
 	else if (vx < 0) ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
@@ -145,10 +179,11 @@ void Koopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_DIE:
-		//y += 16;
+		y += 10;
 		vx = 0;
-		vy = 0;
-		//height = 16;
+		vy = 0.1;
+		height = 14;
+		width=16;
 		break;
 	case KOOPAS_STATE_WALKING:
 		vx = KOOPAS_WALKING_SPEED;
@@ -160,13 +195,13 @@ void Koopas::SetState(int state)
 		vx = 0;
 		height = 14;
 		width = 16;
-		DebugOut(L" SET Koopa is shell\n");
+		//DebugOut(L" SET Koopa is shell\n");
 		break;
 	case KOOPAS_STATE_HOLD:
 		vy = 0;
 		vx = 0;
-		height = 0;
-		width = 0;
+		height = 14;
+		width = 16;
 		DebugOut(L" Koopa is HOLD\n");
 		break;
 	case KOOPAS_STATE_SHELL_RUNNING:

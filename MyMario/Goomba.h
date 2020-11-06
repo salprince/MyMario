@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define GOOMBA_WALKING_SPEED 0.05f;
+#define GOOMBA_WALKING_SPEED 0.04f;
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 15
@@ -35,5 +35,6 @@ public:
 	int getStartDying() { return this->startDying; }
 	int getEndDying() { return this->endDying; }
 	bool getIsDie(){ return isDie; }
+	float startx = 0;
 	void setIsDie(bool a) { isDie = a; }
 };

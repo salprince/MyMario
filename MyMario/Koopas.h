@@ -34,6 +34,8 @@ public:
 	int width = 16;
 	int height = 26;
 	bool isShell = false;	
+	float startx = 0;
+	int starty = 0;
 	virtual void SetState(int state);
 	void setShellIn(int value) { shellIn = value; }
 	int getShellIn() { return shellIn; }

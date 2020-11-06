@@ -110,6 +110,7 @@ class CMario : public CGameObject
 {
 	int level;
 	int untouchable;
+	
 	DWORD untouchable_start;
 
 	float start_x;			// initial position of Mario at scene
@@ -120,14 +121,20 @@ class CMario : public CGameObject
 	bool isSpin = false;
 	bool isHold = false;
 
+
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	float acceleration = 0;
+	bool readyToHoldKoopas = false;
 	void SetState(int state);
+	float relativeDistanceMarioKoopa = 0;
 	void SetLevel(int l) { level = l; }
-	int getLevel() { return this->level; }
+	int getLevel() { return level; }
+	int getUntouchable() { return untouchable; }
+	int spining = 0;
+	void StartSpinning() { spining= GetTickCount(); }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	bool isJumping() { return this->isJump; }
 	void setJumping(bool jump) { this->isJump = jump; }

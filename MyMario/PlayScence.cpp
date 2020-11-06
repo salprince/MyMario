@@ -13,10 +13,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	Load scene resources from scene file (textures, sprites, animations and objects)
 	See scene1.txt, scene2.txt for detail format specification
 */
-
-
-
-
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
@@ -133,15 +129,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
+	case OBJECT_TYPE_GOOMBA: 
+	{
+		obj = new CGoomba();
+		float l = atof(tokens[4].c_str());
+		obj->length = l;
+		break;
+	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new Koopas(); break;
+	case OBJECT_TYPE_KOOPAS:
+	{
+		float l = atof(tokens[4].c_str());
+		float nx0 = atof(tokens[5].c_str());
+		obj = new Koopas();
+		obj->length = l;
+		obj->nx = nx0;
+		break;
+	}
 	case OBJECT_TYPE_BACKROUND: obj = new backRound(); break;
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
 	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
+	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -241,22 +252,16 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	if (cx < 290)
+	if (cx < 45)
 		CGame::GetInstance()->SetCamPos(15, 00);
-	else if (cy < -130)
+	else if (cy < -160)
 	{
 		for(int i=0; i <100; i++)
 			CGame::GetInstance()->SetCamPos(round(cx), -i);
 	}	
-	else if (cy < 0)
-	{
-		for (int i = 0; i < 100; i++)
-			CGame::GetInstance()->SetCamPos(round(cx), round(cy));
-	}
+	
 	else CGame::GetInstance()->SetCamPos(round(cx), 00);
-	//CGame::GetInstance()->SetCamPos(2300, 0);
-	//DebugOut(L" %f \n", cx);
-	//player->nx = 1;
+	//CGame::GetInstance()->SetCamPos(1300, 0);
 }
 
 void CPlayScene::Render()
@@ -327,12 +332,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{			
-			mario->setIsSpin(!mario->getIsSpin());
+			if (!mario->getIsSpin())
+			{
+				mario->setIsSpin(!mario->getIsSpin());
+				mario->spining = GetTickCount();
+			}			
 		}
-		/*else if (mario->getLevel() == MARIO_LEVEL_BIG)
+		else if (mario->getLevel() == MARIO_LEVEL_BIG)
 		{
-			mario->setIsHold(true);
-		}*/
+			mario->readyToHoldKoopas = true;
+		}
 		break;
 	}
 	case DIK_F:
