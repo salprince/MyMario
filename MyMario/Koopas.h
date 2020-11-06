@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameObject.h"
+#include "Include.h"
 
 #define KOOPAS_WALKING_SPEED 0.03f;
 
@@ -10,6 +10,7 @@
 
 #define KOOPAS_STATE_WALKING	100
 #define KOOPAS_STATE_SHELL 200
+#define KOOPAS_STATE_HOLD 250
 #define KOOPAS_STATE_DIE 300
 #define KOOPAS_STATE_SHELL_RUNNING 400
 
@@ -18,6 +19,7 @@
 #define GREEN_KOOPAS_ANI_DIE 2
 #define GREEN_KOOPAS_ANI_RENEW 3
 #define GREEN_KOOPAS_ANI_SHELL 4
+#define GREEN_KOOPAS_ANI_HOLD 4
 
 class Koopas : public CGameObject
 {
@@ -26,6 +28,7 @@ class Koopas : public CGameObject
 	virtual void Render();
 	int shellIn = 0;
 	int shellOut = 0;
+	bool isHold = false;
 public:
 	Koopas();
 	int width = 16;
@@ -36,5 +39,12 @@ public:
 	int getShellIn() { return shellIn; }
 	void setShellOut(int value) { shellOut = value; }
 	int getShellOut() { return shellOut; }
+	void setIsHold(bool value) { isHold = value; }
+	bool getIsHold() { return isHold; }
+	void setPositionWhileHolding(float x0,float y0)
+	{
+		this->x = x0;
+		this->y = y0;
+	}
 
 };

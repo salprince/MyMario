@@ -288,29 +288,37 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
-		if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state== MARIO_STATE_FLY)
+		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{
-			if (!mario->isJumping())
+			if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state == MARIO_STATE_FLY)
 			{
-				mario->setFlying(true);
-				mario->SetState(MARIO_STATE_FLY);
-			}			
-		}
-		if (!mario->isJumping() && !mario->isFlying())
+				if (!mario->isJumping())
+				{
+					mario->setFlying(true);
+					mario->SetState(MARIO_STATE_FLY);
+				}
+			}
+			if (!mario->isJumping() && !mario->isFlying())
+			{
+				mario->setJumping(true);
+				mario->SetState(MARIO_STATE_JUMP);
+			}
+			else if (mario->isJumping())
+			{
+				mario->setIsOnSky(true);
+				mario->vy = 0.00001;
+			}
+			else
+			{
+
+				mario->vy = -0.2;
+				//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
+			}
+		}		
+		else if (!mario->isJumping())
 		{
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);
-		}
-		else if (mario->isJumping())
-		{
-			mario->setIsOnSky(true);
-			mario->vy = 0.00001;
-		}		
-		else 
-		{
-			
-			mario->vy = -0.2;
-			//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
 		}
 		//mario->SetState(MARIO_STATE_JUMP);
 		break;
@@ -321,6 +329,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{			
 			mario->setIsSpin(!mario->getIsSpin());
 		}
+		/*else if (mario->getLevel() == MARIO_LEVEL_BIG)
+		{
+			mario->setIsHold(true);
+		}*/
+		break;
+	}
+	case DIK_F:
+	{
+		mario->SetLevel(MARIO_LEVEL_FIRE);
 		break;
 	}
 	case DIK_A:

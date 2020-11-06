@@ -183,7 +183,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				else if (e->nx != 0)
-				{
+				{					
 					if (untouchable == 0)
 					{
 						if (koopa->GetState() == KOOPAS_STATE_SHELL)
@@ -339,11 +339,18 @@ void CMario::Render()
 					ani = MARIO_ANI_BIG_BRAKE_RIGHT;
 				}
 				else if (vx == 0)
-					ani = MARIO_ANI_BIG_IDLE_RIGHT;
+				{
+					if (state == MARIO_STATE_HOLD)
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_IDLE_RIGHT;
+					else ani = MARIO_ANI_BIG_IDLE_RIGHT;
+				}
+					
 				else
 				{
 					if (state == MARIO_STATE_RUN)
 						ani = MARIO_ANI_BIG_RUNNING_RIGHT;
+					else if (state == MARIO_STATE_HOLD)
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_WALKING_RIGHT;
 					else ani = MARIO_ANI_BIG_WALKING_RIGHT;
 				}
 			}
@@ -353,11 +360,17 @@ void CMario::Render()
 					ani = MARIO_ANI_BIG_BRAKE_LEFT;
 				}
 				else if (vx == 0)
-					ani = MARIO_ANI_BIG_IDLE_LEFT;
+				{
+					if (state == MARIO_STATE_HOLD)
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_IDLE_LEFT;
+					else ani = MARIO_ANI_BIG_IDLE_LEFT;
+				}
 				else
 				{
 					if (state == MARIO_STATE_RUN)
 						ani = MARIO_ANI_BIG_RUNNING_LEFT;
+					else if (state == MARIO_STATE_HOLD)
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_WALKING_LEFT;
 					else ani = MARIO_ANI_BIG_WALKING_LEFT;
 				}
 			}
@@ -483,6 +496,51 @@ void CMario::Render()
 				
 			
 		}
+		else if (level == MARIO_LEVEL_FIRE)
+		{
+
+		if (nx > 0)
+		{
+			if (vx < 0 && state == MARIO_STATE_WALKING_RIGHT)
+			{
+				ani = MARIO_ANI_FIRE_BRAKE_RIGHT;
+			}
+			else if (vx == 0)
+				ani = MARIO_ANI_FIRE_IDLE_RIGHT;
+			else
+			{
+				if (state == MARIO_STATE_RUN)
+					ani = MARIO_ANI_FIRE_RUNNING_RIGHT;
+				else ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+			}
+		}
+		else {
+			if (vx > 0 && state == MARIO_STATE_WALKING_LEFT)
+			{
+				ani = MARIO_ANI_FIRE_BRAKE_LEFT;
+			}
+			else if (vx == 0)
+				ani = MARIO_ANI_FIRE_IDLE_LEFT;
+			else
+			{
+				if (state == MARIO_STATE_RUN)
+					ani = MARIO_ANI_FIRE_RUNNING_LEFT;
+				else ani = MARIO_ANI_FIRE_WALKING_LEFT;
+			}
+		}
+		if (isJumping())
+		{
+			if (nx > 0)
+			{
+				ani = MARIO_ANI_FIRE_JUMPING_RIGHT;
+			}
+			else
+			{
+				ani = MARIO_ANI_FIRE_JUMPING_LEFT;
+			}
+		}
+
+		}
 	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -537,10 +595,19 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	left = x;
 	top = y;
 
-	if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL)
+	if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL || level == MARIO_LEVEL_FIRE)
 	{
-		right = x + MARIO_BIG_BBOX_WIDTH;
-		bottom = y + MARIO_BIG_BBOX_HEIGHT;
+		if (GetState() == MARIO_STATE_HOLD)
+		{
+			right = x + MARIO_BIG_BBOX_WIDTH+16;
+			bottom = y + MARIO_BIG_BBOX_HEIGHT;
+		}
+		else
+		{
+			right = x + MARIO_BIG_BBOX_WIDTH;
+			bottom = y + MARIO_BIG_BBOX_HEIGHT;
+		}
+		
 	}
 	else
 	{

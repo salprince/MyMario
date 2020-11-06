@@ -19,6 +19,7 @@
 #define MARIO_STATE_JUMP			400
 #define MARIO_STATE_JUMP_WAVE_TAIL	450
 #define MARIO_STATE_FLY				500
+#define MARIO_STATE_HOLD				600
 #define MARIO_STATE_DIE				1000
 
 
@@ -52,20 +53,39 @@
 #define MARIO_ANI_TAIL_FLYING_RIGHT			25
 #define MARIO_ANI_TAIL_RUNNING_LEFT			26
 #define MARIO_ANI_TAIL_RUNNING_RIGHT		27
+
 #define MARIO_ANI_SMALL_BRAKE_LEFT			29
 #define MARIO_ANI_SMALL_BRAKE_RIGHT			28
 #define MARIO_ANI_SMALL_JUMPING_LEFT		31
 #define MARIO_ANI_SMALL_JUMPING_RIGHT		30
+
 #define MARIO_ANI_TAIL_IS_JUMPING_LEFT		32
 #define MARIO_ANI_TAIL_IS_JUMPING_RIGHT		33
 #define MARIO_ANI_TAIL_SPIN_LEFT			34
 #define MARIO_ANI_TAIL_SPIN_RIGHT			35
+
+#define MARIO_ANI_FIRE_IDLE_LEFT			37
+#define MARIO_ANI_FIRE_IDLE_RIGHT			38
+#define MARIO_ANI_FIRE_WALKING_LEFT			39
+#define MARIO_ANI_FIRE_WALKING_RIGHT		40
+#define MARIO_ANI_FIRE_RUNNING_LEFT			41
+#define MARIO_ANI_FIRE_RUNNING_RIGHT		42
+#define MARIO_ANI_FIRE_BRAKE_LEFT			43
+#define MARIO_ANI_FIRE_BRAKE_RIGHT			44
+#define MARIO_ANI_FIRE_JUMPING_LEFT			45
+#define MARIO_ANI_FIRE_JUMPING_RIGHT			46
+
+#define MARIO_ANI_BIG_HOLD_KOOPA_IDLE_LEFT	47		
+#define MARIO_ANI_BIG_HOLD_KOOPA_IDLE_RIGHT		48
+#define MARIO_ANI_BIG_HOLD_KOOPA_WALKING_LEFT	49		
+#define MARIO_ANI_BIG_HOLD_KOOPA_WALKING_RIGHT	50
 
 #define MARIO_ANI_DIE				8
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_TAIL	3
+#define	MARIO_LEVEL_FIRE	4
 
 #define MARIO_BIG_BBOX_WIDTH  15
 #define MARIO_BIG_BBOX_HEIGHT 27
@@ -98,6 +118,7 @@ class CMario : public CGameObject
 	bool isFly = false;
 	bool isOnSky = false;
 	bool isSpin = false;
+	bool isHold = false;
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -116,6 +137,8 @@ public:
 	bool getIsOnSky() { return isOnSky; }
 	void setIsSpin(bool value) { isSpin = value; }
 	bool getIsSpin() { return this->isSpin; }
+	void setIsHold(bool value) {isHold = value;}
+	bool getIsHold() { return isHold; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
