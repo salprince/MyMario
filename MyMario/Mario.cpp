@@ -160,6 +160,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					//DebugOut(L"%f %f \n", x, koopa->x);
 					if (e->ny < 0)
 					{
+
 						if (this->isJumping())
 							this->setJumping(false);
 						if (this->isFlying())
@@ -181,10 +182,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (untouchable == 0)
 						{
+							
 							//making kick koopas
 							if (koopa->GetState() == KOOPAS_STATE_SHELL && abs(koopa->vx)==0 )
 							{
-								if (abs(vx) > 0.04)
+								if (abs(vx) > 0.06)
 								{
 									if (readyToHoldKoopas)
 										readyToHoldKoopas = false;
@@ -213,7 +215,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else if (koopa->GetState() == KOOPAS_STATE_SHELL_RUNNING || koopa->GetState() == KOOPAS_STATE_WALKING)
 							{
-								if (level > MARIO_LEVEL_SMALL)
+								if (level == MARIO_LEVEL_TAIL && getIsSpin())
+									koopa->SetState(KOOPAS_STATE_SHELL);
+								else if (level > MARIO_LEVEL_SMALL)
 								{
 									level -= 1;
 									StartUntouchable();
@@ -397,11 +401,16 @@ void CMario::Render()
 			{
 				if (nx > 0)
 				{
-					ani = MARIO_ANI_BIG_JUMPING_RIGHT;
+					if (getIsHold())
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_JUMPING_RIGHT;
+					else	ani = MARIO_ANI_BIG_JUMPING_RIGHT;
+					//ani = MARIO_ANI_BIG_HOLD_KOOPA_JUMPING_RIGHT;
 				}
 				else
 				{
-					ani = MARIO_ANI_BIG_JUMPING_LEFT;
+					if (getIsHold())
+						ani = MARIO_ANI_BIG_HOLD_KOOPA_JUMPING_LEFT;
+					else	ani = MARIO_ANI_BIG_JUMPING_LEFT;
 				}
 			}
 

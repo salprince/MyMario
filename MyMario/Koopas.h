@@ -3,7 +3,7 @@
 #include "Include.h"
 
 #define KOOPAS_WALKING_SPEED 0.03f;
-
+#define KOOPAS_RUNNING_SPEED 0.2f;
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 26
 #define KOOPAS_BBOX_HEIGHT_DIE 16
@@ -19,7 +19,7 @@
 #define GREEN_KOOPAS_ANI_DIE 2
 #define GREEN_KOOPAS_ANI_RENEW 3
 #define GREEN_KOOPAS_ANI_SHELL 4
-#define GREEN_KOOPAS_ANI_HOLD 4
+#define GREEN_KOOPAS_ANI_HOLD 5
 
 class Koopas : public CGameObject
 {
@@ -36,6 +36,8 @@ public:
 	bool isShell = false;	
 	float startx = 0;
 	int starty = 0;
+	float gravity = 0;
+	CMario* marioHandle= NULL;
 	virtual void SetState(int state);
 	void setShellIn(int value) { shellIn = value; }
 	int getShellIn() { return shellIn; }
@@ -43,10 +45,21 @@ public:
 	int getShellOut() { return shellOut; }
 	void setIsHold(bool value) { isHold = value; }
 	bool getIsHold() { return isHold; }
-	void setPositionWhileHolding(float x0,float y0)
+	void setPositionWhileHolding(float x0,float y0, float vx0, int nx)
 	{
-		this->x = x0;
-		this->y = y0;
+		if (nx > 0)
+		{
+			this->x = x0 + 10;
+			this->y = y0 + 10;
+			this->vx = vx0;
+		}
+		else 
+		{
+			this->x = x0 - 10;
+			this->y = y0 + 10;
+			this->vx = vx0;
+		}
+		
 	}
 
 };

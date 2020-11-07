@@ -32,29 +32,51 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	if (state != KOOPAS_STATE_DIE)
 	{
-		vy += 0.0008 * dt;
-		if (startx == 0)
-			startx = x;
-		if (vx < 0 && x < 15)
+		if (state == KOOPAS_STATE_HOLD)
 		{
-			vx = -vx;
-			x = 15;
+			this->marioHandle= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			if (!marioHandle->getIsHold())
+			{
+				this->setIsHold(false);
+				this->SetState(KOOPAS_STATE_SHELL_RUNNING);
+				this->nx = marioHandle->nx;
+				this->vx = nx * KOOPAS_RUNNING_SPEED;				
+				this->vy = -0.2;
+				this->marioHandle = NULL;
+			}
+			else
+				setPositionWhileHolding(marioHandle->x, marioHandle->y, marioHandle->vx, marioHandle->nx);
 		}
-		if (state != KOOPAS_STATE_SHELL_RUNNING)
+		else
 		{
-			if (vx > 0 && x >= length + startx)
+			if (state != KOOPAS_STATE_SHELL_RUNNING)
+				this->gravity = 0.0001;
+			else	gravity = 0.0008;
+			vy += gravity * dt;
+			if (startx == 0)
+				startx = x;
+			if (vx < 0 && x < 15)
 			{
 				vx = -vx;
-				x = length + startx;
+				x = 15;
 			}
-			if (vx < 0 && x <= startx - length)
+			if (state != KOOPAS_STATE_SHELL_RUNNING)
 			{
-				vx = -vx;
-				x = -length + startx;
+				if (vx > 0 && x >= length + startx)
+				{
+					vx = -vx;
+					x = length + startx;
+				}
+				if (vx < 0 && x <= startx - length)
+				{
+					vx = -vx;
+					x = -length + startx;
+				}
 			}
+
+			CalcPotentialCollisions(coObjects, coEvents);
 		}
 		
-		CalcPotentialCollisions(coObjects, coEvents);
 	}	
 	
 	//DebugOut(L"%f %f \n", x, startx);
@@ -160,9 +182,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Koopas::Render()
 {
 	int ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
-	if (state == KOOPAS_STATE_DIE || state == KOOPAS_STATE_HOLD) {
+	if (state == KOOPAS_STATE_DIE ) {
 		ani = GREEN_KOOPAS_ANI_DIE;
 	}
+	else if (state == KOOPAS_STATE_HOLD)
+		ani = GREEN_KOOPAS_ANI_HOLD;
 	else if (state == KOOPAS_STATE_SHELL|| state == KOOPAS_STATE_SHELL_RUNNING )
 		ani = GREEN_KOOPAS_ANI_SHELL;
 	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;

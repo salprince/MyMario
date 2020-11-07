@@ -340,7 +340,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else if (mario->getLevel() == MARIO_LEVEL_BIG)
 		{
-			mario->readyToHoldKoopas = true;
+			mario->readyToHoldKoopas = false;
+			if(!mario->readyToHoldKoopas)
+				mario->readyToHoldKoopas = true;
+			if (mario->getIsHold())
+				mario->setIsHold(false);
+
 		}
 		break;
 	}
