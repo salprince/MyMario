@@ -23,7 +23,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
-
+	DebugOut(L"%f \n", vx);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	
@@ -32,7 +32,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// turn off collision when die 
 	if (state != MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
-
+	
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
@@ -54,22 +54,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		//if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		if (nx != 0);
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			{
-				CalcPotentialCollisions(coObjects, coEvents);
-				// block every object first!
-				x += (min_tx * dx + nx * 0.4f);
-				y += min_ty * dy + ny * 0.4f;
 
-				//if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
-				if (nx != 0);
-				//if (ny != 0) ;
-
-			}
 			//seting state of collision
 			int stateCollision = -1;
 			if (dynamic_cast<CGoomba*>(e->obj))
@@ -122,8 +117,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				break;
 			}
 			case MARIO_COLLISION_GOOMBA:
-			{
-				vx = 0;
+			{				
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
@@ -160,7 +154,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_KOOPA:
 			{
 				Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
-				DebugOut(L"coliis koopas at %f\n ", dt);
+				//DebugOut(L"coliis koopas at %f\n ", dt);
 				if (untouchable == 0)
 				{
 					//DebugOut(L"%f %f \n", x, koopa->x);
@@ -256,7 +250,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 				if (e->nx != 0)
 				{
-					(vx = 0);
+					//(vx = 0);
 					SetState(MARIO_STATE_IDLE);
 				}
 				if (e->ny != 0)
@@ -306,25 +300,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT)
-	{	
+	{
 		if (vx > MARIO_MAX_WALKING_SPEED)
 			vx = MARIO_MAX_WALKING_SPEED;
-		else if(vx < -MARIO_MAX_WALKING_SPEED)
+		else if (vx < -MARIO_MAX_WALKING_SPEED)
 			vx = -MARIO_MAX_WALKING_SPEED;
 		else
-		{	
-			vx += ((int)nx) * (MARIO_ACCELERATION *dt );
+		{
+			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
 		}
-		if (abs(vx) >= MARIO_MAX_WALKING_SPEED)
-			SetState(MARIO_STATE_RUN);
+		if (abs(vx) >= MARIO_MAX_WALKING_SPEED-0.05)
+			this->SetState(MARIO_STATE_RUN);
 	}
 	else if (state == MARIO_STATE_IDLE)
 	{
-		if (vx > MARIO_STOP_ACCELERATION/2)
+		if (vx > MARIO_STOP_ACCELERATION / 2)
 		{
-			vx = vx - abs(vx/5);
+			vx = vx - abs(vx / 5);
 		}
-		else if (vx < -MARIO_STOP_ACCELERATION/2)
+		else if (vx < -MARIO_STOP_ACCELERATION / 2)
 		{
 			vx = vx + abs(vx / 5);
 		}
@@ -333,6 +327,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 		}
 	}
+
 	if (getLevel() == MARIO_LEVEL_TAIL && getIsSpin() && spining != 0)
 	{
 		if (GetTickCount() - spining >= 200)
@@ -340,7 +335,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 		spining = 0;
-
 	if (getIsHold())
 		SetState(MARIO_STATE_HOLD);
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];	

@@ -57,7 +57,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CalcPotentialCollisions(coObjects, coEvents);
 	}	
 	
-	DebugOut(L"%f %f \n", x, startx);
+	//DebugOut(L"%f %f \n", x, startx);
 	//make koopa waling after some seconds
 	if (isShell == true && state != KOOPAS_STATE_SHELL_RUNNING  && state != KOOPAS_STATE_HOLD)
 	{

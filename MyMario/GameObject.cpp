@@ -123,11 +123,15 @@ void CGameObject::FilterCollision(
 			nx = 0;
 			ny = 0;
 		}
-		if (dynamic_cast<CMario*>(coEvents[i]->obj))
+		if (dynamic_cast<Koopas*>(this))
 		{
-			nx = 0;
-			ny = 0;
+			if (dynamic_cast<CMario*>(coEvents[i]->obj))
+			{
+				nx = 0;
+				ny = 0;
+			}
 		}
+		
 	}
 
 	if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
