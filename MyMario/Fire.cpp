@@ -15,30 +15,41 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	vy += 0.005;
 	coEvents.clear();
+
 	this->SetState(FIRE_STATE_ALIVE);
+
 	if (this->state == FIRE_STATE_ALIVE)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
 	if (marioHandle->getIsFire())
 	{
+		this->Reset();
 		this->isFire = GetTickCount();
-		this->setPositionAfterMario(marioHandle->x, marioHandle->y, marioHandle->nx);
+		
+		if (abs(marioHandle->vx) > 0.07f)
+			this->vx = marioHandle->vx;
+		else 
+			this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
+		this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);
 	}
 		
 	if (isFire != 0)
 	{
-		this->vx =marioHandle->nx * FIRE_FLYING_SPEED;
-		this->vy = -0.00002;
-		marioHandle->setIsFire(false);
-		isFire = 0;
+		if ((GetTickCount() - isFire) < 3000)
+		{	
+			marioHandle->setIsFire(false);
+		}
+		else
+		{			
+			isFire = 0;
+		}
+		
 	}
-	//DebugOut(L"%d \n", ny);
 	if (coEvents.size() == 0)
 	{
 		x += dx;
 		y += dy;
-		//DebugOut(L"not collis\n ");
 	}
 	else
 	{
@@ -46,48 +57,69 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		
-		/*if (isFire ==0)
-		{
-			x += min_tx * dx + nx * 0.4f;
-			if (ny != 0) vy = 0;
-			if (nx != 0);
-		}*/
 		if (nx != 0)
 			y = 500;
 		if (ny != 0)
-		{
+		{			
+			/*if(abs(vy)>0)
+				vy = -(abs(vy)-0.002);	*/
+			if (vy > 0.12 / 2)
+			{
+				vy = vy - abs(vy / 3);
+			}
+			else if (vy < -0.12/ 2)
+			{
+				vy = vy + abs(vy / 3);
+			}
+			else
+			{
+				vy = 0;
+			}
 			ny = -ny;
-			//if (abs(vy) <= 0.2)
-				vy = -(vy-0.002);
-				DebugOut(L"%f \n", vy);
+			vy = -vy;
+			DebugOut(L"%f \n", vy);
+		}
+		if (state == FIRE_STATE_ALIVE)
+		{
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (dynamic_cast<Koopas*>(e->obj))
+				{
+					e->obj->SetState(KOOPAS_STATE_DIE);
+					e->obj->y += 12;
+					e->obj->vx += 0.05 * nx;
+					SetState(KOOPAS_STATE_DIE);
+					y = 300;
+
+				}
+				else if (dynamic_cast<CGoomba*>(e->obj))
+				{
+					//e->obj->SetState(GOOMBA_STATE_CLEAR);
+					e->obj->y += 12;
+					e->obj->vx += 0.05 * nx;
+					y = 300;
+				}
+				else if (dynamic_cast<ColorBrick*>(e->obj));
+				/*else
+				{
+					if (e->nx != 0)
+					{
+						vx = -vx;
+						nx = -nx;
+					}
+					if (e->ny != 0)
+					{
+						ny = -ny;
+						vy = -vy;
+					}
+					
+				}*/
+			}
 		}
 		
 	}
-	if (state == FIRE_STATE_ALIVE)
-	{
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<Koopas*>(e->obj))
-			{
-				e->obj->SetState(KOOPAS_STATE_DIE);
-				e->obj->y += 12;
-				e->obj->vx += 0.05 * nx;
-				SetState(KOOPAS_STATE_DIE);
-				y = 300;
-
-			}
-			if (dynamic_cast<CGoomba*>(e->obj))
-			{
-				//e->obj->SetState(GOOMBA_STATE_CLEAR);
-				e->obj->y += 12;
-				e->obj->vx += 0.05 * nx;
-				y = 300;
-			}
-			
-		}
-	}
+	
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 void Fire::Render()
@@ -105,4 +137,10 @@ void Fire::SetState(int state)
 	case FIRE_STATE_ALIVE:
 		break;
 	}
+}
+void Fire::Reset()
+{
+	this->SetState(FIRE_STATE_ALIVE);
+	this->SetSpeed(0.05, 0.05);
+	this->isFire = 0;
 }

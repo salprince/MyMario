@@ -713,7 +713,7 @@
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 #backround
-4	0	-180	99999
+#4	0	-180	99999
 #brick
 1	0	250	9001
 1	16	250	9002
@@ -1856,7 +1856,7 @@
 3	1341	165	23001	45	-1
 
 #fire 
-10	100	100	25001
+10	100	500	25001
 # MARIO
 0	50.0	0	1
 

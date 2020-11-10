@@ -12,7 +12,7 @@ void LevelMushroom::Render()
 {
 	int ani = MUSHROOM_ANI_ALIVE;
 	if (state == MUSHROOM_STATE_DIE) {
-		ani = MUSHROOM_ANI_DIE;
+		ani = MUSHROOM_ANI_ALIVE;
 	}
 	animation_set->at(ani)->Render(x, y);
 }

@@ -20,6 +20,7 @@ public:
 	virtual void SetState(int state);
 	int isFire = 0;
 	CMario* marioHandle = NULL;
+	void Reset();
 	void setPositionAfterMario(float x, float y, float nx)
 	{
 		this->x = x;

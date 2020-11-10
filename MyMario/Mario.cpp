@@ -23,12 +23,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
-	//DebugOut(L"%f \n", vx);
+	if (vy < 0 && y < -100) y = -100;
+	DebugOut(L"%f %f \n",vy , y);
 	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	
+	vector<LPCOLLISIONEVENT> coEventsResult;	
 	coEvents.clear();
-
 	// turn off collision when die 
 	if (state != MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
