@@ -151,6 +151,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
 	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
+	case OBJECT_TYPE_FIRE: 
+	{
+		obj = new Fire(); 
+		/*CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		mario->numberFire = (Fire*)obj;*/
+		break;
+	}
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
@@ -345,13 +352,18 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				mario->readyToHoldKoopas = true;
 			if (mario->getIsHold())
 				mario->setIsHold(false);
-
+		}
+		else if (mario->getLevel() == MARIO_LEVEL_FIRE)
+		{
+			if (!mario->getIsFire())
+				mario->setIsFire(true);
 		}
 		break;
 	}
 	case DIK_F:
 	{
 		mario->SetLevel(MARIO_LEVEL_FIRE);
+		mario->SetPosition(mario->x, mario->y - 20);
 		break;
 	}
 	case DIK_A:

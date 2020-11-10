@@ -24,6 +24,7 @@
 #define OBJECT_TYPE_MICSBRICK	7
 #define OBJECT_TYPE_LEVELMUSHROOM	8
 #define OBJECT_TYPE_GREEN_FLOWER	9
+#define OBJECT_TYPE_FIRE			10
 #define OBJECT_TYPE_CHIMNEY_PORTAL	49
 #define OBJECT_TYPE_PORTAL	50
 
@@ -45,7 +46,6 @@ protected:
 
 public:
 	CPlayScene(int id, LPCWSTR filePath);
-
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

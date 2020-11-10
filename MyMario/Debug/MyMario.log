@@ -1,2 +1,9 @@
-﻿  LevelMushroom.cpp
+﻿  Fire.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.h(27,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(16,13): warning C4305: '+=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(26,74): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(32,22): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(62,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(76,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(85,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

@@ -122,7 +122,7 @@ class CMario : public CGameObject
 	bool isOnSky = false;
 	bool isSpin = false;
 	bool isHold = false;
-
+	bool isFire = false;
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -148,6 +148,8 @@ public:
 	bool getIsSpin() { return this->isSpin; }
 	void setIsHold(bool value) {isHold = value;}
 	bool getIsHold() { return isHold; }
+	void setIsFire(bool value) { isFire = value; }
+	bool getIsFire() { return isFire; }
 	void Reset();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

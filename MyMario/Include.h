@@ -25,3 +25,4 @@
 #include "MicsBrick.h"
 #include "ChimneyPortal.h"
 #include "LevelMushroom.h"
+#include "Fire.h"
