@@ -22,6 +22,8 @@ void LevelMushroom::SetState(int state)
 	CGameObject::SetState(state);
 	if (state == MUSHROOM_STATE_DIE)
 	{
+		this->x = -500;
+		this->y = -500;
 		width = 0;
 		height = 0;
 	}

@@ -57,12 +57,11 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdx = 0;
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		CalcPotentialCollisions(coObjects, coEvents);
 		if (nx != 0)
 			y = 500;
 		if (ny != 0)
 		{			
-			/*if(abs(vy)>0)
-				vy = -(abs(vy)-0.002);	*/
 			if (vy > 0.12 / 2)
 			{
 				vy = vy - abs(vy / 3);
@@ -77,7 +76,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			ny = -ny;
 			vy = -vy;
-			DebugOut(L"%f \n", vy);
+			//DebugOut(L"%f \n", vy);
 		}
 		if (state == FIRE_STATE_ALIVE)
 		{
@@ -100,21 +99,18 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->vx += 0.05 * nx;
 					y = 300;
 				}
-				else if (dynamic_cast<ColorBrick*>(e->obj));
-				/*else
+				else if (dynamic_cast<ColorBrick*>(e->obj))
 				{
-					if (e->nx != 0)
-					{
-						vx = -vx;
-						nx = -nx;
-					}
-					if (e->ny != 0)
-					{
-						ny = -ny;
-						vy = -vy;
-					}
-					
-				}*/
+					//DebugOut(L"collis color brick\n");
+					x++;
+				}
+				else if (dynamic_cast<backRound*>(e->obj));
+				else if (dynamic_cast<CBrick*>(e->obj));
+				else 
+				{
+					y = 500;
+				}
+				
 			}
 		}
 		

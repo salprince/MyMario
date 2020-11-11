@@ -29,7 +29,7 @@
 #define WINDOW_CLASS_NAME L"GameWindow"
 #define MAIN_WINDOW_TITLE L"MYMARIO"
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(72, 220, 72)
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(156,252,240)
 #define SCREEN_WIDTH 400
 #define SCREEN_HEIGHT 328
 
@@ -71,6 +71,7 @@ void Render()
 	if (d3ddv->BeginScene())
 	{
 		// Clear back buffer with a color
+		
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 

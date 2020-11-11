@@ -260,18 +260,18 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 	CGame::GetInstance()->SetCamPos(15, 00);
-	/*if (cx < 15)
+	if (cx < 15)
 		CGame::GetInstance()->SetCamPos(15, 00);
 	else if (cy < -160)
 	{
-		for(int i=0; i <100; i++)
+		for(int i=0; i <160; i++)
 			CGame::GetInstance()->SetCamPos(round(cx), -i);
 	}	
 	else if(cy>200)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
 	else 
-		CGame::GetInstance()->SetCamPos(round(cx), 00);*/
-	CGame::GetInstance()->SetCamPos(2200, 250);
+		CGame::GetInstance()->SetCamPos(round(cx), 00);
+	//CGame::GetInstance()->SetCamPos(2300, 250);
 }
 
 void CPlayScene::Render()
@@ -389,10 +389,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	if (game->IsKeyDown(DIK_LEFT) || game->IsKeyDown(DIK_RIGHT))
-	{
-		mario->acceleration=0.05;
-	}
+	
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
@@ -412,4 +409,5 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
 	else
 		mario->SetState(MARIO_STATE_IDLE);
+	
 }

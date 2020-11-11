@@ -23,8 +23,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
-	if (vy < 0 && y < -100) y = -100;
-	DebugOut(L"%f %f \n",vy , y);
+	if (vy < 0 && y < -120) y = -120;
+	//DebugOut(L"%f %f \n",vy , y);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;	
 	coEvents.clear();
@@ -237,7 +237,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			case MARIO_COLLISION_COLORBRICK:
 			{
-				if (e->ny != 0)
+				if (e->ny <0 )
 				{
 					if (this->isJumping())
 						this->setJumping(false);

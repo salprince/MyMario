@@ -129,7 +129,7 @@ void CGameObject::FilterCollision(
 			{
 				nx = 0;
 				ny = 0;
-				DebugOut(L"coliis mario \n");
+				//DebugOut(L"coliis mario \n");
 			}
 		}
 		/*if (dynamic_cast<Fire*>(coEvents[i]->obj) && dynamic_cast<CMario*>(this))
