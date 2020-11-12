@@ -6,11 +6,11 @@ CMario::CMario(float x, float y) : CGameObject()
 	level = MARIO_LEVEL_SMALL;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
-
 	start_x = x;
 	start_y = y;
 	this->x = x;
 	this->y = y;
+
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -336,15 +336,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (GetTickCount() - spining >= 200)
 			setIsSpin(false);
 	}
-	else if (getLevel() == MARIO_LEVEL_FIRE && getIsFire() && timeShooting != 0)
+	else if (getLevel() == MARIO_LEVEL_FIRE && timeShooting != 0)
 	{
+		setIsFire(false);
 		if (GetTickCount() - timeShooting >= 100)
-			setIsFire(false);	
+			timeShooting = 0;
 	}
+	/*else if (getLevel() == MARIO_LEVEL_TAIL && timeFlying != 0)
+	{
+		if (GetTickCount() - timeFlying >= 200)
+			setFlying(false);
+	}*/
 	else
 	{
 		spining = 0;
 		timeShooting = 0;
+		timeShooting = 0;
+
 	}
 		
 	if (getIsHold())
@@ -576,7 +584,7 @@ void CMario::Render()
 				ani = MARIO_ANI_FIRE_JUMPING_LEFT;
 			}
 		}
-		else if (getIsFire())
+		else if (timeShooting!=0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_FIRE_SHOOTING_LEFT;

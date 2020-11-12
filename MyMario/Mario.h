@@ -157,6 +157,8 @@ public:
 	bool getIsFire() { return isFire; }
 	void Reset();
 	int FireID = 1;
+	//tiemshotting toset ani for mario 
 	int timeShooting = 0;
+	int timeFlying = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

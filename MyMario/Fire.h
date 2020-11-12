@@ -20,8 +20,9 @@ public:
 	virtual void SetState(int state);
 	int isFire = 0;
 	int id = 0;
-	int maxFire = 5;
+	bool isFiring = false;
 	CMario* marioHandle = NULL;
+	
 	void Reset();
 	void setPositionAfterMario(float x, float y, float nx)
 	{

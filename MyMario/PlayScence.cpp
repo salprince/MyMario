@@ -300,8 +300,6 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
@@ -314,7 +312,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (!mario->isJumping())
 				{
 					mario->setFlying(true);
-					mario->SetState(MARIO_STATE_FLY);
+					//if(mario->GetState()!= MARIO_STATE_FLY)
+						mario->SetState(MARIO_STATE_FLY);
+					//mario->timeFlying = GetTickCount();
 				}
 			}
 			if (!mario->isJumping() && !mario->isFlying())
@@ -362,12 +362,19 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else if (mario->getLevel() == MARIO_LEVEL_FIRE)
 		{
+			//DeBugOut(L"Get is Fire AFTER = %d \n", mario->getIsFire());
+			//DebugOut(L"Get is Fire beFORE = %d \n",mario->getIsFire());
 			if (!mario->getIsFire())
 			{
 				mario->setIsFire(true);
 				mario->timeShooting = GetTickCount();
-				DebugOut(L"aaaaaa\n");
+				if(mario->FireID<10)
+					mario->FireID++;
+				else 
+					mario->FireID=1;
+				//DebugOut(L"aaaaaa\n");
 			}
+			//DebugOut(L"Get is Fire AFTER = %d \n", mario->getIsFire());
 			
 		}
 		break;

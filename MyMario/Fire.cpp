@@ -6,47 +6,74 @@ void Fire::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + FIRE_BBOX_WIDTH;
 	b = y + FIRE_BBOX_HEIGHT;
+	this->marioHandle = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 }
+
 void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
-	this->marioHandle= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	vy += 0.005;
 	coEvents.clear();
-
+	
 	this->SetState(FIRE_STATE_ALIVE);
 
 	if (this->state == FIRE_STATE_ALIVE)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
+	
 	if (marioHandle->getIsFire())
 	{
+		//DebugOut(L"isShooting %d, getIsFire %d \n", marioHandle->timeShooting, marioHandle->getIsFire());
 		//if(this->id == marioHandle->FireID)
 		{
-			this->Reset();
-			this->isFire = GetTickCount();
-			if (abs(marioHandle->vx) > 0.07f)
-				this->vx = marioHandle->vx;
-			else
-				this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
-			this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);			
-		}		
-		
-		
+			for (int i = 1; i < 10; i++)
+			{
+				//DebugOut(L" id of fire %d \n", id);
+				if (!this->isFiring && this->id == marioHandle->FireID)
+				{
+					this->Reset();
+					this->isFire = GetTickCount();
+					if (abs(marioHandle->vx) > 0.07f)
+						this->vx = marioHandle->vx;
+					else
+						this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
+					if (marioHandle->nx > 0)
+						this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);
+					else if (marioHandle->nx < 0)
+						this->setPositionAfterMario(marioHandle->x - 3, marioHandle->y, marioHandle->nx);
+					//vy = -0.08;
+					this->isFiring = true;
+					//DebugOut(L"BREAK id of fire %d \n", id);
+					//DebugOut(L"mario y %f \n", marioHandle->y);
+					DebugOut(L"%f  %f ///// %f %f \n", vx, vy, x,y);
+					break;
+
+				}
+			}
+
+			/*if (marioHandle->FireID < 10)
+				marioHandle->FireID++;*/
+
+		}
 	}
+	else;
+		//DebugOut(L"\n");
 		
 	if (isFire != 0)
 	{
 		if ((GetTickCount() - isFire) < 3000)
 		{	
-			//marioHandle->setIsFire(false);
+			if (y > 240 && y != 500)
+				y = 240;
 		}
 		else
 		{			
 			isFire = 0;
+			this->isFiring = false;
 		}
 		
 	}
@@ -63,7 +90,14 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		CalcPotentialCollisions(coObjects, coEvents);
 		if (nx != 0)
+		{
+			Reset();
+			x = 0;
 			y = 500;
+			isFiring = false;
+			isFire = 0;
+		}
+			
 		if (ny != 0)
 		{			
 			if (vy > 0.12 / 2)
@@ -93,7 +127,9 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->y += 12;
 					e->obj->vx += 0.05 * nx;
 					SetState(KOOPAS_STATE_DIE);
-					y = 300;
+					isFiring = false;
+					isFire = 0;
+					Reset();
 
 				}
 				else if (dynamic_cast<CGoomba*>(e->obj))
@@ -101,18 +137,27 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					//e->obj->SetState(GOOMBA_STATE_CLEAR);
 					e->obj->y += 12;
 					e->obj->vx += 0.05 * nx;
-					y = 300;
+					isFiring = false;
+					isFire = 0;
+					Reset();
 				}
-				else if (dynamic_cast<ColorBrick*>(e->obj))
+				else if (dynamic_cast<ColorBrick*>(e->obj) || dynamic_cast<Coin*>(e->obj))
 				{
 					//DebugOut(L"collis color brick\n");
 					x++;
 				}
 				else if (dynamic_cast<backRound*>(e->obj));
+				else if (dynamic_cast<CMario*>(e->obj))
+				{
+					nx = 0; ny = 0;
+					x++;
+				}
 				else if (dynamic_cast<CBrick*>(e->obj));
 				else 
 				{
-					y = 500;
+					isFiring = false;
+					isFire = 0;
+					Reset();
 				}
 				
 			}
@@ -141,6 +186,18 @@ void Fire::SetState(int state)
 void Fire::Reset()
 {
 	this->SetState(FIRE_STATE_ALIVE);
-	this->SetSpeed(0.05, 0.05);
+	this->SetSpeed(0.0, 0.0);
 	this->isFire = 0;
+	this->vx = 0;
+	this->vy = 0;
+	this->x = 0;
+	this->y = 0;
+	this->ax = 0;
+	this->ay = 0;
+	this->dx = 0;
+	this->dy = 0;
+	this->nx = 0;
+	this->ny = 0;
+
+	//isFiring = false;
 }
