@@ -152,10 +152,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
 	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
 	case OBJECT_TYPE_FIRE: 
-	{
+	{		
+		
 		obj = new Fire(); 
-		/*CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		mario->numberFire = (Fire*)obj;*/
+		int l = atof(tokens[4].c_str());
+		dynamic_cast<Fire*>(obj)->id = l;
+		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
+			dynamic_cast<Fire*>(obj)->maxFire = l;*/
+		//DebugOut(L"maxFireaaaaaa %d \n", l);
 		break;
 	}
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
@@ -344,7 +348,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{			
 			if (!mario->getIsSpin())
 			{
-				mario->setIsSpin(!mario->getIsSpin());
+				mario->setIsSpin(true);
 				mario->spining = GetTickCount();
 			}			
 		}
@@ -359,7 +363,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		else if (mario->getLevel() == MARIO_LEVEL_FIRE)
 		{
 			if (!mario->getIsFire())
+			{
 				mario->setIsFire(true);
+				mario->timeShooting = GetTickCount();
+				DebugOut(L"aaaaaa\n");
+			}
+			
 		}
 		break;
 	}

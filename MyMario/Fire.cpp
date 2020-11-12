@@ -8,7 +8,7 @@ void Fire::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y + FIRE_BBOX_HEIGHT;
 }
 void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
+{	
 	this->marioHandle= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -24,21 +24,25 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (marioHandle->getIsFire())
 	{
-		this->Reset();
-		this->isFire = GetTickCount();
+		//if(this->id == marioHandle->FireID)
+		{
+			this->Reset();
+			this->isFire = GetTickCount();
+			if (abs(marioHandle->vx) > 0.07f)
+				this->vx = marioHandle->vx;
+			else
+				this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
+			this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);			
+		}		
 		
-		if (abs(marioHandle->vx) > 0.07f)
-			this->vx = marioHandle->vx;
-		else 
-			this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
-		this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);
+		
 	}
 		
 	if (isFire != 0)
 	{
 		if ((GetTickCount() - isFire) < 3000)
 		{	
-			marioHandle->setIsFire(false);
+			//marioHandle->setIsFire(false);
 		}
 		else
 		{			

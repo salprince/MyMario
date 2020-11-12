@@ -1,8 +1,7 @@
-﻿  Fire.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.h(28,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(16,13): warning C4305: '+=': truncation from 'double' to 'float'
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(34,79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(90,29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(99,29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(140,27): warning C4305: 'argument': truncation from 'double' to 'float'
+﻿  Mario.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.h(30,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(22,27): warning C4305: '+=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(193,27): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(194,32): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(61,15): warning C4390: ';': empty controlled statement found; is this the intent?
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

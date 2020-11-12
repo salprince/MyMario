@@ -19,6 +19,8 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
 	int isFire = 0;
+	int id = 0;
+	int maxFire = 5;
 	CMario* marioHandle = NULL;
 	void Reset();
 	void setPositionAfterMario(float x, float y, float nx)

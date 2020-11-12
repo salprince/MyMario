@@ -20,6 +20,7 @@
 #define MARIO_STATE_JUMP_WAVE_TAIL	450
 #define MARIO_STATE_FLY				500
 #define MARIO_STATE_HOLD				600
+#define MARIO_STATE_SHOOTING				700
 #define MARIO_STATE_DIE				1000
 
 
@@ -82,6 +83,9 @@
 #define MARIO_ANI_BIG_HOLD_KOOPA_JUMPING_LEFT	51		
 #define MARIO_ANI_BIG_HOLD_KOOPA_JUMPING_RIGHT	52
 
+#define MARIO_ANI_FIRE_SHOOTING_LEFT			54
+#define MARIO_ANI_FIRE_SHOOTING_RIGHT			53
+
 #define MARIO_ANI_DIE				8
 
 #define	MARIO_LEVEL_SMALL	1
@@ -123,6 +127,7 @@ class CMario : public CGameObject
 	bool isSpin = false;
 	bool isHold = false;
 	bool isFire = false;
+	
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -151,6 +156,7 @@ public:
 	void setIsFire(bool value) { isFire = value; }
 	bool getIsFire() { return isFire; }
 	void Reset();
-
+	int FireID = 1;
+	int timeShooting = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

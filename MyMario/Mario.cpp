@@ -331,13 +331,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (getLevel() == MARIO_LEVEL_TAIL && getIsSpin() && spining != 0)
+	if (getLevel() == MARIO_LEVEL_TAIL  && spining != 0)
 	{
 		if (GetTickCount() - spining >= 200)
 			setIsSpin(false);
 	}
+	else if (getLevel() == MARIO_LEVEL_FIRE && getIsFire() && timeShooting != 0)
+	{
+		if (GetTickCount() - timeShooting >= 100)
+			setIsFire(false);	
+	}
 	else
+	{
 		spining = 0;
+		timeShooting = 0;
+	}
+		
 	if (getIsHold())
 		SetState(MARIO_STATE_HOLD);
 	
@@ -567,6 +576,13 @@ void CMario::Render()
 				ani = MARIO_ANI_FIRE_JUMPING_LEFT;
 			}
 		}
+		else if (getIsFire())
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_FIRE_SHOOTING_LEFT;
+			else
+				ani = MARIO_ANI_FIRE_SHOOTING_RIGHT;
+		}
 
 		}
 	}
@@ -612,6 +628,8 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		break;
+	case MARIO_STATE_SHOOTING:
 		break;
 	}
 	//DebugOut(L"mario acceleration  ax ay %d, %d, %d \n", ax, ay, state);
