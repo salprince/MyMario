@@ -47,6 +47,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setPositionAfterMario(marioHandle->x - 3, marioHandle->y, marioHandle->nx);
 					//vy = -0.08;
 					this->isFiring = true;
+
 					//DebugOut(L"BREAK id of fire %d \n", id);
 					//DebugOut(L"mario y %f \n", marioHandle->y);
 					DebugOut(L"%f  %f ///// %f %f \n", vx, vy, x,y);

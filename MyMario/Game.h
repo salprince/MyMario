@@ -38,8 +38,8 @@ class CGame
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
-	int screen_width;
-	int screen_height;
+	int screen_width=0;
+	int screen_height=0;
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;

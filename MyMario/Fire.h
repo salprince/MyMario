@@ -24,7 +24,7 @@ public:
 	CMario* marioHandle = NULL;
 	
 	void Reset();
-	void setPositionAfterMario(float x, float y, float nx)
+	void setPositionAfterMario(float x, float y, int nx)
 	{
 		this->x = x;
 		this->y = y;
