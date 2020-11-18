@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#pragma warning(disable:28159) 
 #define MARIO_WALKING_SPEED				0.08f
 //0.1f
 #define MARIO_JUMP_SPEED_Y				0.5f

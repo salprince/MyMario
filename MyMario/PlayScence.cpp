@@ -1,5 +1,5 @@
 #include "Include.h"
-
+#pragma warning(disable:28159 26495) 
 
 using namespace std;
 

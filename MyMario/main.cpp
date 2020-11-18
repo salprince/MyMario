@@ -26,13 +26,14 @@
 
 #include "PlayScence.h"
 
+#pragma warning(disable:28251 28159 6230) 
+
 #define WINDOW_CLASS_NAME L"GameWindow"
 #define MAIN_WINDOW_TITLE L"MYMARIO"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(156,252,240)
 #define SCREEN_WIDTH 400
 #define SCREEN_HEIGHT 328
-
 #define MAX_FRAME_RATE 120
 
 CGame* game;

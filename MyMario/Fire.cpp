@@ -15,7 +15,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-	vy += 0.005;
+	vy += 0.005f;
 	coEvents.clear();
 	
 	this->SetState(FIRE_STATE_ALIVE);
@@ -38,6 +38,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->Reset();
 					this->isFire = GetTickCount();
 					if (abs(marioHandle->vx) > 0.07f)
+
 						this->vx = marioHandle->vx;
 					else
 						this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
@@ -126,7 +127,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(KOOPAS_STATE_DIE);
 					e->obj->y += 12;
-					e->obj->vx += 0.05 * nx;
+					e->obj->vx += (float)0.05 * nx;
 					SetState(KOOPAS_STATE_DIE);
 					isFiring = false;
 					isFire = 0;
@@ -137,7 +138,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					//e->obj->SetState(GOOMBA_STATE_CLEAR);
 					e->obj->y += 12;
-					e->obj->vx += 0.05 * nx;
+					e->obj->vx += (float)0.05 * nx;
 					isFiring = false;
 					isFire = 0;
 					Reset();
