@@ -1,5 +1,5 @@
 #include "Include.h"
-#pragma warning(disable:28159 26495) 
+//#pragma warning(disable:28159 26495) 
 
 using namespace std;
 
@@ -118,17 +118,37 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
+		case OBJECT_TYPE_MARIO:
 		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
+			
+			int typeScence = atof(tokens[4].c_str());
+			//DebugOut(L"[ERROR] MARIO object was created before! %d\n",typeScence );
+			if (player != NULL && typeScence == 0)
+			{
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
+				return;
+			}
+			else if (typeScence == 2)
+			{
+				obj = new CMario(x, y);
+				player1 = (CMario*)obj;
+				player1->SetLevel(2);
+				player1->nx = -1;
+				player1->color = 2;
+				player1->scence = typeScence;
+			}
+			else
+			{
+				obj = new CMario(x, y);
+				player = (CMario*)obj;
+				player->scence = typeScence;
+				if (typeScence == 0)
+					player->SetLevel(2);
+				DebugOut(L"[INFO] Player object created!\n");
+			}			
+			break;
 		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
-
-		DebugOut(L"[INFO] Player object created!\n");
-		break;
+		
 	case OBJECT_TYPE_GOOMBA: 
 	{
 		obj = new CGoomba();
@@ -146,7 +166,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->nx = nx0;
 		break;
 	}
-	case OBJECT_TYPE_BACKROUND: obj = new backRound(); break;
+	case OBJECT_TYPE_BACKROUND:
+	{
+		int typeAnimation= atof(tokens[3].c_str());
+		obj = new backRound();
+		if (typeAnimation == 9004)
+		{
+			int animation1 = atof(tokens[4].c_str());
+			dynamic_cast<backRound*>(obj)->isAnimation = animation1;
+		}			
+		break;
+	}
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new Coin(); break;
 	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
@@ -170,8 +200,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
+	
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -275,7 +306,11 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
 	else 
 		CGame::GetInstance()->SetCamPos(round(cx), 00);
+	//DebugOut(L"scence %d\n", player->scence);
+	if(player->scence == 0)
+		CGame::GetInstance()->SetCamPos(15, 00);
 	//CGame::GetInstance()->SetCamPos(2300, 250);
+	//DebugOut(L"tick count %d\n", GetTickCount64());
 }
 
 void CPlayScene::Render()

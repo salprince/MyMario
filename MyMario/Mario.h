@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#pragma warning(disable:28159) 
+//#pragma warning(disable:28159) 
 #define MARIO_WALKING_SPEED				0.08f
 //0.1f
 #define MARIO_JUMP_SPEED_Y				0.5f
@@ -86,6 +86,16 @@
 #define MARIO_ANI_FIRE_SHOOTING_LEFT			54
 #define MARIO_ANI_FIRE_SHOOTING_RIGHT			53
 
+#define GREEN_MARIO_ANI_BIG_IDLE_LEFT			55
+#define GREEN_MARIO_ANI_BIG_IDLE_RIGHT			56
+#define GREEN_MARIO_ANI_BIG_WALK_LEFT			57
+#define GREEN_MARIO_ANI_BIG_WALK_RIGHT			58
+#define GREEN_MARIO_ANI_BIG_RUN_LEFT			59
+#define GREEN_MARIO_ANI_BIG_RUN_RIGHT			60
+#define GREEN_MARIO_ANI_BIG_SIT_LEFT			61
+#define GREEN_MARIO_ANI_BIG_SIT_RIGHT			62
+#define GREEN_MARIO_ANI_BIG_JUMP_LEFT			63
+#define GREEN_MARIO_ANI_BIG_JUMP_RIGHT			64
 #define MARIO_ANI_DIE				8
 
 #define	MARIO_LEVEL_SMALL	1
@@ -161,4 +171,7 @@ public:
 	int timeShooting = 0;
 	int timeFlying = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	int scence = 1;
+	int color = 1;
+	float beginTime = 0;
 };

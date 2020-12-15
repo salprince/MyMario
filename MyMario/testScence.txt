@@ -2,7 +2,6 @@
 [TEXTURES]
 0	textures\mario.png	255	255	255
 1	textures\mario2.png	255	255	255
-2	textures\black.png	255	255	255
 20	textures\misc.png	176	224	248
 10	textures\enemies.png	3	26	110
 30	textures\backGround.png	255	128	192
@@ -348,8 +347,7 @@
 260001	4	4	252	173	120
 #hinh rang cua
 260002	508	176	596	345	120
-#black backround
-260003	0	0	400	400	2
+
 #star portal 
 260004	379	347	405	373	120
 #-------SKY OBJECT BACKROUND
@@ -756,8 +754,7 @@
 26001	2601
 #hinh rang cua
 26002	2602
-#black backround
-26003	2603
+
 #star portal 
 26004	2604
 #-------SKY OBJECT BACKROUND

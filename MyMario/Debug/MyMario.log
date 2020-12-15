@@ -1,2 +1,7 @@
-﻿  main.cpp
+﻿  Mario.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(22,34): warning C4244: '=': conversion from 'DWORD' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(63,30): warning C4305: '+=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(234,28): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(235,33): warning C4305: '=': truncation from 'double' to 'float'
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(102,16): warning C4390: ';': empty controlled statement found; is this the intent?
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

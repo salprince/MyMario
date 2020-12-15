@@ -26,12 +26,13 @@
 
 #include "PlayScence.h"
 
-#pragma warning(disable:28251 28159 6230) 
+//#pragma warning(disable:28251 28159 6230) 
 
 #define WINDOW_CLASS_NAME L"GameWindow"
 #define MAIN_WINDOW_TITLE L"MYMARIO"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(156,252,240)
+#define BACKGROUND_COLOR_BEGIN_SCENCE D3DCOLOR_XRGB(0,0,0)
 #define SCREEN_WIDTH 400
 #define SCREEN_HEIGHT 328
 #define MAX_FRAME_RATE 120
@@ -72,10 +73,12 @@ void Render()
 	if (d3ddv->BeginScene())
 	{
 		// Clear back buffer with a color
-		
-		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+		//DebugOut(L"tick count %d\n", GetTickCount64());
+		//if(GetTickCount64()>461700000 && GetTickCount64() < 462000000)
+		//	d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR_BEGIN_SCENCE);
+		//else 
+			d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
 		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
@@ -182,7 +185,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"mario-sample.txt");
 
-	SetWindowPos(hWnd, 0, 70, 70, SCREEN_WIDTH*2 , SCREEN_HEIGHT*2, SWP_NOOWNERZORDER | SWP_NOZORDER );
+	SetWindowPos(hWnd, 0, 400, 70, SCREEN_WIDTH*2 , SCREEN_HEIGHT*2, SWP_NOOWNERZORDER | SWP_NOZORDER );
 	Run();
 
 	return 0;

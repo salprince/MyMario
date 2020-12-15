@@ -8,11 +8,20 @@ void backRound::Render()
 }
 
 void backRound::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-	/*l = x;
-	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y - BRICK_BBOX_WIDTH;*/
+{	
 	l = t = r = b = 0;
+}
+void backRound::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	DebugOut(L"is Annimation %d\n", isAnimation);
+	if (isAnimation == 1)
+	{
+		if(beginTime==0)
+			beginTime = GetTickCount();
+		if ((GetTickCount() - beginTime < 1000))
+		{
+			y -= 3.7;
+		}
+	}
 }
 
