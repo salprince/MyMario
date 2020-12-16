@@ -14,15 +14,24 @@ void backRound::GetBoundingBox(float& l, float& t, float& r, float& b)
 void backRound::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOut(L"is Annimation %d\n", isAnimation);
-	if (isAnimation == 1)
+	if (beginTime == 0)
+		beginTime = (float)GetTickCount64();
+	float t = GetTickCount64() - beginTime;
+	switch (isAnimation)
 	{
-		if(beginTime==0)
-			beginTime = (float)GetTickCount64();
-		if ((GetTickCount64() - beginTime < 1000))
+		case 1:
 		{
-			y -= (float)3.7;
+			if ((t< 1000))
+				y -= (float)3.7; 
+			break;
 		}
-
+		case 2:
+		{
+			if (t>6000 && t<7000)
+				y += (float)3.7;
+			break;
+		}
 	}
+	
 }
 

@@ -224,6 +224,8 @@
 260003	0	0	400	400	2
 #begin scence 
 280001	258	0	515	224	130
+#SupermarioTEXT
+290001	295	71	474	143	130
 #backround 
 999999	0	0	0	0	1
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
@@ -391,6 +393,8 @@
 26003	260003	100
 #BEGINNNNNNN
 2801	280001	100 
+#SupermarioTEXT
+2901	290001	100
 #backround
 9999	999999	100
 #
@@ -422,6 +426,8 @@
 2603	26003
 #BEGINNNNNNN
 28001	2801
+#SupermarioTEXT
+29001	2901
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba
@@ -479,7 +485,7 @@
 1	368	263	9003
 
 4	15	0	9004	1
-
+4	120	-200	29001	2
 # MARIO
 0	15	200	1	1	1
 # GREEN MARIO

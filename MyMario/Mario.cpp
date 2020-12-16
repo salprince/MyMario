@@ -17,18 +17,33 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (this->beginTime == 0)
 		this->beginTime =(float) GetTickCount64();
 	float t = GetTickCount64() - beginTime;
-	this->y = 223;
-	DebugOut(L"STATE %d\n", this->GetState());
+	//vy += (float)(MARIO_GRAVITY * 1.25);
+	DebugOut(L"VY %f\n", vy );
+	
 	if (t < 800)
 	{
 		this->x = -50;
 	}
-	else if (t > 800 && t < 1500)
+	else if (t > 800 && t < 850)
 	{
-		if(color ==1)
+		this->y = 180;
+	}
+	else if (t > 850 && t < 1500)
+	{
+		if (color == 2)
+		{
 			this->x = 15;
-		else 
+			this->SetState(MARIO_STATE_WALKING_RIGHT);
+			vx = (float)MARIO_MAX_WALKING_SPEED;
+		}
+			
+		else
+		{
 			this->x = 384;
+			this->SetState(MARIO_STATE_WALKING_LEFT);
+			vx = (float)MARIO_MAX_WALKING_SPEED;
+		}
+			
 	}
 	else if (t > 1500 && t < 3000)
 	{
@@ -37,25 +52,82 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case 1:
 			{
 				//red mario 
-				this->SetState(MARIO_STATE_WALKING_RIGHT);
-				vx = (float)0.01;
-				this->x += 1.5;
+				this->SetState(MARIO_STATE_WALKING_LEFT);
+				//this->x -= 1.5;
+				vx =- (float)MARIO_MAX_WALKING_SPEED/1.5;
 				break;
 			}
 			case 2 :
 			{
-				//green mario 
-				this->SetState(MARIO_STATE_WALKING_LEFT);
-				this->x -= 1.5;
-				vx = (float)-0.01;
+				//green mario 				
+				this->SetState(MARIO_STATE_WALKING_RIGHT);
+				vx = (float)MARIO_MAX_WALKING_SPEED/3;
+				//this->x += 1.5;
 				break;
 			}
 		}						
 	}		
+	else if (t > 3000 && t < 4000)
+	{
+		switch (color)
+		{
+			case 1:
+			{
+				break;
+			}
+			case 2:
+			{
+				//green mario 				
+				this->SetState(MARIO_STATE_JUMP);
+				vx = (float)MARIO_MAX_WALKING_SPEED/1.5;
+				vy -= 0.03;
+				break;
+			}
+		}
+	}
+	else if (t > 4000 && t < 5000)
+	{
+		switch (color)
+		{
+			case 1:
+			{
+				break;
+			}
+			case 2:
+			{
+				//green mario 		
+				if(vy <0)
+					this->SetState(MARIO_STATE_JUMP);
+				else 
+					this->SetState(MARIO_STATE_IDLE);
+				vx = (float)MARIO_MAX_WALKING_SPEED/1.5;
+				vy-= (float)(MARIO_GRAVITY * 1.25);
+				vy += 0.03;
+				break;
+			}
+		}
+	}
+	else if (t > 5000 && t < 6000)
+	{
+		switch (color)
+		{
+			case 1:
+			{
+				break;
+			}
+			case 2:
+			{
+				//green mario 		
+				this->SetState(MARIO_STATE_WALKING_RIGHT);
+				vx = (float)MARIO_MAX_WALKING_SPEED /1.5;
+				break;
+			}
+		}
+	}
 	else
 	{
-		vx = 0;
-		//this->SetState(MARIO_STATE_IDLE);
+		vx = 0;		
+		this->SetState(MARIO_STATE_IDLE);
 	}
 
 }
@@ -130,6 +202,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (vx > 0 && x > 2810) x = 2810;
 	if (vy < 0 && y < -120) y = -120;
 	//DebugOut(L"%f %f \n",vy , y);
+	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
+	{
+		BeginSceneUpdate(dt);
+	}
+	else
+	{
+		PlaySceneUpdate(dt);
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -255,10 +335,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_KOOPA:
 			{
 				Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
-				//DebugOut(L"coliis koopas at %f\n ", dt);
 				if (untouchable == 0)
-				{
-					//DebugOut(L"%f %f \n", x, koopa->x);
+				{					
 					if (e->ny < 0)
 					{
 
@@ -300,7 +378,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								{
 									if (readyToHoldKoopas)
 									{
-										//DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
 										koopa->y -= 4;
 										relativeDistanceMarioKoopa = abs(koopa->x - x);
 										koopa->setIsHold(true);
@@ -311,7 +388,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							else if (koopa->GetState() == KOOPAS_STATE_HOLD)
 							{
-								DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
 								koopa->x = this->x + 16;
 							}
 							else if (koopa->GetState() == KOOPAS_STATE_SHELL_RUNNING || koopa->GetState() == KOOPAS_STATE_WALKING)
@@ -374,8 +450,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				Coin* coin = dynamic_cast<Coin*>(e->obj);
 				coin->SetState(COIN_STATE_DIE);
-				//DebugOut(L"colisson coin %d %d\n", coin->x,coin->y);
-				//DebugOut(L"MARIO %d %d \n", dx, dy);
 				break;
 			}
 			case MARIO_COLLISION_MICSBRICK:
@@ -405,14 +479,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//it means mario is in begin scene
-	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
-	{
-		BeginSceneUpdate(dt);
-	}
-	else
-	{
-		PlaySceneUpdate(dt);
-	}
+	
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];	
 }
 
@@ -504,7 +571,7 @@ void CMario::Render()
 					}
 				}
 			}
-			if (isJumping())
+			if (isJumping()|| state == MARIO_STATE_JUMP)
 			{
 				if (nx > 0)
 				{
@@ -700,7 +767,6 @@ void CMario::Render()
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-	DebugOut(L"ANI %d\n\n", ani);
 	RenderBoundingBox();
 }
 
@@ -719,8 +785,8 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUN:
 		break;
 	case MARIO_STATE_JUMP:
-		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = -MARIO_JUMP_SPEED_Y;
+		if (CGame::GetInstance()->GetCurrentScene()->typeScene == 1)
+			vy = -MARIO_JUMP_SPEED_Y;
 		ny = -1;
 		break;
 	case MARIO_STATE_JUMP_WAVE_TAIL:
@@ -742,7 +808,6 @@ void CMario::SetState(int state)
 	case MARIO_STATE_SHOOTING:
 		break;
 	}
-	//DebugOut(L"mario acceleration  ax ay %d, %d, %d \n", ax, ay, state);
 }
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
