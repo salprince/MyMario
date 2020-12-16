@@ -142,6 +142,8 @@ class CMario : public CGameObject
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	float acceleration = 0;
 	bool readyToHoldKoopas = false;
@@ -171,7 +173,6 @@ public:
 	int timeShooting = 0;
 	int timeFlying = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	int scence = 1;
 	int color = 1;
 	float beginTime = 0;
 };

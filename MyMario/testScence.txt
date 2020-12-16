@@ -618,8 +618,6 @@
 2601	260001	100
 #hinh rang cua
 2602	260002	100
-#black backround
-2603	260003	100
 #star portal 
 2604	260004	100
 #-------SKY OBJECT BACKROUND

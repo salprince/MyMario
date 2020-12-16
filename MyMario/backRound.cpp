@@ -13,7 +13,7 @@ void backRound::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void backRound::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"is Annimation %d\n", isAnimation);
+	//DebugOut(L"is Annimation %d\n", isAnimation);
 	if (isAnimation == 1)
 	{
 		if(beginTime==0)

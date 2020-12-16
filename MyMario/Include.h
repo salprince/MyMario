@@ -13,6 +13,7 @@
 #include "Sprites.h"
 #include "Game.h"
 #include "PlayScence.h"
+#include "BeginScene.h"
 
 #include "Mario.h"
 #include "Goomba.h"

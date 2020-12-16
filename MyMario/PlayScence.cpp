@@ -119,33 +119,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 		case OBJECT_TYPE_MARIO:
-		{
-			
-			int typeScence = atof(tokens[4].c_str());
-			//DebugOut(L"[ERROR] MARIO object was created before! %d\n",typeScence );
-			if (player != NULL && typeScence == 0)
+		{			
+			if (player != NULL)
 			{
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
-			}
-			else if (typeScence == 2)
-			{
-				obj = new CMario(x, y);
-				player1 = (CMario*)obj;
-				player1->SetLevel(2);
-				player1->nx = -1;
-				player1->color = 2;
-				player1->scence = typeScence;
 			}
 			else
 			{
 				obj = new CMario(x, y);
 				player = (CMario*)obj;
-				player->scence = typeScence;
-				if (typeScence == 0)
-					player->SetLevel(2);
+				player->SetLevel(2);
 				DebugOut(L"[INFO] Player object created!\n");
-			}			
+				}			
 			break;
 		}
 		
@@ -170,10 +156,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int typeAnimation= atof(tokens[3].c_str());
 		obj = new backRound();
-		if (typeAnimation == 9004)
+		if (CGame::GetInstance()->GetCurrentScene()->typeScene !=0)
 		{
-			int animation1 = atof(tokens[4].c_str());
-			dynamic_cast<backRound*>(obj)->isAnimation = animation1;
+			//int animation1 = atof(tokens[4].c_str());
+			//dynamic_cast<backRound*>(obj)->isAnimation = animation1;
 		}			
 		break;
 	}
@@ -306,11 +292,6 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
 	else 
 		CGame::GetInstance()->SetCamPos(round(cx), 00);
-	//DebugOut(L"scence %d\n", player->scence);
-	if(player->scence == 0)
-		CGame::GetInstance()->SetCamPos(15, 00);
-	//CGame::GetInstance()->SetCamPos(2300, 250);
-	//DebugOut(L"tick count %d\n", GetTickCount64());
 }
 
 void CPlayScene::Render()

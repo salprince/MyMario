@@ -12,125 +12,335 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->y = y;
 
 }
-
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
-	if (this->scence == 0)
+	if (this->beginTime == 0)
+		this->beginTime = GetTickCount();
+	float t = GetTickCount() - beginTime;
+	this->y = 223;
+	DebugOut(L"STATE %d\n", this->GetState());
+	if (t < 800)
 	{
-		if(this->beginTime==0)
-			this->beginTime = GetTickCount();
-		this->y = 223;
-		DebugOut(L"%d\n",this->GetState());
-		if ((GetTickCount() - beginTime < 800))
-			this->x = -50;
-		if ((GetTickCount() - beginTime > 800) && (GetTickCount() - beginTime < 1500))
+		this->x = -50;
+	}
+	else if (t > 800 && t < 1500)
+	{
+		if(color ==1)
 			this->x = 15;
-		if ((GetTickCount() - beginTime > 1500) && (GetTickCount() - beginTime < 3000))
-		{			
-			this->SetState(MARIO_STATE_WALKING_RIGHT);
-			DebugOut(L"%d\n", this->GetState());
-			this->x += 1.5;			
-			vy += MARIO_GRAVITY * dt;
-			if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT)
+		else 
+			this->x = 384;
+	}
+	else if (t > 1500 && t < 3000)
+	{
+		switch (color)
+		{
+			case 1:
 			{
-				if (vx > MARIO_MAX_WALKING_SPEED)
-					vx = MARIO_MAX_WALKING_SPEED;
-				else if (vx < -MARIO_MAX_WALKING_SPEED)
-					vx = -MARIO_MAX_WALKING_SPEED;
-				else
-				{
-					vx += ((int)nx) * (MARIO_ACCELERATION * dt);
-				}
-				/*if (abs(vx) >= MARIO_MAX_WALKING_SPEED - 0.05)
-					this->SetState(MARIO_STATE_RUN);*/
+				//red mario 
+				this->SetState(MARIO_STATE_WALKING_RIGHT);
+				vx = 0.01;
+				this->x += 1.5;
+				break;
 			}
-			
+			case 2 :
+			{
+				//green mario 
+				this->SetState(MARIO_STATE_WALKING_LEFT);
+				this->x -= 1.5;
+				vx = -0.01;
+				break;
+			}
+		}						
+	}		
+	else
+	{
+		vx = 0;
+		//this->SetState(MARIO_STATE_IDLE);
+	}
+
+}
+void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT)
+	{
+		if (vx > MARIO_MAX_WALKING_SPEED)
+			vx = MARIO_MAX_WALKING_SPEED;
+		else if (vx < -MARIO_MAX_WALKING_SPEED)
+			vx = -MARIO_MAX_WALKING_SPEED;
+		else
+		{
+			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+		}
+		if (abs(vx) >= MARIO_MAX_WALKING_SPEED - 0.05)
+			this->SetState(MARIO_STATE_RUN);
+	}
+	else if (state == MARIO_STATE_IDLE)
+	{
+		if (vx > MARIO_STOP_ACCELERATION / 2)
+		{
+			vx = vx - abs(vx / 5);
+		}
+		else if (vx < -MARIO_STOP_ACCELERATION / 2)
+		{
+			vx = vx + abs(vx / 5);
 		}
 		else
 		{
 			vx = 0;
-			this->SetState(MARIO_STATE_IDLE);
 		}
-			
+	}
+
+	if (getLevel() == MARIO_LEVEL_TAIL && spining != 0)
+	{
+		if (GetTickCount() - spining >= 200)
+			setIsSpin(false);
+	}
+	else if (getLevel() == MARIO_LEVEL_FIRE && timeShooting != 0)
+	{
+		setIsFire(false);
+		if (GetTickCount() - timeShooting >= 100)
+			timeShooting = 0;
+	}
+	/*else if (getLevel() == MARIO_LEVEL_TAIL && timeFlying != 0)
+	{
+		if (GetTickCount() - timeFlying >= 200)
+			setFlying(false);
+	}*/
+	else
+	{
+		spining = 0;
+		timeShooting = 0;
+		timeShooting = 0;
+
+	}
+
+	if (getIsHold())
+		SetState(MARIO_STATE_HOLD);
+}
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{	
+	//DebugOut(L" type scence %d \n", CGame::GetInstance()->GetCurrentScene()->typeScene);
+	CGameObject::Update(dt);
+	if (!getIsOnSky())
+		vy += MARIO_GRAVITY * dt;
+	else
+		vy += MARIO_GRAVITY * 1.25;
+	//make mario cant move out of left border 
+	if (vx < 0 && x < 15) x = 15;
+	if (vx > 0 && x > 2810) x = 2810;
+	if (vy < 0 && y < -120) y = -120;
+	//DebugOut(L"%f %f \n",vy , y);
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+	// turn off collision when die 
+	if (state != MARIO_STATE_DIE)
+		CalcPotentialCollisions(coObjects, coEvents);
+
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
 	}
 	else
 	{
-		CGameObject::Update(dt);
-		if (!getIsOnSky())
-			vy += MARIO_GRAVITY * dt;
-		else
-			vy += MARIO_GRAVITY * 1.25;
-		//make mario cant move out of left border 
-		if (vx < 0 && x < 15) x = 15;
-		if (vx > 0 && x > 2810) x = 2810;
-		if (vy < 0 && y < -120) y = -120;
-		//DebugOut(L"%f %f \n",vy , y);
-		vector<LPCOLLISIONEVENT> coEvents;
-		vector<LPCOLLISIONEVENT> coEventsResult;
-		coEvents.clear();
-		// turn off collision when die 
-		if (state != MARIO_STATE_DIE)
-			CalcPotentialCollisions(coObjects, coEvents);
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
 
-		// reset untouchable timer if untouchable time has passed
-		if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		//if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		if (nx != 0);
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			untouchable_start = 0;
-			untouchable = 0;
-		}
 
-		// No collision occured, proceed normally
-		if (coEvents.size() == 0)
-		{
-			x += dx;
-			y += dy;
-		}
-		else
-		{
-			float min_tx, min_ty, nx = 0, ny;
-			float rdx = 0;
-			float rdy = 0;
+			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			// TODO: This is a very ugly designed function!!!!
-			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-			x += min_tx * dx + nx * 0.4f;
-			y += min_ty * dy + ny * 0.4f;
-
-			//if (nx != 0) vx = 0;
-			if (ny != 0) vy = 0;
-			if (nx != 0);
-			for (UINT i = 0; i < coEventsResult.size(); i++)
+			//seting state of collision
+			int stateCollision = -1;
+			if (dynamic_cast<CGoomba*>(e->obj))
+				stateCollision = MARIO_COLLISION_GOOMBA;
+			else if (dynamic_cast<CPortal*>(e->obj))
+				stateCollision = MARIO_COLLISION_GATE;
+			else if (dynamic_cast<CBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_BRICK;
+			else if (dynamic_cast<backRound*>(e->obj))
+				stateCollision = MARIO_COLLISION_BACKROUND;
+			else if (dynamic_cast<ColorBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_COLORBRICK;
+			else if (dynamic_cast<CBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_BRICK;
+			else if (dynamic_cast<Coin*>(e->obj))
+				stateCollision = MARIO_COLLISION_COIN;
+			else if (dynamic_cast<Koopas*>(e->obj))
+				stateCollision = MARIO_COLLISION_KOOPA;
+			else if (dynamic_cast<MicsBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_MICSBRICK;
+			else if (dynamic_cast<ChimneyPortal*>(e->obj))
+				stateCollision = MARIO_COLLISION_CHIMNEYPORTAL;
+			else if (dynamic_cast<LevelMushroom*>(e->obj))
+				stateCollision = MARIO_COLLISION_LEVELMUSHROOM;
+			switch (stateCollision)
 			{
-
-				LPCOLLISIONEVENT e = coEventsResult[i];
-
-				//seting state of collision
-				int stateCollision = -1;
-				if (dynamic_cast<CGoomba*>(e->obj))
-					stateCollision = MARIO_COLLISION_GOOMBA;
-				else if (dynamic_cast<CPortal*>(e->obj))
-					stateCollision = MARIO_COLLISION_GATE;
-				else if (dynamic_cast<CBrick*>(e->obj))
-					stateCollision = MARIO_COLLISION_BRICK;
-				else if (dynamic_cast<backRound*>(e->obj))
-					stateCollision = MARIO_COLLISION_BACKROUND;
-				else if (dynamic_cast<ColorBrick*>(e->obj))
-					stateCollision = MARIO_COLLISION_COLORBRICK;
-				else if (dynamic_cast<CBrick*>(e->obj))
-					stateCollision = MARIO_COLLISION_BRICK;
-				else if (dynamic_cast<Coin*>(e->obj))
-					stateCollision = MARIO_COLLISION_COIN;
-				else if (dynamic_cast<Koopas*>(e->obj))
-					stateCollision = MARIO_COLLISION_KOOPA;
-				else if (dynamic_cast<MicsBrick*>(e->obj))
-					stateCollision = MARIO_COLLISION_MICSBRICK;
-				else if (dynamic_cast<ChimneyPortal*>(e->obj))
-					stateCollision = MARIO_COLLISION_CHIMNEYPORTAL;
-				else if (dynamic_cast<LevelMushroom*>(e->obj))
-					stateCollision = MARIO_COLLISION_LEVELMUSHROOM;
-				switch (stateCollision)
+			case MARIO_COLLISION_CHIMNEYPORTAL:
+			{
+				if (this->isJumping())
+					this->setJumping(false);
+				if (this->isFlying())
+					this->setFlying(false);
+				if (this->getIsOnSky())
+					this->setIsOnSky(false);
+				if (y < 100)
 				{
-				case MARIO_COLLISION_CHIMNEYPORTAL:
+					y = 300;
+				}
+				else if (y > 250)
+				{
+					y = 190;
+					x -= 153;
+				}
+				break;
+			}
+			case MARIO_COLLISION_GATE:
+			{
+				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				break;
+			}
+			case MARIO_COLLISION_GOOMBA:
+			{
+				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+				// jump on top >> kill Goomba and deflect a bit 
+				if (e->ny < 0)
+				{
+					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					{
+						goomba->SetState(GOOMBA_STATE_DIE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						{
+							if (level == MARIO_LEVEL_TAIL && getIsSpin())
+								goomba->SetState(GOOMBA_STATE_CLEAR);
+							else
+							{
+								if (level > MARIO_LEVEL_SMALL)
+								{
+									level -= 1;
+									StartUntouchable();
+								}
+								else
+									SetState(MARIO_STATE_DIE);
+							}
+						}
+					}
+				}
+				break;
+			}
+			case MARIO_COLLISION_KOOPA:
+			{
+				Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
+				//DebugOut(L"coliis koopas at %f\n ", dt);
+				if (untouchable == 0)
+				{
+					//DebugOut(L"%f %f \n", x, koopa->x);
+					if (e->ny < 0)
+					{
+
+						if (this->isJumping())
+							this->setJumping(false);
+						if (this->isFlying())
+							this->setFlying(false);
+						if (this->getIsOnSky())
+							this->setIsOnSky(false);
+					}
+					if (e->ny < 0)
+					{
+						if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
+						{
+							koopa->SetState(KOOPAS_STATE_SHELL);
+							if (koopa->isShell == false)
+								koopa->y += 9;
+							koopa->isShell = true;
+						}
+					}
+					else if (e->nx != 0)
+					{
+						if (untouchable == 0)
+						{
+
+							//making kick koopas
+							if (koopa->GetState() == KOOPAS_STATE_SHELL && abs(koopa->vx) == 0)
+							{
+								if (abs(vx) > 0.06)
+								{
+									if (readyToHoldKoopas)
+										readyToHoldKoopas = false;
+									if (nx < 0)
+										koopa->vx = 0.15;
+									else koopa->vx = -0.15;
+									koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
+								}
+								else
+								{
+									if (readyToHoldKoopas)
+									{
+										//DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
+										koopa->y -= 4;
+										relativeDistanceMarioKoopa = abs(koopa->x - x);
+										koopa->setIsHold(true);
+										this->setIsHold(true);
+
+									}
+								}
+							}
+							else if (koopa->GetState() == KOOPAS_STATE_HOLD)
+							{
+								DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
+								koopa->x = this->x + 16;
+							}
+							else if (koopa->GetState() == KOOPAS_STATE_SHELL_RUNNING || koopa->GetState() == KOOPAS_STATE_WALKING)
+							{
+								if (level == MARIO_LEVEL_TAIL && getIsSpin())
+									koopa->SetState(KOOPAS_STATE_SHELL);
+								else if (level > MARIO_LEVEL_SMALL)
+								{
+									level -= 1;
+									StartUntouchable();
+								}
+								else
+									SetState(MARIO_STATE_DIE);
+							}
+
+						}
+					}
+				}
+
+				break;
+			}
+			case MARIO_COLLISION_BACKROUND:
+			{
+				break;
+			}
+			case MARIO_COLLISION_COLORBRICK:
+			{
+				if (e->ny < 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);
@@ -138,270 +348,73 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setFlying(false);
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
-					if (y < 100)
-					{
-						y = 300;
-					}
-					else if (y > 250)
-					{
-						y = 190;
-						x -= 153;
-					}
-					break;
 				}
-				case MARIO_COLLISION_GATE:
-				{
-					CPortal* p = dynamic_cast<CPortal*>(e->obj);
-					CGame::GetInstance()->SwitchScene(p->GetSceneId());
-					break;
-				}
-				case MARIO_COLLISION_GOOMBA:
-				{
-					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-					// jump on top >> kill Goomba and deflect a bit 
-					if (e->ny < 0)
-					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-						{
-							goomba->SetState(GOOMBA_STATE_DIE);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-						}
-					}
-					else if (e->nx != 0)
-					{
-						if (untouchable == 0)
-						{
-							if (goomba->GetState() != GOOMBA_STATE_DIE)
-							{
-								if (level == MARIO_LEVEL_TAIL && getIsSpin())
-									goomba->SetState(GOOMBA_STATE_CLEAR);
-								else
-								{
-									if (level > MARIO_LEVEL_SMALL)
-									{
-										level -= 1;
-										StartUntouchable();
-									}
-									else
-										SetState(MARIO_STATE_DIE);
-								}
-							}
-						}
-					}
-					break;
-				}
-				case MARIO_COLLISION_KOOPA:
-				{
-					Koopas* koopa = dynamic_cast<Koopas*>(e->obj);
-					//DebugOut(L"coliis koopas at %f\n ", dt);
-					if (untouchable == 0)
-					{
-						//DebugOut(L"%f %f \n", x, koopa->x);
-						if (e->ny < 0)
-						{
-
-							if (this->isJumping())
-								this->setJumping(false);
-							if (this->isFlying())
-								this->setFlying(false);
-							if (this->getIsOnSky())
-								this->setIsOnSky(false);
-						}
-						if (e->ny < 0)
-						{
-							if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
-							{
-								koopa->SetState(KOOPAS_STATE_SHELL);
-								if (koopa->isShell == false)
-									koopa->y += 9;
-								koopa->isShell = true;
-							}
-						}
-						else if (e->nx != 0)
-						{
-							if (untouchable == 0)
-							{
-
-								//making kick koopas
-								if (koopa->GetState() == KOOPAS_STATE_SHELL && abs(koopa->vx) == 0)
-								{
-									if (abs(vx) > 0.06)
-									{
-										if (readyToHoldKoopas)
-											readyToHoldKoopas = false;
-										if (nx < 0)
-											koopa->vx = 0.15;
-										else koopa->vx = -0.15;
-										koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
-									}
-									else
-									{
-										if (readyToHoldKoopas)
-										{
-											//DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
-											koopa->y -= 4;
-											relativeDistanceMarioKoopa = abs(koopa->x - x);
-											koopa->setIsHold(true);
-											this->setIsHold(true);
-
-										}
-									}
-								}
-								else if (koopa->GetState() == KOOPAS_STATE_HOLD)
-								{
-									DebugOut(L"KOOPA IS HOLDINGGGGGGGGG\n");
-									koopa->x = this->x + 16;
-								}
-								else if (koopa->GetState() == KOOPAS_STATE_SHELL_RUNNING || koopa->GetState() == KOOPAS_STATE_WALKING)
-								{
-									if (level == MARIO_LEVEL_TAIL && getIsSpin())
-										koopa->SetState(KOOPAS_STATE_SHELL);
-									else if (level > MARIO_LEVEL_SMALL)
-									{
-										level -= 1;
-										StartUntouchable();
-									}
-									else
-										SetState(MARIO_STATE_DIE);
-								}
-
-							}
-						}
-					}
-
-					break;
-				}
-				case MARIO_COLLISION_BACKROUND:
-				{
-					break;
-				}
-				case MARIO_COLLISION_COLORBRICK:
-				{
-					if (e->ny < 0)
-					{
-						if (this->isJumping())
-							this->setJumping(false);
-						if (this->isFlying())
-							this->setFlying(false);
-						if (this->getIsOnSky())
-							this->setIsOnSky(false);
-					}
-					break;
-				}
-				case MARIO_COLLISION_BRICK:
-				{
-					CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-					if (e->nx != 0)
-					{
-						//(vx = 0);
-						SetState(MARIO_STATE_IDLE);
-					}
-					if (e->ny != 0)
-					{
-						if (this->isJumping())
-							this->setJumping(false);
-						if (this->isFlying())
-							this->setFlying(false);
-						if (this->getIsOnSky())
-							this->setIsOnSky(false);
-					}
-
-					break;
-				}
-				case MARIO_COLLISION_COIN:
-				{
-					Coin* coin = dynamic_cast<Coin*>(e->obj);
-					coin->SetState(COIN_STATE_DIE);
-					//DebugOut(L"colisson coin %d %d\n", coin->x,coin->y);
-					//DebugOut(L"MARIO %d %d \n", dx, dy);
-					break;
-				}
-				case MARIO_COLLISION_MICSBRICK:
-				{
-					MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);
-					if (e->ny != 0)
-					{
-						if (this->isJumping())
-							this->setJumping(false);
-						if (this->isFlying())
-							this->setFlying(false);
-						if (this->getIsOnSky())
-							this->setIsOnSky(false);
-					}
-					break;
-				}
-				case MARIO_COLLISION_LEVELMUSHROOM:
-				{
-					LevelMushroom* mushroom = dynamic_cast<LevelMushroom*>(e->obj);
-					mushroom->SetState(COIN_STATE_DIE);
-					if (level < MARIO_LEVEL_TAIL)
-						level++;
-					break;
-				}
-				default:break;
-				}
+				break;
 			}
-		}
-		if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT)
-		{
-			if (vx > MARIO_MAX_WALKING_SPEED)
-				vx = MARIO_MAX_WALKING_SPEED;
-			else if (vx < -MARIO_MAX_WALKING_SPEED)
-				vx = -MARIO_MAX_WALKING_SPEED;
-			else
+			case MARIO_COLLISION_BRICK:
 			{
-				vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+				if (e->nx != 0)
+				{
+					//(vx = 0);
+					SetState(MARIO_STATE_IDLE);
+				}
+				if (e->ny != 0)
+				{
+					if (this->isJumping())
+						this->setJumping(false);
+					if (this->isFlying())
+						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
+				}
+
+				break;
 			}
-			if (abs(vx) >= MARIO_MAX_WALKING_SPEED - 0.05)
-				this->SetState(MARIO_STATE_RUN);
-		}
-		else if (state == MARIO_STATE_IDLE)
-		{
-			if (vx > MARIO_STOP_ACCELERATION / 2)
+			case MARIO_COLLISION_COIN:
 			{
-				vx = vx - abs(vx / 5);
+				Coin* coin = dynamic_cast<Coin*>(e->obj);
+				coin->SetState(COIN_STATE_DIE);
+				//DebugOut(L"colisson coin %d %d\n", coin->x,coin->y);
+				//DebugOut(L"MARIO %d %d \n", dx, dy);
+				break;
 			}
-			else if (vx < -MARIO_STOP_ACCELERATION / 2)
+			case MARIO_COLLISION_MICSBRICK:
 			{
-				vx = vx + abs(vx / 5);
+				MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);
+				if (e->ny != 0)
+				{
+					if (this->isJumping())
+						this->setJumping(false);
+					if (this->isFlying())
+						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
+				}
+				break;
 			}
-			else
+			case MARIO_COLLISION_LEVELMUSHROOM:
 			{
-				vx = 0;
+				LevelMushroom* mushroom = dynamic_cast<LevelMushroom*>(e->obj);
+				mushroom->SetState(COIN_STATE_DIE);
+				if (level < MARIO_LEVEL_TAIL)
+					level++;
+				break;
+			}
+			default:break;
 			}
 		}
-
-		if (getLevel() == MARIO_LEVEL_TAIL && spining != 0)
-		{
-			if (GetTickCount() - spining >= 200)
-				setIsSpin(false);
-		}
-		else if (getLevel() == MARIO_LEVEL_FIRE && timeShooting != 0)
-		{
-			setIsFire(false);
-			if (GetTickCount() - timeShooting >= 100)
-				timeShooting = 0;
-		}
-		/*else if (getLevel() == MARIO_LEVEL_TAIL && timeFlying != 0)
-		{
-			if (GetTickCount() - timeFlying >= 200)
-				setFlying(false);
-		}*/
-		else
-		{
-			spining = 0;
-			timeShooting = 0;
-			timeShooting = 0;
-
-		}
-
-		if (getIsHold())
-			SetState(MARIO_STATE_HOLD);
-
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-	
-	
+	//it means mario is in begin scene
+	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
+	{
+		BeginSceneUpdate(dt);
+	}
+	else
+	{
+		PlaySceneUpdate(dt);
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];	
 }
 
 void CMario::Render()
@@ -413,7 +426,6 @@ void CMario::Render()
 	{
 		if (level == MARIO_LEVEL_BIG)
 		{
-
 			if (nx > 0)
 			{
 				if (vx < 0 && state == MARIO_STATE_WALKING_RIGHT)
@@ -635,7 +647,6 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_FIRE)
 		{
-
 		if (nx > 0)
 		{
 			if (vx < 0 && state == MARIO_STATE_WALKING_RIGHT)
@@ -690,7 +701,7 @@ void CMario::Render()
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-
+	DebugOut(L"ANI %d\n\n", ani);
 	RenderBoundingBox();
 }
 

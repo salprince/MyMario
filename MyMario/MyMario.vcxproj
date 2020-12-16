@@ -145,6 +145,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="backRound.h" />
     <ClInclude Include="beginBrick.h" />
+    <ClInclude Include="BeginScene.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="ChimneyPortal.h" />
     <ClInclude Include="Coin.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="backRound.cpp" />
     <ClCompile Include="beginBrick.cpp" />
+    <ClCompile Include="BeginScene.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="ChimneyPortal.cpp" />
     <ClCompile Include="Coin.cpp" />
