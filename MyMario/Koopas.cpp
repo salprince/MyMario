@@ -41,7 +41,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->SetState(KOOPAS_STATE_SHELL_RUNNING);
 				this->nx = marioHandle->nx;
 				this->vx = nx * KOOPAS_RUNNING_SPEED;				
-				this->vy = -0.2;
+				this->vy = (float)-0.2;
 				this->marioHandle = NULL;
 			}
 			else
@@ -50,8 +50,8 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else
 		{
 			if (state != KOOPAS_STATE_SHELL_RUNNING)
-				this->gravity = 0.0001;
-			else	gravity = 0.0008;
+				this->gravity = (float)0.0001;
+			else	gravity = (float)0.0008;
 			vy += gravity * dt;
 			if (startx == 0)
 				startx = x;
@@ -91,8 +91,8 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (getShellIn() == 0)
 			{
-				setShellIn(GetTickCount());
-				setShellOut(GetTickCount());
+				setShellIn((int)GetTickCount64());
+				setShellOut((int)GetTickCount64());
 			}
 
 			else
@@ -120,9 +120,9 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	if (getIsHold())
-		state == KOOPAS_STATE_HOLD;
+		state = KOOPAS_STATE_HOLD;
 	else 
-		state == KOOPAS_STATE_SHELL;
+		state = KOOPAS_STATE_SHELL;
 	
 	if (coEvents.size() == 0)
 	{
@@ -140,7 +140,6 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			x += min_tx * dx + nx * 0.4f;
 			if (ny != 0) vy = 0;
-			if (nx != 0);
 		}
 		
 
@@ -165,15 +164,15 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				e->obj->SetState(KOOPAS_STATE_DIE);
 				e->obj->y += 12;
-				e->obj->vx += 0.05*ny;
+				e->obj->vx += (float)(0.05*ny);
 				SetState(KOOPAS_STATE_DIE);
-				vx = -0.05 * ny;
+				vx = (float)(-0.05 * ny);
 			}
 			if (dynamic_cast<CGoomba*>(e->obj))
 			{
 				//e->obj->SetState(GOOMBA_STATE_CLEAR);
 				e->obj->y += 12;
-				e->obj->vx += 0.05 * ny;
+				e->obj->vx += (float)(0.05 * ny);
 			}
 		}
 	}
@@ -205,7 +204,7 @@ void Koopas::SetState(int state)
 	case KOOPAS_STATE_DIE:
 		y += 10;
 		vx = 0;
-		vy = 0.1;
+		vy = (float)0.1;
 		height = 14;
 		width=16;
 		break;

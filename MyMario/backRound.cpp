@@ -17,11 +17,12 @@ void backRound::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isAnimation == 1)
 	{
 		if(beginTime==0)
-			beginTime = GetTickCount();
-		if ((GetTickCount() - beginTime < 1000))
+			beginTime = (float)GetTickCount64();
+		if ((GetTickCount64() - beginTime < 1000))
 		{
-			y -= 3.7;
+			y -= (float)3.7;
 		}
+
 	}
 }
 

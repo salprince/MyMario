@@ -15,8 +15,8 @@ CMario::CMario(float x, float y) : CGameObject()
 void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	if (this->beginTime == 0)
-		this->beginTime = GetTickCount();
-	float t = GetTickCount() - beginTime;
+		this->beginTime =(float) GetTickCount64();
+	float t = GetTickCount64() - beginTime;
 	this->y = 223;
 	DebugOut(L"STATE %d\n", this->GetState());
 	if (t < 800)
@@ -38,7 +38,7 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				//red mario 
 				this->SetState(MARIO_STATE_WALKING_RIGHT);
-				vx = 0.01;
+				vx = (float)0.01;
 				this->x += 1.5;
 				break;
 			}
@@ -47,7 +47,7 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//green mario 
 				this->SetState(MARIO_STATE_WALKING_LEFT);
 				this->x -= 1.5;
-				vx = -0.01;
+				vx = (float)-0.01;
 				break;
 			}
 		}						
@@ -92,13 +92,13 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (getLevel() == MARIO_LEVEL_TAIL && spining != 0)
 	{
-		if (GetTickCount() - spining >= 200)
+		if (GetTickCount64() - spining >= 200)
 			setIsSpin(false);
 	}
 	else if (getLevel() == MARIO_LEVEL_FIRE && timeShooting != 0)
 	{
 		setIsFire(false);
-		if (GetTickCount() - timeShooting >= 100)
+		if (GetTickCount64() - timeShooting >= 100)
 			timeShooting = 0;
 	}
 	/*else if (getLevel() == MARIO_LEVEL_TAIL && timeFlying != 0)
@@ -124,7 +124,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!getIsOnSky())
 		vy += MARIO_GRAVITY * dt;
 	else
-		vy += MARIO_GRAVITY * 1.25;
+		vy += (float)(MARIO_GRAVITY * 1.25);
 	//make mario cant move out of left border 
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
@@ -138,7 +138,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -161,7 +161,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		//if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-		if (nx != 0);
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 
@@ -293,8 +292,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 									if (readyToHoldKoopas)
 										readyToHoldKoopas = false;
 									if (nx < 0)
-										koopa->vx = 0.15;
-									else koopa->vx = -0.15;
+										koopa->vx = (float)0.15;
+									else koopa->vx = (float)-0.15;
 									koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
 								}
 								else

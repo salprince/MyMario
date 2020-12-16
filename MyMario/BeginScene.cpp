@@ -5,6 +5,8 @@ using namespace std;
 BeginScene::BeginScene(int id, LPCWSTR filePath) :CScene(id, filePath)
 {
 	key_handler = new BeginScenceKeyHandler(this);
+	player = NULL;
+	player1 = NULL;
 }
 
 /*
@@ -60,7 +62,7 @@ void BeginScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < (int)tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -82,7 +84,7 @@ void BeginScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (int i = 1; i < (int)tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -102,8 +104,8 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -115,7 +117,7 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 	{
 	case OBJECT_TYPE_MARIO:
 	{
-		int colorType = atof(tokens[4].c_str());
+		int colorType = (int)atof(tokens[4].c_str());
 		//type =1 red ; type =2 : green 
 		//DebugOut(L"[ERROR] MARIO object was created before! %d\n",typeScence );
 		if (player != NULL && colorType == 1)
@@ -144,27 +146,27 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA:
 	{
 		obj = new CGoomba();
-		float l = atof(tokens[4].c_str());
+		float l = (float)atof(tokens[4].c_str());
 		obj->length = l;
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS:
 	{
-		float l = atof(tokens[4].c_str());
-		float nx0 = atof(tokens[5].c_str());
+		float l = (float)atof(tokens[4].c_str());
+		float nx0 = (float)atof(tokens[5].c_str());
 		obj = new Koopas();
 		obj->length = l;
-		obj->nx = nx0;
+		obj->nx = (int)nx0;
 		break;
 	}
 	case OBJECT_TYPE_BACKROUND:
 	{
-		int typeAnimation = atof(tokens[3].c_str());
+		int typeAnimation =(int) atof(tokens[3].c_str());
 		obj = new backRound();
 		if (typeAnimation == 9004)
 		{
-			int animation1 = atof(tokens[4].c_str());
+			int animation1 = (int)atof(tokens[4].c_str());
 			dynamic_cast<backRound*>(obj)->isAnimation = animation1;
 		}
 		break;
@@ -177,7 +179,7 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 	{
 
 		obj = new Fire();
-		int l = atof(tokens[4].c_str());
+		int l = (int)atof(tokens[4].c_str());
 		dynamic_cast<Fire*>(obj)->id = l;
 		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
 			dynamic_cast<Fire*>(obj)->maxFire = l;*/
@@ -188,8 +190,8 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
+		float r = (float)atof(tokens[4].c_str());
+		float b = (float)atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
@@ -282,7 +284,7 @@ void BeginScene::Update(DWORD dt)
 	else if (cy < -160)
 	{
 		for (int i = 0; i < 160; i++)
-			CGame::GetInstance()->SetCamPos(round(cx), -i);
+			CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
 	}
 	else if (cy > 200)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
@@ -296,13 +298,13 @@ void BeginScene::Update(DWORD dt)
 
 void BeginScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < (int)objects.size(); i++)
 		objects[i]->Render();
 }
 
 void BeginScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i <(int) objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 	player = NULL;

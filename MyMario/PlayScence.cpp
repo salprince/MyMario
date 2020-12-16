@@ -107,8 +107,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -138,15 +138,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: 
 	{
 		obj = new CGoomba();
-		float l = atof(tokens[4].c_str());
+		float l = (float)atof(tokens[4].c_str());
 		obj->length = l;
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS:
 	{
-		float l = atof(tokens[4].c_str());
-		float nx0 = atof(tokens[5].c_str());
+		float l = (float)atof(tokens[4].c_str());
+		float nx0 = (float)atof(tokens[5].c_str());
 		obj = new Koopas();
 		obj->length = l;
 		obj->nx = nx0;
@@ -154,7 +154,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_BACKROUND:
 	{
-		int typeAnimation= atof(tokens[3].c_str());
+		int typeAnimation= (int)atof(tokens[3].c_str());
 		obj = new backRound();
 		if (CGame::GetInstance()->GetCurrentScene()->typeScene !=0)
 		{
@@ -171,7 +171,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{		
 		
 		obj = new Fire(); 
-		int l = atof(tokens[4].c_str());
+		int l = (int)atof(tokens[4].c_str());
 		dynamic_cast<Fire*>(obj)->id = l;
 		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
 			dynamic_cast<Fire*>(obj)->maxFire = l;*/
@@ -182,8 +182,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
+		float r = (float)atof(tokens[4].c_str());
+		float b = (float)atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
@@ -286,7 +286,7 @@ void CPlayScene::Update(DWORD dt)
 	else if (cy < -160)
 	{
 		for(int i=0; i <160; i++)
-			CGame::GetInstance()->SetCamPos(round(cx), -i);
+			CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
 	}	
 	else if(cy>200)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
@@ -341,12 +341,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			else if (mario->isJumping())
 			{
 				mario->setIsOnSky(true);
-				mario->vy = 0.00001;
+				mario->vy = (float)0.00001;
 			}
 			else
 			{
 
-				mario->vy = -0.2;
+				mario->vy = (float)-0.2;
 				//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
 			}
 		}		
@@ -365,7 +365,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			if (!mario->getIsSpin())
 			{
 				mario->setIsSpin(true);
-				mario->spining = GetTickCount();
+				mario->spining = GetTickCount64();
 			}			
 		}
 		else if (mario->getLevel() == MARIO_LEVEL_BIG)
@@ -383,7 +383,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			if (!mario->getIsFire())
 			{
 				mario->setIsFire(true);
-				mario->timeShooting = GetTickCount();
+				mario->timeShooting = GetTickCount64();
 				if(mario->FireID<10)
 					mario->FireID++;
 				else 

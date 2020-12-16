@@ -153,8 +153,8 @@ public:
 	int getLevel() { return level; }
 	int getUntouchable() { return untouchable; }
 	int spining = 0;
-	void StartSpinning() { spining= GetTickCount(); }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartSpinning() { spining= (int)GetTickCount64(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = (int)GetTickCount64(); }
 	bool isJumping() { return this->isJump; }
 	void setJumping(bool jump) { this->isJump = jump; }
 	bool isFlying() { return isFly; }

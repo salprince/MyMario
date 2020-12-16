@@ -32,8 +32,8 @@
 class BeginScene : public CScene
 {
 protected:
-	CMario* player;					// A play scene has to have player, right? 
-	CMario* player1;
+	CMario* player=NULL;					// A play scene has to have player, right? 
+	CMario* player1=NULL;
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
