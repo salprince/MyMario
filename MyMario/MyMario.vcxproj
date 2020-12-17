@@ -160,6 +160,7 @@
     <ClInclude Include="LevelMushroom.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MicsBrick.h" />
+    <ClInclude Include="MiniMapScene.h" />
     <ClInclude Include="PlayScence.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Scence.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MicsBrick.cpp" />
+    <ClCompile Include="MiniMapScene.cpp" />
     <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scence.cpp" />

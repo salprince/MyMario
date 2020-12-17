@@ -1,2 +1,12 @@
-﻿  main.cpp
+﻿  Game.cpp
+  MiniMapScene.cpp
+  PlayScence.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(65,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(87,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(152,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(299,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(308,20): warning C4018: '<': signed/unsigned mismatch
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(368,36): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(386,41): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

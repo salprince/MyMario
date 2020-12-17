@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include "PlayScence.h"
+#include "MinimapScene.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -343,8 +344,10 @@ void CGame::_ParseSection_SCENES(string line)
 		scene = new BeginScene(id, path);
 		scene->typeScene = 0;
 	}		
-	else 
+	else if(atoi(tokens[2].c_str()) == 1)
 		scene = new CPlayScene(id, path);
+	else if(atoi(tokens[2].c_str()) == 2)
+		scene = new MiniMapScene(id, path);
 	scenes[id] = scene;
 }
 
