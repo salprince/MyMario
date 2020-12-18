@@ -4,6 +4,11 @@
 #include "Textures.h"
 #include "GameObject.h"
 #include "Mario.h"
+#include "Utils.h"
+#include "backRound.h"
+#include "MiniMario.h"
+
+
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
@@ -11,18 +16,15 @@
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
-#define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
-#define OBJECT_TYPE_KOOPAS	3
+#define OBJECT_TYPE_MINI_MARIO	1000
 #define OBJECT_TYPE_BACKROUND	4
 #define MAX_SCENE_LINE 1024
 class MiniMapScene : public CScene
 {
-protected:
-	CMario* player = NULL;
-	vector<LPGAMEOBJECT> objects;
 
+protected:
+	vector<LPGAMEOBJECT> objects;
+	MiniMario* miniMario = NULL;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -37,8 +39,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	//friend class CPlayScenceKeyHandler;
-	CMario* GetPlayer() { return player; }
+	MiniMario* getMiniMario() { return miniMario; }
 };
 
 class MinimapSceneScenceKeyHandler : public CScenceKeyHandler

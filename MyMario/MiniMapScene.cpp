@@ -1,11 +1,8 @@
 #include "MiniMapScene.h"
-#include "Utils.h"
-#include "backRound.h"
 
 MiniMapScene::MiniMapScene(int id, LPCWSTR filePath) :CScene(id, filePath)
 {
 	key_handler = new MinimapSceneScenceKeyHandler(this);
-	player = NULL;
 }
 
 /*
@@ -114,23 +111,10 @@ void MiniMapScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
+	case OBJECT_TYPE_MINI_MARIO:
 	{
-		int colorType = (int)atof(tokens[4].c_str());
-		//type =1 red ; type =2 : green 
-		//DebugOut(L"[ERROR] MARIO object was created before! %d\n",typeScence );
-		if (player != NULL && colorType == 1)
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}		
-		else
-		{
-			obj = new CMario(x, y);
-			player = (CMario*)obj;
-			player->SetLevel(2);
-			DebugOut(L"[INFO] Player object created!\n");
-		}
+		obj = new MiniMario();
+		miniMario = (MiniMario*)obj;
 		break;
 	}
 	
@@ -221,9 +205,7 @@ void MiniMapScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	if (player == NULL) return;
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	float cx=0, cy=0;
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -256,13 +238,61 @@ void MiniMapScene::Unload()
 	for (int i = 0; i < (int)objects.size(); i++)
 		delete objects[i];
 	objects.clear();
-	player = NULL;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
 void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 {
+	MiniMario* mario = ((MiniMapScene*)scence)->getMiniMario();
+	switch (KeyCode)
+	{
+		case DIK_LEFT:
+		{
+			DebugOut(L"x= %d\n", mario->vtX[mario->miniX]);
+			if (mario->miniX < 6 && mario->miniX > 0)
+			{
+				if(mario->canMove(mario->vtX[mario->miniX-1],0))
+					mario->miniX--;
+			}
+				
+			mario->Update();
+			break;
+		}
+		case DIK_RIGHT:
+		{
+			DebugOut(L"x= %d\n", mario->vtX[mario->miniX]);
+			if (mario->miniX < 4 && mario->miniX >= 0)
+			{
+				if (mario->canMove(mario->vtX[mario->miniX + 1], 0))
+					mario->miniX++;
+			}
+			mario->Update();
+			break;
+		}
 
+		case DIK_UP:
+		{
+			DebugOut(L"y= %d\n", mario->vtY[mario->miniY]);
+			if (mario->miniY < 6 && mario->miniY > 0)
+			{
+				if (mario->canMove(0,mario->vtY[mario->miniY - 1]))
+					mario->miniY--;
+			}
+			mario->Update();
+			break;
+		}
+		case DIK_DOWN:
+		{
+			DebugOut(L"y= %d\n", mario->vtY[mario->miniY]);
+			if (mario->miniY < 4 && mario->miniY >= 0)
+			{
+				if (mario->canMove(0, mario->vtY[mario->miniY + 1]))
+					mario->miniY++;
+			}
+			mario->Update();
+			break;
+		}
+	}
 }
 
 void MinimapSceneScenceKeyHandler::KeyState(BYTE* states)
