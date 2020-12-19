@@ -6,19 +6,18 @@ class MiniMario: public backRound
 private:
 	//change miniX into real x 
 	//vd : miniX=0 -> real X=70 ...
-	int getRealX(int );
-	int getRealY(int);
-	
-
+	void getMiniX(int );
+	void getMiniY(int);
 public:
 	void Update();
-	void InitMap(map<int, int>);
-	//this is the position in vector 
-	map <int, int> mapXY;
 	int miniX = 0;
 	int miniY = 1;
 	bool canMove(int, int);
-	vector<int> vtX = { 2,4,8,10,12 };
-	vector<int> vtY = { 1,3,5,7,9};
+	//we have 17 point that mario can move to 
+	//for 1 point we will have 2 coordinate x and y 
+	// change point into x&y by func getMIniX get MiniY
+	//point 0 mean mario is at point(2;3)
+	int point = 0;
 };
+
 

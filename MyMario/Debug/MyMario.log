@@ -1,4 +1,4 @@
 ﻿  MiniMario.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\MiniMario.cpp(81,20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\MiniMario.cpp(82,20): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\MiniMario.cpp(30,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\MiniMario.cpp(31,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

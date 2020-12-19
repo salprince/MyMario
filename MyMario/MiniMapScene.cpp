@@ -248,23 +248,22 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		case DIK_LEFT:
 		{
-			DebugOut(L"x= %d\n", mario->vtX[mario->miniX]);
-			if (mario->miniX < 6 && mario->miniX > 0)
+			switch (mario->point)
 			{
-				if(mario->canMove(mario->vtX[mario->miniX-1],0))
-					mario->miniX--;
+			case 1:case 3:case 4:case 5: case 14:  mario->point--; break;
+			case 7: case 6: case 9:case 10:case 16: mario->point++; break;
+			case 15:mario->point-=2; break;
 			}
-				
 			mario->Update();
 			break;
 		}
 		case DIK_RIGHT:
 		{
-			DebugOut(L"x= %d\n", mario->vtX[mario->miniX]);
-			if (mario->miniX < 4 && mario->miniX >= 0)
+			switch (mario->point)
 			{
-				if (mario->canMove(mario->vtX[mario->miniX + 1], 0))
-					mario->miniX++;
+			case 0:case 2:case 3:case 4:case 14:  mario->point++; break;
+			case 7:case 8:case 10:case 11:case 17:mario->point--; break;
+			case 13:mario->point+=2; break;
 			}
 			mario->Update();
 			break;
@@ -272,22 +271,24 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 
 		case DIK_UP:
 		{
-			DebugOut(L"y= %d\n", mario->vtY[mario->miniY]);
-			if (mario->miniY < 6 && mario->miniY > 0)
+			switch (mario->point)
 			{
-				if (mario->canMove(0,mario->vtY[mario->miniY - 1]))
-					mario->miniY--;
+			case 1:case 15: mario->point++; break;
+			case 6:case 9:case 12:mario->point--; break;
+			case 8: mario->point-=5; break;
+			case 13:mario->point-=2; break;
 			}
 			mario->Update();
 			break;
 		}
 		case DIK_DOWN:
 		{
-			DebugOut(L"y= %d\n", mario->vtY[mario->miniY]);
-			if (mario->miniY < 4 && mario->miniY >= 0)
+			switch (mario->point)
 			{
-				if (mario->canMove(0, mario->vtY[mario->miniY + 1]))
-					mario->miniY++;
+			case 5:case 8:case 12: mario->point++; break;
+			case 15:case 16:case 2:mario->point--; break;
+			case 3: mario->point += 5; break;
+			case 11: mario->point += 2; break;
 			}
 			mario->Update();
 			break;

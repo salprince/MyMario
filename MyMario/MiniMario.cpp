@@ -1,61 +1,33 @@
 #include "MiniMario.h"
-void MiniMario::InitMap(map <int, int> m)
+
+void MiniMario::getMiniX(int i)
 {
-	mapXY[1] = 0;
-	mapXY[4] = 3;
-	mapXY[4] = 1;
-	mapXY[8] = 1;
-	mapXY[10] = 1;
-	mapXY[12] = 1;
-	mapXY[12] = 3;
-	mapXY[10] = 3;
-	mapXY[8] = 3;
-	mapXY[8] = 5;
-	mapXY[6] = 5;
-	mapXY[4] = 5;
-	mapXY[4] = 7;
-	mapXY[4] = 9;
-	mapXY[6] = 9;
-	mapXY[8] = 9;
-	mapXY[8] = 7;
-	mapXY[6] = 7;
-}
-int MiniMario::getRealX(int x)
-{
-	int result = 0;
-	switch (x)
+	switch (i)
 	{
-		case 2: result = 102; break;
-		case 4:result = 134; break;
-		case 8:result = 198; break;
-		case 10: result = 230; break;
-		case 12: result = 262; break;
+		case 0:miniX = 2; break;
+		case 1:case 2: case 11: case 12: case 13: miniX = 4; break;
+		case 3: case 8:case 9 :case 15 :case 16:  miniX = 8; break;
+		case 4:case 7: miniX = 10; break;
+		case 5: case 6:miniX = 12; break;
+		case 10: case 14: case 17:miniX = 6; break;
 	}
-	return result;
 }
-int MiniMario::getRealY(int y)
+void MiniMario::getMiniY(int i)
 {
-	int result = 0;
-	switch (y)
+	switch (i)
 	{
-	case 1:result = 70; break;
-	case 3:result = 102; break;
-	case 5: result = 134; break;
-	case 7: result = 166; break;
-	case 9: result = 198; break;
+	case 0:case 1:case 6: case 7:case 8: miniY = 3; break;
+	case 2:case 3:case 4:case 5: miniY = 1; break;
+	case 9:case 10: case 11: miniY = 5; break;
+	case 12: case 16:case 17: miniY = 7; break;
+	case 13:case 14:case 15:  miniY = 9; break;
 	}
-	return result;
-}
-bool MiniMario::canMove(int x, int y)
-{
-	return true;	
 }
 void MiniMario::Update()
 {
-	
-	this->x = getRealX(vtX[miniX]);
-	this->y = getRealY(vtY[miniY]);
-	DebugOut(L"x= %f y= %f\n", x, y);
-	DebugOut(L"minix= %d miniy= %d\n", vtX[miniX], vtY[miniY]);
+	getMiniX(point);
+	getMiniY(point);
+	this->x = miniX * 16 + 70;
+	this->y = (miniY-1) * 16 + 70;
 }
 
