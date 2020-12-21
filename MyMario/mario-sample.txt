@@ -3,7 +3,7 @@ start	1
 #scene list
 [SCENES]
 #1	BeginScence.txt	0
-#1	testScence.txt	1
-1	Minimap.txt	2
+1	testScence.txt	1
+#1	Minimap.txt	2
 2	scene1.txt	1
 3	scene-test.txt	1

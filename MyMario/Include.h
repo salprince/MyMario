@@ -27,3 +27,5 @@
 #include "ChimneyPortal.h"
 #include "LevelMushroom.h"
 #include "Fire.h"
+#include "HUB.h"
+

@@ -26,7 +26,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (state == GOOMBA_STATE_WALKING)
 	{
-		vy = 0.15;	
+		vy = 0.15f;	
 		if (startx == 0)
 			startx = x;
 		if (vx > 0 && x >= length + startx)
@@ -40,15 +40,15 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			x = -length + startx;
 		}
 		CalcPotentialCollisions(coObjects, coEvents);
-		this->setStartDying(GetTickCount());
-		this->setEndDying(GetTickCount());
+		this->setStartDying((int)GetTickCount64());
+		this->setEndDying((int)GetTickCount64());
 	}
 		
 	else if(state == GOOMBA_STATE_DIE)
 	{				
 		if ((getEndDying() - getStartDying()) < 200)
 		{
-			this->setEndDying(GetTickCount() + 50);
+			this->setEndDying((int)GetTickCount64() + 50);
 		}
 		else
 			this->setIsDie(true);

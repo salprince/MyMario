@@ -164,8 +164,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
-	case OBJECT_TYPE_COIN: obj = new Coin(); break;
-	case OBJECT_TYPE_MICSBRICK: obj = new MicsBrick(); break;
+	case OBJECT_TYPE_COIN: 
+	{
+		obj = new Coin();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<Coin*>(obj)->id = temp;
+		}
+		break;
+	}
+	case OBJECT_TYPE_MICSBRICK: 
+	{
+		obj = new MicsBrick();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<MicsBrick*>(obj)->id = temp;
+		}
+		break;
+	}		 
 	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
 	case OBJECT_TYPE_FIRE: 
 	{		
@@ -176,6 +194,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
 			dynamic_cast<Fire*>(obj)->maxFire = l;*/
 		//DebugOut(L"maxFireaaaaaa %d \n", l);
+		break;
+	}
+	case OBJECT_TYPE_HUB:
+	{
+		obj = new MyHUB();
 		break;
 	}
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
@@ -268,7 +291,10 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		/*if (dynamic_cast<MyHUB*>(objects[i]))
+			objects[i]->Update(dt);
+		else */
+			objects[i]->Update(dt, &coObjects);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -280,9 +306,12 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	CGame::GetInstance()->SetCamPos(15, 00);
+	CGame::GetInstance()->SetCamPos(15, 0);
 	if (cx < 15)
-		CGame::GetInstance()->SetCamPos(15, 00);
+	{
+		CGame::GetInstance()->SetCamPos(15, 0);
+	}
+		
 	else if (cy < -160)
 	{
 		for(int i=0; i <160; i++)
@@ -291,7 +320,7 @@ void CPlayScene::Update(DWORD dt)
 	else if(cy>200)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
 	else 
-		CGame::GetInstance()->SetCamPos(round(cx), 00);
+		CGame::GetInstance()->SetCamPos(round(cx), 0);
 }
 
 void CPlayScene::Render()
@@ -378,8 +407,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else if (mario->getLevel() == MARIO_LEVEL_FIRE)
 		{
-			//DeBugOut(L"Get is Fire AFTER = %d \n", mario->getIsFire());
-			//DebugOut(L"Get is Fire beFORE = %d \n",mario->getIsFire());
 			if (!mario->getIsFire())
 			{
 				mario->setIsFire(true);

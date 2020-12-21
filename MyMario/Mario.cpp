@@ -464,6 +464,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
 				}
+				if (e->ny >0)
+					this->coinID = dynamic_cast<MicsBrick*>(e->obj)->id;
 				break;
 			}
 			case MARIO_COLLISION_LEVELMUSHROOM:

@@ -18,5 +18,5 @@ public:
 	virtual void SetState(int state);
 	int width = 16;
 	int height = 16;
-
+	int id = 0;
 };

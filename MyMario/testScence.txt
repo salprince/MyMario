@@ -14,6 +14,7 @@
 100	textures\enemies-2.png	0	128	128
 110	textures\enemies-3.png	0	130	130
 120	textures\GoalRoulette.png	0	183	239
+130	textures\HUBAndFont.png	81	255	191
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 #NOTHING
@@ -357,6 +358,22 @@
 270002	277	374	293	391	120
 #star 
 270003	297	373	313	389	120
+#HUB 
+#frame 
+280001	11	127	165	157	130
+#M letter
+280002	16	161	32	168	130
+#white P
+280003	73	162	88	169	130
+#black P
+280004	100	162	115	169	130
+#white arrow
+280005	64	162	72	169	130
+#black arrow 
+280006	91	162	99	169	130
+
+#======HUB=============
+
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -627,6 +644,19 @@
 2702	270002	100
 #star 
 2703	270003	100
+#===================HUB 
+#frame 
+2801	280001	100
+#M letter 
+2802	280002	100
+#white P
+2803	280003	100
+#black P
+2804	280004	100
+#white arrow
+2805	280005	100
+#balck arrow 
+2806	280006	100
 
 #backround
 9999	999999	100
@@ -762,6 +792,8 @@
 27002	2702
 #star 
 27003	2703
+#HUB 
+28001	2801	2802	2803	2804	2805	2806
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -1270,11 +1302,11 @@
 #bigCloudtype2
 4	136	107	19001
 #coin1
-6	192	171	11001
-6	208	171	11001
+6	192	187	11001	1
+6	208	187	11001	2
 #mics Brick1
-7	192	187	22
-7	208	187	22
+7	192	187	22	1
+7	208	187	22	2
 
 #coin2
 6	240	123	11001
@@ -2327,6 +2359,10 @@
 10	100	500	25001	9
 10	100	500	25001	10
 
+#HUB 
+11	15	260	28001
+
+6	30	235	11001	1
 # MARIO
 0	50.0	0	1
 

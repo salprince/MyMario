@@ -137,7 +137,7 @@ class CMario : public CGameObject
 	bool isSpin = false;
 	bool isHold = false;
 	bool isFire = false;
-	
+	int coinID = 0;
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -168,6 +168,7 @@ public:
 	void setIsFire(bool value) { isFire = value; }
 	bool getIsFire() { return isFire; }
 	void Reset();
+	int GetCoinID() { return coinID; };
 	int FireID = 1;
 	//tiemshotting toset ani for mario 
 	int timeShooting = 0;

@@ -246,14 +246,18 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 	MiniMario* mario = ((MiniMapScene*)scence)->getMiniMario();
 	switch (KeyCode)
 	{
+		//when mario go to 1 POINT : decision WHERE MARIO can GO and WHERE NOT
 		case DIK_LEFT:
 		{
 			switch (mario->point)
 			{
+				//explain : at point 1 : mario can go left and it go to point 0
+				//at point 7 : mario can go left and it go to point 8
 			case 1:case 3:case 4:case 5: case 14:  mario->point--; break;
 			case 7: case 6: case 9:case 10:case 16: mario->point++; break;
 			case 15:mario->point-=2; break;
 			}
+			//update : CHANGE the POSITION of mini mario DEPEND on its POINT
 			mario->Update();
 			break;
 		}
