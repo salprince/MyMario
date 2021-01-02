@@ -299,8 +299,3 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 	}
 }
-
-void MinimapSceneScenceKeyHandler::KeyState(BYTE* states)
-{
-
-}

@@ -1,5 +1,4 @@
 #include "ChimneyPortal.h"
-#include "Utils.h"
 ChimneyPortal::ChimneyPortal()
 {
 	

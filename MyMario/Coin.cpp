@@ -1,6 +1,5 @@
 #include "Coin.h"
-#include "PlayScence.h"
-
+#include "Include.h"
 void Coin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;

@@ -1,5 +1,5 @@
 #include "BeginScene.h"
-#include "Include.h"
+
 using namespace std;
 
 BeginScene::BeginScene(int id, LPCWSTR filePath) :CScene(id, filePath)
@@ -191,6 +191,7 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 			//DebugOut(L"maxFireaaaaaa %d \n", l);
 		break;
 	}
+	case OBJECT_TYPE_RED_ARROW: obj = new RedArrowBeginScene(); this->redArrow = dynamic_cast<RedArrowBeginScene*>(obj); break;
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 		//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
@@ -275,8 +276,12 @@ void BeginScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (dynamic_cast<RedArrowBeginScene*>(objects[i]))
+			dynamic_cast<RedArrowBeginScene*>(objects[i])->Update();
+		else 
+			objects[i]->Update(dt, &coObjects);
 	}
+	
 	if (player == NULL) return;
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -318,10 +323,22 @@ void BeginScene::Unload()
 
 void BeginScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	
-}
-
-void BeginScenceKeyHandler::KeyState(BYTE* states)
-{	
-
+	RedArrowBeginScene* arrow = ((BeginScene*)scence)->getArrow();
+	switch (KeyCode)
+	{
+		case DIK_UP:
+		{
+			if (arrow->level == 1)
+				arrow->level = 0;
+			arrow->Update();
+			break;
+		}
+		case DIK_DOWN:
+		{
+			if (arrow->level == 0)
+				arrow->level = 1;
+			arrow->Update();
+			break;
+		}
+	}
 }

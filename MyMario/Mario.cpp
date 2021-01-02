@@ -18,7 +18,7 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->beginTime =(float) GetTickCount64();
 	float t = GetTickCount64() - beginTime;
 	//vy += (float)(MARIO_GRAVITY * 1.25);
-	DebugOut(L"VY %f\n", vy );
+	//DebugOut(L"VY %f\n", vy );
 	
 	if (t < 800)
 	{

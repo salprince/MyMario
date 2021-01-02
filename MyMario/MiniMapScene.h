@@ -1,13 +1,6 @@
 #pragma once
-#include "Scence.h"
-#include "Game.h"
-#include "Textures.h"
-#include "GameObject.h"
-#include "Mario.h"
-#include "Utils.h"
-#include "backRound.h"
 #include "MiniMario.h"
-
+#include "Include.h"
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
@@ -45,7 +38,7 @@ public:
 class MinimapSceneScenceKeyHandler : public CScenceKeyHandler
 {
 public:
-	virtual void KeyState(BYTE* states);
+	virtual void KeyState(BYTE* states) {};
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode) {};
 	MinimapSceneScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};

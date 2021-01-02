@@ -1,5 +1,4 @@
-#include "Animations.h"
-#include "Utils.h"
+#include "Include.h"
 
 CAnimationSets* CAnimationSets::__instance = NULL;
 
@@ -22,7 +21,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
 void CAnimation::Render(float x, float y, int alpha)
 {
-	DWORD now = GetTickCount();
+	DWORD now = (DWORD)GetTickCount64();
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
