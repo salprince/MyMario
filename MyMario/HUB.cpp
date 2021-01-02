@@ -25,19 +25,19 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 		
 		x = round(cx-154);
 		cy += game->GetScreenHeight() / 2;
-		y = round(cy);
+		y = round(cy-5);
 	}	
 	else if (cy > game->GetScreenHeight() / 2)
 	{
 		x = round(cx);
 		cy += game->GetScreenHeight() /2;
-		y = round(cy);
+		y = round(cy-5);
 	}
 	else
 	{
 		x = round(cx);
 		cy += game->GetScreenHeight()/2+40;
-		y = round(cy);
+		y = round(cy-5);
 	}
 	//DebugOut(L"cx cy %f %f\n", cx, cy);
 	
@@ -45,8 +45,24 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 
 void MyHUB::Render()
 {
-	int ani = GOOMBA_ANI_WALKING_LEFT;
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(HUB_ANI_BLACK_BACKROUND)->Render(x - 15, y);
+	animation_set->at(HUB_ANI_NORMAL)->Render(x, y);
+	//render 3 frame card 
+	animation_set->at(HUB_ANI_FRAME_CARD)->Render(x+164, y);
+	animation_set->at(HUB_ANI_FRAME_CARD)->Render(x + 164 +24, y);
+	animation_set->at(HUB_ANI_FRAME_CARD)->Render(x + 164 +48, y);
+	//render M letter
+	animation_set->at(HUB_ANI_M_LETTER)->Render(x+5, y+16);
+	//nextto M letter
+	animation_set->at(HUB_ANI_NUMBER_0)->Render(x + 38, y + 16);
+	//render level 1 
+	animation_set->at(HUB_ANI_NUMBER_1)->Render(x +39, y +8);
+	//render black arrow 
+	for(int i=0 ; i <6; i++)
+		animation_set->at(HUB_ANI_BLACK_ARROW)->Render(x + 54+8*i, y + 8);
+	animation_set->at(HUB_ANI_BLACK_P)->Render(x + 104, y + 8);
+	
+	
 }
 
 void MyHUB::SetState(int state)
