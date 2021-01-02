@@ -164,10 +164,15 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 	{
 		int typeAnimation =(int) atof(tokens[3].c_str());
 		obj = new backRound();
-		if (typeAnimation == 9004 || typeAnimation == 29001 || typeAnimation == 30001)
+		if (tokens.size()==5)
 		{
 			int animation1 = (int)atof(tokens[4].c_str());
 			dynamic_cast<backRound*>(obj)->isAnimation = animation1;
+		}
+		if (tokens.size() == 6)
+		{
+			int animation1 = (int)atof(tokens[5].c_str());
+			dynamic_cast<backRound*>(obj)->isColorBackround= animation1;
 		}
 		break;
 	}
