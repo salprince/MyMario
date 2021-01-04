@@ -167,6 +167,7 @@
     <ClInclude Include="Portal.h" />
     <ClInclude Include="RedArrowBeginScene.h" />
     <ClInclude Include="Scence.h" />
+    <ClInclude Include="ShootingRedTree.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Utils.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="RedArrowBeginScene.cpp" />
     <ClCompile Include="Scence.cpp" />
+    <ClCompile Include="ShootingRedTree.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Utils.cpp" />

@@ -13,7 +13,7 @@ void MyHUB::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
-	float cx, cy;
+	/*float cx, cy;
 	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetPosition(cx, cy);
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
@@ -39,7 +39,7 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 		cy += game->GetScreenHeight()/2+40;
 		y = round(cy-5);
 	}
-	//DebugOut(L"cx cy %f %f\n", cx, cy);
+	//DebugOut(L"cx cy %f %f\n", cx, cy);*/
 	
 }
 

@@ -1,5 +1,5 @@
 #include "Include.h"
-//#pragma warning(disable:28159 26495) 
+#include "ShootingRedTree.h"
 
 using namespace std;
 
@@ -62,7 +62,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < (int)tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -84,7 +84,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (int i = 1; i < (int)tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -149,7 +149,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float nx0 = (float)atof(tokens[5].c_str());
 		obj = new Koopas();
 		obj->length = l;
-		obj->nx = nx0;
+		obj->nx = (int)nx0;
 		break;
 	}
 	case OBJECT_TYPE_BACKROUND:
@@ -200,6 +200,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new MyHUB();
 		break;
+	}
+	case OBJECT_TYPE_SHOOTING_RED_TREE:
+	{
+		obj = new ShootingRedTree(); break;
 	}
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
@@ -325,7 +329,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < (int)objects.size(); i++)
 		objects[i]->Render();
 }
 
@@ -334,7 +338,7 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < (int)objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
@@ -387,14 +391,14 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		//mario->SetState(MARIO_STATE_JUMP);
 		break;
 	}
-	case DIK_Z:
+	case DIK_A:
 	{
 		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{			
 			if (!mario->getIsSpin())
 			{
 				mario->setIsSpin(true);
-				mario->spining = GetTickCount64();
+				mario->spining =(int) GetTickCount64();
 			}			
 		}
 		else if (mario->getLevel() == MARIO_LEVEL_BIG)
@@ -410,7 +414,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			if (!mario->getIsFire())
 			{
 				mario->setIsFire(true);
-				mario->timeShooting = GetTickCount64();
+
+				mario->timeShooting =(int) GetTickCount64();
 				if(mario->FireID<10)
 					mario->FireID++;
 				else 
@@ -428,7 +433,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetPosition(mario->x, mario->y - 20);
 		break;
 	}
-	case DIK_A:
+	case DIK_R:
 		mario->Reset();
 		break;
 	case DIK_B:

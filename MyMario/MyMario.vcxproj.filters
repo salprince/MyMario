@@ -99,6 +99,9 @@
     <ClInclude Include="RedArrowBeginScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShootingRedTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Brick.cpp">
@@ -180,6 +183,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RedArrowBeginScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShootingRedTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

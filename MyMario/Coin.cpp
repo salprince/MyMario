@@ -38,7 +38,7 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (isCheck == false)
 		{
 			width = 16;
-			height = 16;
+			height = 10;
 			y -= 16;
 			isCheck = true;
 		}

@@ -18,7 +18,6 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->beginTime =(float) GetTickCount64();
 	float t = GetTickCount64() - beginTime;
 	//vy += (float)(MARIO_GRAVITY * 1.25);
-	//DebugOut(L"VY %f\n", vy );
 	
 	if (t < 800)
 	{
@@ -54,7 +53,7 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//red mario 
 				this->SetState(MARIO_STATE_WALKING_LEFT);
 				//this->x -= 1.5;
-				vx =- (float)MARIO_MAX_WALKING_SPEED/1.5;
+				vx =- (float)(MARIO_MAX_WALKING_SPEED/1.5);
 				break;
 			}
 			case 2 :
@@ -79,8 +78,8 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				//green mario 				
 				this->SetState(MARIO_STATE_JUMP);
-				vx = (float)MARIO_MAX_WALKING_SPEED/1.5;
-				vy -= 0.03;
+				vx = (float)(MARIO_MAX_WALKING_SPEED/1.5);
+				vy -= (float)0.03;
 				break;
 			}
 		}
@@ -100,9 +99,9 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->SetState(MARIO_STATE_JUMP);
 				else 
 					this->SetState(MARIO_STATE_IDLE);
-				vx = (float)MARIO_MAX_WALKING_SPEED/1.5;
+				vx = (float)(MARIO_MAX_WALKING_SPEED/1.5);
 				vy-= (float)(MARIO_GRAVITY * 1.25);
-				vy += 0.03;
+				vy += (float)0.03;
 				break;
 			}
 		}
@@ -119,7 +118,7 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				//green mario 		
 				this->SetState(MARIO_STATE_WALKING_RIGHT);
-				vx = (float)MARIO_MAX_WALKING_SPEED /1.5;
+				vx = (float)(MARIO_MAX_WALKING_SPEED /1.5);
 				break;
 			}
 		}

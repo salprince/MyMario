@@ -22,7 +22,7 @@ public:
 	int id = 0;
 	bool isFiring = false;
 	CMario* marioHandle = NULL;
-	
+	bool isFromTree = false;
 	void Reset();
 	void setPositionAfterMario(float x, float y, int nx)
 	{

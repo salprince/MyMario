@@ -81,7 +81,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	//DebugOut(L"%f %f \n", x, startx);
 	//make koopa waling after some seconds
-	if (isShell == true && state != KOOPAS_STATE_SHELL_RUNNING  && state != KOOPAS_STATE_HOLD)
+	if (isShell == true && state != KOOPAS_STATE_HOLD)
 	{
 		if (getIsHold())
 		{
@@ -97,7 +97,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			else
 			{
-				if (getShellOut() - getShellIn() < 4000)
+				if (getShellOut() - getShellIn() < 3000)
 				{
 					setShellOut(getShellOut() + 10);
 				}
@@ -119,10 +119,10 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		setShellOut(0);
 	}
 
-	if (getIsHold())
+	if (getIsHold() && this->GetState() == KOOPAS_STATE_SHELL)
 		state = KOOPAS_STATE_HOLD;
-	else 
-		state = KOOPAS_STATE_SHELL;
+	/*else 
+		state = KOOPAS_STATE_SHELL;*/
 	
 	if (coEvents.size() == 0)
 	{
@@ -190,7 +190,7 @@ void Koopas::Render()
 		ani = GREEN_KOOPAS_ANI_SHELL;
 	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
 	else if (vx < 0) ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
-
+	//DebugOut(L"STATE = %d\n", this->GetState());
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();

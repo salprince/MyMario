@@ -36,7 +36,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (!this->isFiring && this->id == marioHandle->FireID)
 				{
 					this->Reset();
-					this->isFire = GetTickCount();
+					this->isFire = GetTickCount64();
 					if (abs(marioHandle->vx) > 0.07f)
 
 						this->vx = marioHandle->vx;
@@ -62,12 +62,19 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		}
 	}
-	else;
-		//DebugOut(L"\n");
-		
+	else if (this->isFromTree)
+	{
+		if (!this->isFiring)
+		{
+			this->Reset();
+			this->isFire = GetTickCount64();
+			this->vx = nx * FIRE_FLYING_SPEED;
+			this->isFiring = true;
+		}
+	}
 	if (isFire != 0)
 	{
-		if ((GetTickCount() - isFire) < 3000)
+		if ((GetTickCount64() - isFire) < 3000)
 		{	
 			if (y > 240 && y != 500)
 				y = 240;
