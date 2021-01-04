@@ -134,7 +134,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(KOOPAS_STATE_DIE);
 					e->obj->y += 12;
-					e->obj->vx += (float)0.05 * nx;
+					//e->obj->vx += (float)0.05 * nx;
 					SetState(KOOPAS_STATE_DIE);
 					isFiring = false;
 					isFire = 0;

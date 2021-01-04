@@ -7,12 +7,13 @@
 #define FLOWER_BBOX_HEIGHT 15
 
 #define FLOWER_STATE_UP 100
-#define FLOWER_STATE_DIE 200
+#define FLOWER_STATE_DOWN 200
+#define FLOWER_STATE_DIE 300
 #define FLOWER_STATE_ATTACK 300
 
 
-#define FLOWER_ANI_UP_LEFT 0
-#define FLOWER_ANI_UP_RIGHT 1
+#define FLOWER_ANI_LEFT 0
+#define FLOWER_ANI_RIGHT 1
 
 class ShootingRedTree : public CGameObject
 {
@@ -22,8 +23,8 @@ class ShootingRedTree : public CGameObject
 
 public:
 	ShootingRedTree();
+	double time = 0;
 	void FireActive(int nx);
-
 	void FireReset();
 	virtual void SetState(int state);
 	Fire* treeFire = NULL;

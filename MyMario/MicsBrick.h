@@ -7,7 +7,7 @@
 #define MICSBRICK_STATE_DIE 200
 
 #define MICSBRICK_ANI_ALIVE 0
-#define MICSBRICK_ANI_DIE 0
+#define MICSBRICK_ANI_DIE 1
 
 class MicsBrick : public CGameObject
 {

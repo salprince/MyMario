@@ -164,7 +164,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				e->obj->SetState(KOOPAS_STATE_DIE);
 				e->obj->y += 12;
-				e->obj->vx += (float)(0.05*ny);
+				//e->obj->vx += (float)(0.05*ny);
 				SetState(KOOPAS_STATE_DIE);
 				vx = (float)(-0.05 * ny);
 			}

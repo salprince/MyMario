@@ -391,7 +391,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		//mario->SetState(MARIO_STATE_JUMP);
 		break;
 	}
-	case DIK_A:
+	case DIK_A:case DIK_Z:
 	{
 		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{			

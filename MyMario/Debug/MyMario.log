@@ -1,2 +1,4 @@
-﻿  ShootingRedTree.cpp
+﻿  Fire.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(39,35): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(70,33): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe
