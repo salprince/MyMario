@@ -1,4 +1,20 @@
-﻿  Fire.cpp
+﻿  Animations.cpp
+  BeginScene.cpp
+  Coin.cpp
+  Fire.cpp
 D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(39,35): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
 D:\ProjectGame\MyNewMario\MyMario\MyMario\Fire.cpp(70,33): warning C4244: '=': conversion from 'ULONGLONG' to 'int', possible loss of data
+  Game.cpp
+  GameObject.cpp
+  HUB.cpp
+  Koopas.cpp
+  LevelMushroom.cpp
+  Mario.cpp
+  MiniMapScene.cpp
+  PlayScence.cpp
+  RedArrowBeginScene.cpp
+  ShootingRedTree.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\ShootingRedTree.cpp(9,29): warning C4244: '=': conversion from 'ULONGLONG' to 'double', possible loss of data
+  main.cpp
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

@@ -184,7 +184,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}		 
-	case OBJECT_TYPE_LEVELMUSHROOM: obj = new LevelMushroom(); break;
+	case OBJECT_TYPE_LEVELMUSHROOM:
+	{
+		obj = new LevelMushroom();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<LevelMushroom*>(obj)->id = temp;
+		}
+		break;
+	}
 	case OBJECT_TYPE_FIRE: 
 	{		
 		
