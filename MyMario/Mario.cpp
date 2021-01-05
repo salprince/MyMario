@@ -471,9 +471,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_LEVELMUSHROOM:
 			{
 				LevelMushroom* mushroom = dynamic_cast<LevelMushroom*>(e->obj);
-				mushroom->SetState(COIN_STATE_DIE);
+				mushroom->SetState(MUSHROOM_STATE_DIE);				
 				if (level < MARIO_LEVEL_TAIL)
 					level++;
+				this->y -= 20;
 				break;
 			}
 			default:break;

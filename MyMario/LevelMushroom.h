@@ -7,6 +7,9 @@
 #define MUSHROOM_ANI_ALIVE 0
 #define MUSHROOM_ANI_DIE 1
 
+#define MUSHROOM_VX 0.05f
+#define MUSHROOM_GRAVITY 0.05f
+
 class LevelMushroom : public CGameObject
 {
 public:
@@ -18,4 +21,5 @@ public:
 	int height = 0;
 	int id = 0;
 	bool isCheck = false;
+	float time = 0;
 };

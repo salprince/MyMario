@@ -117,11 +117,7 @@ void CGameObject::FilterCollision(
 			nx = 0;
 			ny = 0;
 		}
-		if (dynamic_cast<LevelMushroom*>(coEvents[i]->obj))
-		{
-			nx = 0;
-			ny = 0;
-		}
+		
 		if (dynamic_cast<Koopas*>(this) || dynamic_cast<Fire*>(this) )
 		{
 			if (dynamic_cast<CMario*>(coEvents[i]->obj))

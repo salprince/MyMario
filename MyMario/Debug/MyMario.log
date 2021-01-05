@@ -1,3 +1,2 @@
-﻿  MicsBrick.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\MicsBrick.cpp(44,22): warning C4305: '=': truncation from 'double' to 'float'
+﻿  Mario.cpp
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe
