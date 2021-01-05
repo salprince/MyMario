@@ -65,11 +65,7 @@ void ShootingRedTree::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dMarioTree <= 50 && dMarioTree >= 0)
 			this->FireActive(this->nx);
 	}
-	//else this->FireReset();
-	if (dMarioTree <= 80 && dMarioTree >= 0)
-		this->y--;
-	else if (dMarioTree < 0 && dMarioTree >= -80)
-		this->y++;
+	
 	
 
 }

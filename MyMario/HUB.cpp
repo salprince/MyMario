@@ -77,6 +77,7 @@ void MyHUB::Render()
 	renderText(std::to_string(live), x + 38, y + 16);
 	//render number of coin - which mario have 
 	renderText(std::to_string(coinNumber), x + 133, y + 8);
+
 }
 
 void MyHUB::SetState(int state)

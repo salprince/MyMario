@@ -129,7 +129,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			{
 				obj = new CMario(x, y);
 				player = (CMario*)obj;
-				player->SetLevel(2);
+				player->SetLevel(MARIO_LEVEL_SMALL);
 				DebugOut(L"[INFO] Player object created!\n");
 				}			
 			break;
@@ -180,6 +180,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() == 5)
 		{
 			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<MicsBrick*>(obj)->oldY = y;
 			dynamic_cast<MicsBrick*>(obj)->id = temp;
 		}
 		break;

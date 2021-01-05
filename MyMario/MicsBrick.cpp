@@ -1,4 +1,5 @@
 #include "MicsBrick.h"
+#include "Include.h"
 void MicsBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
@@ -26,24 +27,24 @@ void MicsBrick::SetState(int state)
 }
 void MicsBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
-	//x += dx;
-	//y += dy;
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-	if (state != MICSBRICK_ANI_DIE)
-		CalcPotentialCollisions(coObjects, coEvents);
-	if (coEvents.size() == 0)	{
-		
-	}
-	else
+	if (isCheck )
 	{
-		
-
+		//DebugOut(L"OLD Y %f\n", oldY);
+		if (y < oldY)
+		{
+			vy += COIN_GRAVITY;
+			y += vy * dt;
+		}
+		else y = oldY;
 	}
-
-	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	//DebugOut(L"shell %d\n", isShell);
+	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
+	{
+		if (isCheck == false)
+		{
+			this->vy = -0.0075;
+			y -= 16;
+			isCheck = true;
+			this->time = (float)GetTickCount64();
+		}
+	}
 }

@@ -22,7 +22,7 @@
 #define HUB_ANI_POINT_2000	15
 #define HUB_ANI_POINT_4000	16
 #define HUB_ANI_POINT_8000	17
-#define HUB_ANI_POINT_1VP	18
+#define HUB_ANI_POINT_1UP	18
 #define HUB_ANI_NUMBER_0	19
 #define HUB_ANI_NUMBER_1	20
 #define HUB_ANI_NUMBER_2	21
@@ -74,4 +74,5 @@ public:
 	string timeText="";
 	int live = 4;
 	int coinNumber = 0;
+	vector <int> point = { 100,200,400,800,1000,2000,4000,8000 };
 };

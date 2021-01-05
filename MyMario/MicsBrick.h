@@ -16,7 +16,11 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
+	float oldY = 0;
 	int width = 16;
 	int height = 16;
 	int id = 0;
+	bool isCheck = false;
+	float time = 0;
+	
 };

@@ -10,6 +10,8 @@
 #define COIN_ANI_ALIVE 0
 #define COIN_ANI_DIE 1
 
+#define COIN_GRAVITY 0.01f
+
 class Coin : public CGameObject
 {
 public:
@@ -17,8 +19,9 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
-	int width = 0;
-	int height = 0;
+	int width = 5;
+	int height = 5;
 	int id = 0;
 	bool isCheck = false;
+	float time = 0;
 };
