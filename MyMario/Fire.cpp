@@ -36,7 +36,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (!this->isFiring && this->id == marioHandle->FireID)
 				{
 					this->Reset();
-					this->isFire = GetTickCount64();
+					this->isFire = (int)GetTickCount64();
 					if (abs(marioHandle->vx) > 0.07f)
 
 						this->vx = marioHandle->vx;
@@ -67,7 +67,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (!this->isFiring)
 		{
 			this->Reset();
-			this->isFire = GetTickCount64();
+			this->isFire = (int)GetTickCount64();
 			this->vx = nx * FIRE_FLYING_SPEED;
 			this->isFiring = true;
 		}

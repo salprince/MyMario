@@ -60,6 +60,8 @@
 #define HUB_ANI_TEXT_Y		53
 #define HUB_ANI_TEXT_Z		54
 #define HUB_ANI_BLACK_BACKROUND 55
+
+#define SCENCE1_TIME		365
 class MyHUB : public CGameObject
 {
 public:
@@ -67,4 +69,9 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void renderText(string s, int x, int y);
+	float time = 0;
+	string timeText="";
+	int live = 4;
+	int coinNumber = 0;
 };

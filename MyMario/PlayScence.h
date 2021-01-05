@@ -37,7 +37,6 @@ class CPlayScene : public CScene
 protected:
 	CMario* player=NULL;
 	vector<LPGAMEOBJECT> objects;
-
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -51,10 +50,9 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
 	CMario* GetPlayer() { return player; }
 
-	//friend class CPlayScenceKeyHandler;
+	float time = 0;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

@@ -338,6 +338,8 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	if (time == 0)
+		time = (float)GetTickCount64();
 	for (int i = 0; i < (int)objects.size(); i++)
 		objects[i]->Render();
 }

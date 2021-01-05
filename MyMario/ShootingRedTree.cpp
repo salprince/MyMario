@@ -6,7 +6,7 @@ ShootingRedTree::ShootingRedTree()
 	treeFire = new Fire();
 	treeFire->x = -15;
 	treeFire->y = -15;
-	this->time = GetTickCount64();
+	this->time = (double)GetTickCount64();
 	this->nx = 0;
 	this->SetState(FLOWER_STATE_DOWN);
 };

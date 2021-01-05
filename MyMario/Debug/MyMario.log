@@ -1,2 +1,8 @@
-﻿  BeginScene.cpp
+﻿  HUB.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(75,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(75,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(77,45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(77,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(79,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(79,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe
