@@ -340,5 +340,9 @@ void BeginScenceKeyHandler::OnKeyDown(int KeyCode)
 			arrow->Update();
 			break;
 		}
+		case DIK_W:
+		{
+			CGame::GetInstance()->SwitchScene(2);
+		}
 	}
 }

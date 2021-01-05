@@ -297,5 +297,9 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->Update();
 			break;
 		}
+		case DIK_W:
+		{
+			CGame::GetInstance()->SwitchScene(3);
+		}
 	}
 }
