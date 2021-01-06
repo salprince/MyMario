@@ -1,2 +1,3 @@
 ﻿  PlayScence.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(499,21): warning C4305: '-=': truncation from 'double' to 'float'
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

@@ -40,25 +40,19 @@ void ShootingRedTree::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float dMarioTree = mario->x - this->x;
-	int timeActive = (int)((GetTickCount64() - time)/1000);
-	//DebugOut(L"time = %d %f\n", timeActive% 5 , GetTickCount64() - time);
-	if (timeActive %2 == 0)
+	int timeActive = (int)((GetTickCount64() - time));
+	//DebugOut(L"time = %d %f\n", timeActive% 5 , GetTickCount64() - time);	
+	if (y <= 175)
+		this->SetState(FLOWER_STATE_DOWN);
+	else if (y >= 230)
+		this->SetState(FLOWER_STATE_UP);
+	if (state == FLOWER_STATE_UP)
 	{
-		if (state == FLOWER_STATE_UP)
-			this->SetState(FLOWER_STATE_DOWN);
-		else if (state == FLOWER_STATE_DOWN)
-			this->SetState(FLOWER_STATE_UP);
+		this->y-=0.5;
 	}
-	else
-	{
-		if (state == FLOWER_STATE_UP)
-		{
-			this->y-=0.5;
-		}
 			
-		else if (state == FLOWER_STATE_DOWN)
-			this->y+=0.5;
-	}
+	else if (state == FLOWER_STATE_DOWN)
+		this->y+=0.5;
 	//DebugOut(L"STATE = %d\n", state);
 	if (this->treeFire->isFiring == false)
 	{
