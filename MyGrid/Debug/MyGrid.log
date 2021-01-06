@@ -1,0 +1,2 @@
+﻿  MyGrid.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Sprites.h(38,22): error C4596: 'Clear': illegal qualified name in member declaration

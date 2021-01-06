@@ -1,7 +1,8 @@
 [SETTINGS]
-start	3
+start	4
 #scene list
 [SCENES]
 1	BeginScence.txt	0
 2	Minimap.txt	2
 3	testScence.txt	1
+4	scene4.txt	1
