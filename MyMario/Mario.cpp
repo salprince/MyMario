@@ -141,9 +141,18 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else
 		{
 			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+		}		
+	}
+	else if (state == MARIO_STATE_RUN )
+	{
+		if (vx > MARIO_MAX_RUNNING_SPEED)
+			vx = MARIO_MAX_RUNNING_SPEED;
+		else if (vx < -MARIO_MAX_RUNNING_SPEED)
+			vx = -MARIO_MAX_RUNNING_SPEED;
+		else
+		{
+			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
 		}
-		if (abs(vx) >= MARIO_MAX_WALKING_SPEED - 0.05)
-			this->SetState(MARIO_STATE_RUN);
 	}
 	else if (state == MARIO_STATE_IDLE)
 	{
@@ -200,6 +209,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
 	if (vy < 0 && y < -120) y = -120;
+	//DebugOut(L"Coin id = %d \ncoin number %d \n", this->coinID, CGame::GetInstance()->GetCurrentScene()->Ge);
 	//DebugOut(L"%f %f \n",vy , y);
 	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
 	{
@@ -306,6 +316,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+						scene->point += scene->pointList[scene->pointLevel];
 					}
 				}
 				else if (e->nx != 0)
@@ -463,7 +475,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
 				}
-				if (e->ny >0)
+				
+				if (e->ny >0 && this->coinID!= dynamic_cast<MicsBrick*>(e->obj)->id)
 					this->coinID = dynamic_cast<MicsBrick*>(e->obj)->id;
 				dynamic_cast<MicsBrick*>(e->obj)->SetState(MICSBRICK_STATE_DIE);
 				break;

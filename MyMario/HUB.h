@@ -65,6 +65,7 @@
 class MyHUB : public CGameObject
 {
 public:
+	MyHUB(): CGameObject(){	}
 	virtual void Render() ;
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
@@ -72,7 +73,5 @@ public:
 	void renderText(string s, int x, int y);
 	float time = 0;
 	string timeText="";
-	int live = 4;
-	int coinNumber = 0;
-	vector <int> point = { 100,200,400,800,1000,2000,4000,8000 };
+	string pointText = "000000";
 };

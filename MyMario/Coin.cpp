@@ -36,7 +36,11 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy += COIN_GRAVITY;
 			y += vy * dt;
 		}
-		else this->SetState(COIN_STATE_DIE);
+		else
+		{
+			this->SetState(COIN_STATE_DIE);
+			
+		}
 	}
 	// 1 micsbrick have a id to know which coin 
 	// whenmario collis mics brick mario will return a value : id of micsbrick 
@@ -45,11 +49,14 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if ( ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
 	{		
 		if (isCheck == false)
-		{			
-			this->vy = -0.15;
+		{		
+			//DebugOut(L"GET COIN\n");
+			this->vy = (float)-0.15;
 			y -= 16;
 			isCheck = true;
-			this->time = (float)GetTickCount64();
+			this->time = (float)GetTickCount64();	
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point += 100;
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber++;
 		}
 	}
 }

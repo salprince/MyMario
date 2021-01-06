@@ -208,7 +208,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_HUB:
 	{
+		
 		obj = new MyHUB();
+		this->hub = (MyHUB*)(obj);
 		break;
 	}
 	case OBJECT_TYPE_SHOOTING_RED_TREE:
@@ -310,10 +312,9 @@ void CPlayScene::Update(DWORD dt)
 		else */
 			objects[i]->Update(dt, &coObjects);
 	}
-
+	//this->GetHUB()->Render();
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -335,6 +336,7 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(round(cx), 150);
 	else 
 		CGame::GetInstance()->SetCamPos(round(cx), 0);
+	
 }
 
 void CPlayScene::Render()
@@ -342,7 +344,11 @@ void CPlayScene::Render()
 	if (time == 0)
 		time = (float)GetTickCount64();
 	for (int i = 0; i < (int)objects.size(); i++)
-		objects[i]->Render();
+	{
+		//if(!dynamic_cast<MyHUB*>(objects[i]))
+			objects[i]->Render();
+	}	
+	//this->GetHUB()->Render();
 }
 
 /*
@@ -469,20 +475,26 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
-	{
-		if (game->IsKeyDown(DIK_Z))
+	{		
+		if (game->IsKeyDown(DIK_A) && mario->vx == MARIO_MAX_WALKING_SPEED)
 		{
-			if (mario->getLevel() == MARIO_LEVEL_FIRE)
-			{
-				if (!mario->getIsFire())
-					mario->setIsFire(true);
-			}
+			mario->SetState(MARIO_STATE_RUN);
+			mario->nx = 1;
 		}
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			
+		else mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 		
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	{
+		if (game->IsKeyDown(DIK_A) && mario->vx == -MARIO_MAX_WALKING_SPEED)
+		{
+			mario->SetState(MARIO_STATE_RUN);
+			mario->nx = -1;
+		}
+		else mario->SetState(MARIO_STATE_WALKING_LEFT);
+	}
+		
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 	

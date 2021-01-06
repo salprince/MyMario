@@ -12,38 +12,32 @@ void MyHUB::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt);
-	this->time = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->time;
-	this->timeText = std::to_string(SCENCE1_TIME - (int)(GetTickCount64() / 1000 - time / 1000));
-	//timeRemain -= (float)(GetTickCount64() - time);
-	/*float cx, cy;
-	((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetPosition(cx, cy);
+	//update position of HUD
+	float cx, cy;
+	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	player->GetPosition(cx, cy);
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	if (cx < 15)
-		x = 15;
-	else if (cy > 100)
+	if(cx < 15)
 	{
-		
-		x = round(cx-154);
-		cy += game->GetScreenHeight() / 2;
-		y = round(cy-5);
-	}	
-	else if (cy > game->GetScreenHeight() / 2)
-	{
-		x = round(cx);
-		cy += game->GetScreenHeight() /2;
-		y = round(cy-5);
+		this->x = 15;
 	}
 	else
 	{
-		x = round(cx);
-		cy += game->GetScreenHeight()/2+40;
-		y = round(cy-5);
+		this->x =round( player->x - game->GetScreenWidth() / 2);
+		//this->x = player->x - game->GetScreenWidth() / 2;
 	}
-	//DebugOut(L"cx cy %f %f\n", cx, cy);*/
-	
+	//update point and time to HUD
+	this->time = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->time;
+	this->timeText = std::to_string(SCENCE1_TIME - (int)(GetTickCount64() / 1000 - time / 1000));
+	//process to change point of scence to string 
+	//this is the way I can thinking to 
+	int tempPoint= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point;
+	pointText = "";
+	for (int i = 0; i < (int)(6 - std::to_string(tempPoint).size()); i++)
+		this->pointText += "0";
+	this->pointText += std::to_string(tempPoint);	
 }
 void MyHUB::renderText(string s,int x, int y)
 {
@@ -72,12 +66,12 @@ void MyHUB::Render()
 		animation_set->at(HUB_ANI_BLACK_ARROW)->Render(x + 54+8*i, y + 8);
 	animation_set->at(HUB_ANI_BLACK_P)->Render(x + 104, y + 8);	
 	//render scence time 
-	renderText(timeText, x+125, y+16);
+	renderText(timeText, (int)x+125, (int)y+16);
 	//render live of mario 
-	renderText(std::to_string(live), x + 38, y + 16);
+	renderText(std::to_string(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->live), (int )x + 38, (int)y + 16);
 	//render number of coin - which mario have 
-	renderText(std::to_string(coinNumber), x + 133, y + 8);
-
+	renderText(std::to_string(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber), (int)x + 133, (int)y + 8);
+	renderText(pointText, (int)x + 54, (int)y + 16);
 }
 
 void MyHUB::SetState(int state)

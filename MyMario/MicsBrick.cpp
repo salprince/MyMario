@@ -41,7 +41,7 @@ void MicsBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (isCheck == false)
 		{
-			this->vy = -0.0075;
+			this->vy = (float)-0.0075;
 			y -= 16;
 			isCheck = true;
 			this->time = (float)GetTickCount64();

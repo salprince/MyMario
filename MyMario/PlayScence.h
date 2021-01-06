@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
+#include "HUB.h"
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
@@ -35,7 +36,8 @@
 class CPlayScene : public CScene
 {
 protected:
-	CMario* player=NULL;
+	CMario* player=nullptr;
+	MyHUB* hub = nullptr;
 	vector<LPGAMEOBJECT> objects;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -50,9 +52,14 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-	CMario* GetPlayer() { return player; }
-
+	CMario* GetPlayer() { return player; };
+	MyHUB* GetHUB() { return hub; };
 	float time = 0;
+	long point = 0;
+	int live = 4;
+	int pointLevel = 0;
+	int coinNumber = 0;
+	vector <int> pointList = { 100,200,400,800,1000,2000,4000,8000 };
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

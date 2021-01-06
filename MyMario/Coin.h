@@ -21,7 +21,7 @@ public:
 	virtual void SetState(int state);
 	int width = 5;
 	int height = 5;
-	int id = 0;
+	int id = -1;
 	bool isCheck = false;
 	float time = 0;
 };
