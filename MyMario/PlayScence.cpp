@@ -152,6 +152,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Koopas();
 		obj->length = l;
 		obj->nx = (int)nx0;
+		if (tokens.size() == 7)
+		{
+			int temp = (int)atof(tokens[6].c_str());
+			dynamic_cast<Koopas*>(obj)->typeKoopas = temp;
+		}
 		break;
 	}
 	case OBJECT_TYPE_BACKROUND:

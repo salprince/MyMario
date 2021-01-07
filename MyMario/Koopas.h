@@ -13,6 +13,7 @@
 #define KOOPAS_STATE_HOLD 250
 #define KOOPAS_STATE_DIE 300
 #define KOOPAS_STATE_SHELL_RUNNING 400
+#define KOOPAS_STATE_WING 500
 
 #define GREEN_KOOPAS_ANI_WALKING_LEFT 0
 #define GREEN_KOOPAS_ANI_WALKING_RIGHT 1
@@ -20,6 +21,11 @@
 #define GREEN_KOOPAS_ANI_RENEW 3
 #define GREEN_KOOPAS_ANI_SHELL 4
 #define GREEN_KOOPAS_ANI_HOLD 5
+#define GREEN_KOOPAS_ANI_WING_LEFT 6
+#define GREEN_KOOPAS_ANI_WING_RIGHT 7
+
+#define GRAVITY 0.001f
+#define JUMP_SPEECH 0.3f
 
 class Koopas : public CGameObject
 {
@@ -61,5 +67,6 @@ public:
 		}
 		
 	}
-
+	int typeKoopas = 0;
+	bool isJump = false;
 };

@@ -14,7 +14,8 @@ Koopas::Koopas()
 {
 	SetState(KOOPAS_STATE_WALKING);
 	vx = -KOOPAS_WALKING_SPEED;
-	
+	//if (this->typeKoopas == 1)
+		//this->SetState(KOOPAS_STATE_WING);
 }
 
 void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -30,6 +31,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
+	vy += GRAVITY * dt;
 	if (state != KOOPAS_STATE_DIE)
 	{
 		if (state == KOOPAS_STATE_HOLD)
@@ -125,7 +127,13 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		state = KOOPAS_STATE_SHELL;*/
 	
 	if (coEvents.size() == 0)
-	{
+	{		
+		if (!isJump)
+		{
+			vy += -JUMP_SPEECH;
+			isJump = true;
+		}
+			
 		x += dx;
 		y += dy;
 	}
@@ -150,6 +158,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				nx = -nx;
 				vx = -vx;
+			}
+			if (dynamic_cast<ColorBrick*>(e->obj))
+			{
+				if (isJump)
+					isJump = false;
 			}
 		}
 
@@ -188,6 +201,11 @@ void Koopas::Render()
 		ani = GREEN_KOOPAS_ANI_HOLD;
 	else if (state == KOOPAS_STATE_SHELL|| state == KOOPAS_STATE_SHELL_RUNNING )
 		ani = GREEN_KOOPAS_ANI_SHELL;
+	else if (this->typeKoopas==1)
+	{
+		if (vx > 0) ani = GREEN_KOOPAS_ANI_WING_RIGHT;
+		else if (vx < 0) ani = GREEN_KOOPAS_ANI_WING_LEFT;
+	}
 	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
 	else if (vx < 0) ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
 	//DebugOut(L"STATE = %d\n", this->GetState());
@@ -218,6 +236,9 @@ void Koopas::SetState(int state)
 		vx = 0;
 		height = 14;
 		width = 16;
+		//DebugOut(L" SET Koopa is shell\n");
+		break;
+	case KOOPAS_STATE_WING:
 		//DebugOut(L" SET Koopa is shell\n");
 		break;
 	case KOOPAS_STATE_HOLD:
