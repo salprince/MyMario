@@ -60,6 +60,7 @@ public:
 	int pointLevel = 0;
 	int coinNumber = 0;
 	vector <int> pointList = { 100,200,400,800,1000,2000,4000,8000 };
+	bool isShowEndText = false;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

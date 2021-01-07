@@ -201,9 +201,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Fire(); 
 		int l = (int)atof(tokens[4].c_str());
 		dynamic_cast<Fire*>(obj)->id = l;
-		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
-			dynamic_cast<Fire*>(obj)->maxFire = l;*/
-		//DebugOut(L"maxFireaaaaaa %d \n", l);
 		break;
 	}
 	case OBJECT_TYPE_HUB:
@@ -325,16 +322,26 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(15, 0);
 	}
 		
-	else if (cy < -160)
+	else if (cy < -140)
 	{
-		for(int i=0; i <160; i++)
+		for(int i=0; i <140; i++)
 			CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
 	}	
-	else if(cy>200)
-		CGame::GetInstance()->SetCamPos(round(cx), 150);
-	else 
+	else if (cy > 200)
+	{
+			CGame::GetInstance()->SetCamPos((float)round(2145), (float)300);
+	}
+	else if (cx >2444)
+	{
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
+		CGame::GetInstance()->SetCamPos(2445, 0);
+	}
+	else
+	{
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
 		CGame::GetInstance()->SetCamPos(round(cx), 0);
-	
+	}
+		
 }
 
 void CPlayScene::Render()
@@ -347,6 +354,12 @@ void CPlayScene::Render()
 			objects[i]->Render();
 	}	
 	//this->GetHUB()->Render();
+	if (isShowEndText)
+	{
+		this->GetHUB()->renderText("OF COURSE CLEAR", 2650, 100);
+		this->GetHUB()->renderText("U GOT A CARD", 2650, 120);
+	}
+		
 }
 
 /*
@@ -436,9 +449,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->FireID++;
 				else 
 					mario->FireID=1;
-				//DebugOut(L"aaaaaa\n");
+				
 			}
-			//DebugOut(L"Get is Fire AFTER = %d \n", mario->getIsFire());
 			
 		}
 		break;
@@ -496,7 +508,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_S) && !mario->getIsOnSky())
 	{
-		mario->vy -= 0.035;
+		mario->vy -= (float)0.03;
 	}
 		
 	

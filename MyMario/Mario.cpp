@@ -140,7 +140,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = -MARIO_MAX_WALKING_SPEED;
 		else
 		{
-			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+			vx += ((int)nx) * (MARIO_ACCELERATION*dt );
 		}		
 	}
 	else if (state == MARIO_STATE_RUN )
@@ -198,8 +198,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(MARIO_STATE_HOLD);
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{	
-	//DebugOut(L" type scence %d \n", CGame::GetInstance()->GetCurrentScene()->typeScene);
+{	float PortalTime = 0;
 	CGameObject::Update(dt);
 	if (!getIsOnSky())
 		vy += MARIO_GRAVITY * dt;
@@ -209,8 +208,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (vx < 0 && x < 15) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
 	if (vy < 0 && y < -120) y = -120;
-	//DebugOut(L"Coin id = %d \ncoin number %d \n", this->coinID, CGame::GetInstance()->GetCurrentScene()->Ge);
-	//DebugOut(L"%f %f \n",vy , y);
 	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
 	{
 		BeginSceneUpdate(dt);
@@ -291,19 +288,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->setIsOnSky(false);
 				if (y < 100)
 				{
-					y = 300;
+					y = 350;
 				}
 				else if (y > 250)
 				{
 					y = 190;
-					x -= 153;
+					//x -= 153;
 				}
 				break;
 			}
 			case MARIO_COLLISION_GATE:
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->isShowEndText = true;
+				if (p->time == 0)
+					p->time = (float)GetTickCount64();
+						
 				break;
 			}
 			case MARIO_COLLISION_GOOMBA:

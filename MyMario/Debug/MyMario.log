@@ -1,3 +1,19 @@
-﻿  PlayScence.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(499,21): warning C4305: '-=': truncation from 'double' to 'float'
+﻿  Animations.cpp
+  BeginScene.cpp
+  Coin.cpp
+  Fire.cpp
+  Game.cpp
+  GameObject.cpp
+  HUB.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(36,19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Koopas.cpp
+  LevelMushroom.cpp
+  Mario.cpp
+  MicsBrick.cpp
+  MiniMapScene.cpp
+  PlayScence.cpp
+  RedArrowBeginScene.cpp
+  ShootingRedTree.cpp
+  main.cpp
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

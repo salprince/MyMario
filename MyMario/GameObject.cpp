@@ -8,6 +8,11 @@ CGameObject::CGameObject()
 	ay = 0;
 	nx = 1;
 	ny = 1;
+	this->state = 0;
+	dy = 0;
+	dx = 0;
+	dt = 0;
+	animation_set = 0;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -117,7 +122,11 @@ void CGameObject::FilterCollision(
 			nx = 0;
 			ny = 0;
 		}
-		
+		if (dynamic_cast<CPortal*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			ny = 0;
+		}
 		if (dynamic_cast<Koopas*>(this) || dynamic_cast<Fire*>(this) )
 		{
 			if (dynamic_cast<CMario*>(coEvents[i]->obj))

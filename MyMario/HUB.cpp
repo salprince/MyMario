@@ -13,21 +13,34 @@ void MyHUB::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 {
 	//update position of HUD
-	float cx, cy;
-	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	player->GetPosition(cx, cy);
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-	if(cx < 15)
+	if (isMove)
 	{
-		this->x = 15;
+		float cx, cy;
+		CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		player->GetPosition(cx, cy);
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+		if (cx < 15)
+		{
+			this->x = 15;
+		}
+		else
+		{
+			this->x = round(player->x - game->GetScreenWidth() / 2);
+			//this->x = player->x - game->GetScreenWidth() / 2;
+		}
+		if (player->y > 250)
+		{
+			this->y = 525;
+			this->x = 2350 - game->GetScreenWidth() / 2;
+			//DebugOut(L"MARIO x= %f", player->x);
+		}
+
+		else
+			this->y = 260;
 	}
-	else
-	{
-		this->x =round( player->x - game->GetScreenWidth() / 2);
-		//this->x = player->x - game->GetScreenWidth() / 2;
-	}
+	
 	//update point and time to HUD
 	this->time = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->time;
 	this->timeText = std::to_string(SCENCE1_TIME - (int)(GetTickCount64() / 1000 - time / 1000));
@@ -46,6 +59,8 @@ void MyHUB::renderText(string s,int x, int y)
 		int acsiiCode = static_cast<int>(s[i]);
 		if (acsiiCode >= 48 && acsiiCode <= 57)
 			animation_set->at(acsiiCode- 29)->Render((float)(x +i*8), (float)y);
+		else if (acsiiCode >= 65 && acsiiCode <= 90)
+			animation_set->at(acsiiCode - 36)->Render((float)(x + i * 8), (float)y);
 	}
 }
 void MyHUB::Render()

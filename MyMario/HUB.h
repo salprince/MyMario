@@ -74,4 +74,5 @@ public:
 	float time = 0;
 	string timeText="";
 	string pointText = "000000";
+	bool isMove = true;
 };
