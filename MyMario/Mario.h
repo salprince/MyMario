@@ -181,4 +181,8 @@ public:
 	float highJump = 0;
 	bool isHoldJump = false;
 	bool canJump = true;
+	//show text point
+	bool showPoint = false;
+	float Tx = 0;
+	float Ty = 0;
 };

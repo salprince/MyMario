@@ -500,6 +500,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny >0 && this->coinID!= dynamic_cast<MicsBrick*>(e->obj)->id)
 					this->coinID = dynamic_cast<MicsBrick*>(e->obj)->id;
 				dynamic_cast<MicsBrick*>(e->obj)->SetState(MICSBRICK_STATE_DIE);
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Tx = micsBrick->x;
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Ty = micsBrick->y - 15;
 				break;
 			}
 			case MARIO_COLLISION_LEVELMUSHROOM:

@@ -38,8 +38,8 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 		{
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = false;
 			this->SetState(COIN_STATE_DIE);
-			
 		}
 	}
 	// 1 micsbrick have a id to know which coin 
@@ -50,6 +50,8 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{		
 		if (isCheck == false && isMicsBrick==0)
 		{		
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = true;
+			
 			//DebugOut(L"GET COIN\n");
 			this->vy = (float)-0.15;
 			y -= 16;

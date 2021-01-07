@@ -128,12 +128,11 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (coEvents.size() == 0)
 	{		
-		if (!isJump)
+		if (!isJump && this->typeKoopas==1)
 		{
 			vy += -JUMP_SPEECH;
 			isJump = true;
-		}
-			
+		}			
 		x += dx;
 		y += dy;
 	}

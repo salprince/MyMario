@@ -398,7 +398,8 @@ void CPlayScene::Render()
 		this->GetHUB()->renderText("OF COURSE CLEAR", 2650, 100);
 		this->GetHUB()->renderText("U GOT A CARD", 2650, 120);
 	}
-		
+	if(this->GetPlayer()->showPoint)
+		this->GetHUB()->renderText("100", this->GetPlayer()->Tx, this->GetPlayer()->Ty);
 }
 
 /*

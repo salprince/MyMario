@@ -15,10 +15,17 @@
 class Coin : public CGameObject
 {
 public:
+	Coin()
+	{
+		this->start_x = x;
+		this->start_y = y;
+	}
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
+	float start_x = 0;
+	float start_y = 0;
 	int width = 5;
 	int height = 5;
 	int id = -1;
