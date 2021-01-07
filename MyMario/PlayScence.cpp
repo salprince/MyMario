@@ -1,5 +1,7 @@
 #include "Include.h"
 #include "ShootingRedTree.h"
+#include "BlueP.h"
+#include "BreakBrick.h"
 
 using namespace std;
 
@@ -172,6 +174,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<Coin*>(obj)->id = temp;
 		}
+		if (tokens.size() == 6)
+		{
+			int temp1 = (int)atof(tokens[5].c_str());
+			dynamic_cast<Coin*>(obj)->isMicsBrick = temp1;
+		}
 		break;
 	}
 	case OBJECT_TYPE_MICSBRICK: 
@@ -201,6 +208,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Fire(); 
 		int l = (int)atof(tokens[4].c_str());
 		dynamic_cast<Fire*>(obj)->id = l;
+		dynamic_cast<Fire*>(obj)->start_x = obj->x;
+		dynamic_cast<Fire*>(obj)->start_y = obj->y;
 		break;
 	}
 	case OBJECT_TYPE_HUB:
@@ -213,6 +222,31 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SHOOTING_RED_TREE:
 	{
 		obj = new ShootingRedTree(); break;
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<ShootingRedTree*>(obj)->treeID = temp;
+		}
+	}
+	case OBJECT_TYPE_BLUE_P:
+	{
+		obj = new BlueP();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<BlueP*>(obj)->id = temp;
+		}
+		break;
+	}
+	case OBJECT_TYPE_BREAK_BRICK:
+	{
+		obj = new BreakBrick();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<BreakBrick*>(obj)->id = temp;
+		}
+		break;
 	}
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
@@ -508,7 +542,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_S) && !mario->getIsOnSky())
 	{
-		mario->vy -= (float)0.03;
+		mario->vy -= (float)0.035;
 	}
 		
 	

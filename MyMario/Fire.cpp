@@ -15,6 +15,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += 0.005f;
 	coEvents.clear();
 	
@@ -27,51 +28,27 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (marioHandle->getIsFire())
 	{
-		//DebugOut(L"isShooting %d, getIsFire %d \n", marioHandle->timeShooting, marioHandle->getIsFire());
-		//if(this->id == marioHandle->FireID)
+		for (int i = 1; i < 10; i++)
 		{
-			for (int i = 1; i < 10; i++)
+			if (!this->isFiring && this->id == marioHandle->FireID)
 			{
-				//DebugOut(L" id of fire %d \n", id);
-				if (!this->isFiring && this->id == marioHandle->FireID)
-				{
-					this->Reset();
-					this->isFire = (int)GetTickCount64();
-					if (abs(marioHandle->vx) > 0.07f)
-
-						this->vx = marioHandle->vx;
-					else
-						this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
-					if (marioHandle->nx > 0)
-						this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);
-					else if (marioHandle->nx < 0)
-						this->setPositionAfterMario(marioHandle->x - 3, marioHandle->y, marioHandle->nx);
-					//vy = -0.08;
-					this->isFiring = true;
-
-					//DebugOut(L"BREAK id of fire %d \n", id);
-					//DebugOut(L"mario y %f \n", marioHandle->y);
-					//DebugOut(L"%f  %f ///// %f %f \n", vx, vy, x,y);
-					break;
-
-				}
+				this->Reset();
+				this->isFire = (int)GetTickCount64();
+				if (abs(marioHandle->vx) > 0.07f)
+					this->vx = marioHandle->vx;
+				else
+					this->vx = marioHandle->nx * FIRE_FLYING_SPEED;
+				if (marioHandle->nx > 0)
+					this->setPositionAfterMario(marioHandle->x + 10, marioHandle->y, marioHandle->nx);
+				else if (marioHandle->nx < 0)
+					this->setPositionAfterMario(marioHandle->x - 3, marioHandle->y, marioHandle->nx);
+				this->isFiring = true;
+				break;
 			}
-
-			/*if (marioHandle->FireID < 10)
-				marioHandle->FireID++;*/
-
 		}
 	}
-	else if (this->isFromTree)
-	{
-		if (!this->isFiring)
-		{
-			this->Reset();
-			this->isFire = (int)GetTickCount64();
-			this->vx = nx * FIRE_FLYING_SPEED;
-			this->isFiring = true;
-		}
-	}
+	
+	
 	if (isFire != 0)
 	{
 		if ((GetTickCount64() - isFire) < 3000)
@@ -199,8 +176,8 @@ void Fire::Reset()
 	this->isFire = 0;
 	this->vx = 0;
 	this->vy = 0;
-	this->x = 0;
-	this->y = 0;
+	this->x = this->start_x;
+	this->y = this->start_y;
 	this->ax = 0;
 	this->ay = 0;
 	this->dx = 0;

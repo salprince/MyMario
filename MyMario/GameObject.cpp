@@ -1,4 +1,6 @@
 #include "Include.h"
+#include "BlueP.h"
+#include "BreakBrick.h"
 
 CGameObject::CGameObject()
 {
@@ -117,10 +119,27 @@ void CGameObject::FilterCollision(
 					ny = 0;
 				}
 		}
+		if (dynamic_cast<BlueP*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			if (ny == -1)
+			{
+				ny = 0;
+			}
+		}
 		if (dynamic_cast<Coin*>(coEvents[i]->obj))
 		{
 			nx = 0;
 			ny = 0;
+		}
+		if (dynamic_cast<BreakBrick*>(coEvents[i]->obj))
+		{
+			BreakBrick* brick = dynamic_cast<BreakBrick*>(coEvents[i]->obj);
+			if (brick->state == BREAK_BRICK_STATE_DIE || brick->state == BREAK_BRICK_STATE_COIN)
+			{
+				nx = 0;
+				ny = 0;
+			}
 		}
 		if (dynamic_cast<CPortal*>(coEvents[i]->obj))
 		{

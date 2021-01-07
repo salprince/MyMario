@@ -48,7 +48,7 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// if coin is not check yet : bbox will be =0 , checked : bbox will 16 16 
 	if ( ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
 	{		
-		if (isCheck == false)
+		if (isCheck == false && isMicsBrick==0)
 		{		
 			//DebugOut(L"GET COIN\n");
 			this->vy = (float)-0.15;

@@ -51,6 +51,24 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 	for (int i = 0; i < (int)(6 - std::to_string(tempPoint).size()); i++)
 		this->pointText += "0";
 	this->pointText += std::to_string(tempPoint);	
+	//process to show speech of mario 
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (abs(mario->vx) >= 0 && abs(mario->vx) <= 0.01)
+		levelSpeech = 0;
+	else if (abs(mario->vx) > 0.01 && abs(mario->vx) <= 0.06)
+		levelSpeech = 1;
+	else if (abs(mario->vx) >0.03  && abs(mario->vx) <= 0.06)
+		levelSpeech = 2;
+	else if (abs(mario->vx) > 0.06 && abs(mario->vx) <= 0.09)
+		levelSpeech = 3;
+	else if (abs(mario->vx) > 0.09 && abs(mario->vx) <= 0.12)
+		levelSpeech = 4;
+	else if (abs(mario->vx) > 0.12 && abs(mario->vx) < 0.15)
+		levelSpeech = 5;
+	else if (abs(mario->vx) >= 0.15 && abs(mario->vx) <= 0.36)
+		levelSpeech = 6;
+	if(mario->getIsOnSky() || mario->isFlying())
+		levelSpeech = 0;
 }
 void MyHUB::renderText(string s,int x, int y)
 {
@@ -62,6 +80,11 @@ void MyHUB::renderText(string s,int x, int y)
 		else if (acsiiCode >= 65 && acsiiCode <= 90)
 			animation_set->at(acsiiCode - 36)->Render((float)(x + i * 8), (float)y);
 	}
+}
+void MyHUB::renderSpeech( int number,int x, int y)
+{
+	for (int i =0 ; i < number; i++)
+		animation_set->at(HUB_ANI_WHITE_ARROW)->Render(x + i*8, y );
 }
 void MyHUB::Render()
 {
@@ -80,6 +103,7 @@ void MyHUB::Render()
 	for(int i=0 ; i <6; i++)
 		animation_set->at(HUB_ANI_BLACK_ARROW)->Render(x + 54+8*i, y + 8);
 	animation_set->at(HUB_ANI_BLACK_P)->Render(x + 104, y + 8);	
+	renderSpeech(levelSpeech, x + 54, y + 8);
 	//render scence time 
 	renderText(timeText, (int)x+125, (int)y+16);
 	//render live of mario 

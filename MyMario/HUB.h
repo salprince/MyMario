@@ -61,6 +61,8 @@
 #define HUB_ANI_TEXT_Z		54
 #define HUB_ANI_BLACK_BACKROUND 55
 
+#define MARIO_MAX_RUNNING_SPEED			0.32f
+
 #define SCENCE1_TIME		365
 class MyHUB : public CGameObject
 {
@@ -71,8 +73,10 @@ public:
 	virtual void SetState(int state);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void renderText(string s, int x, int y);
+	void renderSpeech(int number, int x, int y);
 	float time = 0;
 	string timeText="";
 	string pointText = "000000";
 	bool isMove = true;
+	int levelSpeech = 0;
 };

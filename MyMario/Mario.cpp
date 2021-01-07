@@ -1,5 +1,6 @@
 #include "Include.h"
-
+#include "BlueP.h"
+#include "BreakBrick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -169,7 +170,23 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 		}
 	}
-
+	/*if (isHoldJump)
+	{
+		float t = highJump-y;
+		DebugOut(L"highJump = %f\n", t);
+		if (highJump == 0)
+			highJump = y;
+		if (t > 50)
+			canJump = false;
+		
+	}
+	if (!isJumping())
+	{
+		DebugOut(L"IDLE\n");
+		//highJump = 0;
+		//isHoldJump = false;
+		canJump = true;
+	}*/
 	if (getLevel() == MARIO_LEVEL_TAIL && spining != 0)
 	{
 		if (GetTickCount64() - spining >= 200)
@@ -276,6 +293,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				stateCollision = MARIO_COLLISION_CHIMNEYPORTAL;
 			else if (dynamic_cast<LevelMushroom*>(e->obj))
 				stateCollision = MARIO_COLLISION_LEVELMUSHROOM;
+			else if (dynamic_cast<BlueP*>(e->obj))
+				stateCollision = MARIO_COLLISION_BLUE_P;
+			else if (dynamic_cast<BreakBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_BREAK_BRICK;
 			switch (stateCollision)
 			{
 			case MARIO_COLLISION_CHIMNEYPORTAL:
@@ -490,8 +511,49 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->y -= 20;
 				break;
 			}
+
+			case MARIO_COLLISION_BLUE_P:
+			{
+				BlueP* micsBrick = dynamic_cast<BlueP*>(e->obj);
+				if (e->ny != 0)
+				{
+					if (this->isJumping())
+						this->setJumping(false);
+					if (this->isFlying())
+						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
+				}
+
+				if (this->coinID != dynamic_cast<BlueP*>(e->obj)->id)
+					this->coinID = dynamic_cast<BlueP*>(e->obj)->id;
+				DebugOut(L"COIN ID = %d\n", this->coinID);
+				dynamic_cast<BlueP*>(e->obj)->SetState(BLUE_P_STATE_DIE);
+				break;
+			}
+
+			case MARIO_COLLISION_BREAK_BRICK:
+			{
+				if (this->isJumping())
+					this->setJumping(false);
+				if (this->isFlying())
+					this->setFlying(false);
+				if (this->getIsOnSky())
+					this->setIsOnSky(false);
+				BreakBrick* brick = dynamic_cast<BreakBrick*>(e->obj);
+				if (brick->state == BREAK_BRICK_STATE_COIN)
+				{
+					brick->SetState(BREAK_BRICK_STATE_DIE);
+					this->y -= 3;
+				}
+
+					
+				break;
+			}
+
 			default:break;
 			}
+			
 		}
 	}
 	//it means mario is in begin scene

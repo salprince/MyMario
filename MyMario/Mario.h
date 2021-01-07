@@ -118,6 +118,8 @@
 #define MARIO_COLLISION_KOOPA 6
 #define MARIO_COLLISION_MICSBRICK 7
 #define MARIO_COLLISION_LEVELMUSHROOM 8
+#define MARIO_COLLISION_BLUE_P 13
+#define MARIO_COLLISION_BREAK_BRICK 14
 #define MARIO_COLLISION_CHIMNEYPORTAL 49
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -176,4 +178,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int color = 1;
 	float beginTime = 0;
+	float highJump = 0;
+	bool isHoldJump = false;
+	bool canJump = true;
 };

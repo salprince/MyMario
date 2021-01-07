@@ -21,8 +21,9 @@ public:
 	int isFire = 0;
 	int id = 0;
 	bool isFiring = false;
+	float start_x = 0;
+	float start_y = 0;
 	CMario* marioHandle = NULL;
-	bool isFromTree = false;
 	void Reset();
 	void setPositionAfterMario(float x, float y, int nx)
 	{

@@ -1,19 +1,7 @@
-﻿  Animations.cpp
-  BeginScene.cpp
-  Coin.cpp
-  Fire.cpp
-  Game.cpp
-  GameObject.cpp
-  HUB.cpp
+﻿  HUB.cpp
 D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(36,19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  Koopas.cpp
-  LevelMushroom.cpp
-  Mario.cpp
-  MicsBrick.cpp
-  MiniMapScene.cpp
-  PlayScence.cpp
-  RedArrowBeginScene.cpp
-  ShootingRedTree.cpp
-  main.cpp
-  Generating Code...
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(87,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(87,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(106,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\ProjectGame\MyNewMario\MyMario\MyMario\HUB.cpp(106,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

@@ -24,8 +24,6 @@ class ShootingRedTree : public CGameObject
 public:
 	ShootingRedTree();
 	double time = 0;
-	void FireActive(int nx);
-	void FireReset();
 	virtual void SetState(int state);
-	Fire* treeFire = NULL;
+	int treeID = -1;
 };
