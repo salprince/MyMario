@@ -44,21 +44,25 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	CMario* player = ((BeginScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float time = GetTickCount64() - player->beginTime;
-	if ((time < this->appearTime * 1000))
+	if (((BeginScene*)CGame::GetInstance()->GetCurrentScene())->typeScene == SCENE_TYPE_BEGIN)
 	{
-		vy = 0;
-		vx = 0;
-		this->SetState(KOOPAS_STATE_WALKING);
-		this->nx = 1;
+		if ((time < this->appearTime * 1000))
+		{
+			vy = 0;
+			vx = 0;
+			this->SetState(KOOPAS_STATE_WALKING);
+			this->nx = 1;
+		}
+
+		else
+		{
+			vy += GRAVITY * dt;
+			vx = nx * KOOPAS_WALKING_SPEED;
+			if (this->appearTime == 15)
+				vx = 0.05;
+		}
 	}
-		
-	else
-	{
-		vy += GRAVITY * dt;
-		vx = KOOPAS_WALKING_SPEED ;
-		if(this->appearTime==15)
-			vx =0.05;
-	}
+	
 	if (state != KOOPAS_STATE_DIE)
 	{
 		if (state == KOOPAS_STATE_HOLD)

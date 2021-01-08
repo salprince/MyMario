@@ -25,7 +25,7 @@
 #define GREEN_KOOPAS_ANI_WING_RIGHT 7
 
 #define GRAVITY 0.001f
-#define JUMP_SPEECH 0.3f
+#define JUMP_SPEECH 0.09f
 
 class Koopas : public CGameObject
 {
