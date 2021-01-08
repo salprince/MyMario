@@ -123,7 +123,8 @@
 #define MARIO_COLLISION_CHIMNEYPORTAL 49
 #define MARIO_UNTOUCHABLE_TIME 5000
 
-
+#define SCENE_TYPE_PLAYSCENE 1
+#define SCENE_TYPE_BEGIN 0
 class CMario : public CGameObject
 {
 	int level;

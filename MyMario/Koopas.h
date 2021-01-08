@@ -51,6 +51,7 @@ public:
 	int getShellOut() { return shellOut; }
 	void setIsHold(bool value) { isHold = value; }
 	bool getIsHold() { return isHold; }
+
 	void setPositionWhileHolding(float x0,float y0, float vx0, int nx)
 	{
 		if (nx > 0)
@@ -69,4 +70,6 @@ public:
 	}
 	int typeKoopas = 0;
 	bool isJump = false;
+	float appearTime = 0;
+	void BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 };

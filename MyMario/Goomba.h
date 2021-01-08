@@ -37,4 +37,5 @@ public:
 	bool getIsDie(){ return isDie; }
 	float startx = 0;
 	void setIsDie(bool a) { isDie = a; }
+	float appearTime = 0;
 };

@@ -52,7 +52,6 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{		
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = true;
 			
-			//DebugOut(L"GET COIN\n");
 			this->vy = (float)-0.15;
 			y -= 16;
 			isCheck = true;

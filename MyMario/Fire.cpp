@@ -100,7 +100,6 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			ny = -ny;
 			vy = -vy;
-			//DebugOut(L"%f \n", vy);
 		}
 		if (state == FIRE_STATE_ALIVE)
 		{
@@ -111,7 +110,6 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(KOOPAS_STATE_DIE);
 					e->obj->y += 12;
-					//e->obj->vx += (float)0.05 * nx;
 					SetState(KOOPAS_STATE_DIE);
 					isFiring = false;
 					isFire = 0;
@@ -120,7 +118,6 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<CGoomba*>(e->obj))
 				{
-					//e->obj->SetState(GOOMBA_STATE_CLEAR);
 					e->obj->y += 12;
 					e->obj->vx += (float)0.05 * nx;
 					isFiring = false;
@@ -129,7 +126,6 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<ColorBrick*>(e->obj) || dynamic_cast<Coin*>(e->obj))
 				{
-					//DebugOut(L"collis color brick\n");
 					x++;
 				}
 				else if (dynamic_cast<backRound*>(e->obj));

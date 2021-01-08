@@ -148,6 +148,11 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		obj = new CGoomba();
 		float l = (float)atof(tokens[4].c_str());
 		obj->length = l;
+		if (tokens.size() == 6)
+		{
+			int temp = (int)atof(tokens[5].c_str());
+			dynamic_cast<CGoomba*>(obj)->appearTime = temp;
+		}
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
@@ -158,6 +163,12 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		obj = new Koopas();
 		obj->length = l;
 		obj->nx = (int)nx0;
+		//obj->SetState(KOOPAS_STATE_SHELL_RUNNING);
+		if (tokens.size() == 8)
+		{
+			int temp = (int)atof(tokens[7].c_str());
+			dynamic_cast<Koopas*>(obj)->appearTime= temp;
+		}
 		break;
 	}
 	case OBJECT_TYPE_BACKROUND:
@@ -174,6 +185,8 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 			int animation1 = (int)atof(tokens[5].c_str());
 			dynamic_cast<backRound*>(obj)->isColorBackround= animation1;
 		}
+		dynamic_cast<backRound*>(obj)->start_x = x;
+		dynamic_cast<backRound*>(obj)->start_y = y;
 		break;
 	}
 	case OBJECT_TYPE_COLORBRICK: obj = new ColorBrick(); break;
@@ -188,7 +201,6 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		dynamic_cast<Fire*>(obj)->id = l;
 		/*if (l > dynamic_cast<Fire*>(obj)->maxFire)
 			dynamic_cast<Fire*>(obj)->maxFire = l;*/
-			//DebugOut(L"maxFireaaaaaa %d \n", l);
 		break;
 	}
 	case OBJECT_TYPE_RED_ARROW: obj = new RedArrowBeginScene(); this->redArrow = dynamic_cast<RedArrowBeginScene*>(obj); break;
@@ -302,8 +314,6 @@ void BeginScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(round(cx), 00);
 	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
 		CGame::GetInstance()->SetCamPos(15, 00);
-	//CGame::GetInstance()->SetCamPos(2300, 250);
-	//DebugOut(L"tick count %d\n", GetTickCount64());
 }
 
 void BeginScene::Render()

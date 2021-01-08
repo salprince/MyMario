@@ -91,6 +91,8 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			case 1:
 			{
+				if (this->y > 225)
+					this->y -= 5;
 				break;
 			}
 			case 2:
@@ -113,6 +115,8 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			case 1:
 			{
+				if (this->y > 225)
+					this->y -= 5;
 				break;
 			}
 			case 2:
@@ -120,6 +124,25 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//green mario 		
 				this->SetState(MARIO_STATE_WALKING_RIGHT);
 				vx = (float)(MARIO_MAX_WALKING_SPEED /1.5);
+				break;
+			}
+		}
+	}
+	else if (t > 6000 && t < 7000)
+	{
+		switch (color)
+		{
+			case 1:
+			{
+				this->SetState(MARIO_STATE_WALKING_LEFT);
+				this->vx = -0.5;
+				if (this->untouchable)
+					this->y = 300;
+				break;
+			}
+			case 2:
+			{
+				
 				break;
 			}
 		}
@@ -170,23 +193,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 		}
 	}
-	/*if (isHoldJump)
-	{
-		float t = highJump-y;
-		DebugOut(L"highJump = %f\n", t);
-		if (highJump == 0)
-			highJump = y;
-		if (t > 50)
-			canJump = false;
-		
-	}
-	if (!isJumping())
-	{
-		DebugOut(L"IDLE\n");
-		//highJump = 0;
-		//isHoldJump = false;
-		canJump = true;
-	}*/
+	
 	if (getLevel() == MARIO_LEVEL_TAIL && spining != 0)
 	{
 		if (GetTickCount64() - spining >= 200)
@@ -222,7 +229,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		vy += (float)(MARIO_GRAVITY * 1.25);
 	//make mario cant move out of left border 
-	if (vx < 0 && x < 15) x = 15;
+	if (vx < 0 && x < 15 && ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->typeScene != SCENE_TYPE_BEGIN) x = 15;
 	if (vx > 0 && x > 2810) x = 2810;
 	if (vy < 0 && y < -120) y = -120;
 	if (CGame::GetInstance()->GetCurrentScene()->typeScene == 0)
@@ -338,7 +345,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-						scene->point += scene->pointList[scene->pointLevel];
+						if(scene->typeScene!= SCENE_TYPE_BEGIN)
+							scene->point += scene->pointList[scene->pointLevel];
 					}
 				}
 				else if (e->nx != 0)
@@ -529,7 +537,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (this->coinID != dynamic_cast<BlueP*>(e->obj)->id)
 					this->coinID = dynamic_cast<BlueP*>(e->obj)->id;
-				DebugOut(L"COIN ID = %d\n", this->coinID);
 				dynamic_cast<BlueP*>(e->obj)->SetState(BLUE_P_STATE_DIE);
 				break;
 			}

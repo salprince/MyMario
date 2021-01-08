@@ -53,7 +53,6 @@ void BreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (isCheck == false)
 		{
-			//DebugOut(L"GET COIN\n");			
 			this->SetState(BREAK_BRICK_STATE_COIN);
 			isCheck =true;
 		}

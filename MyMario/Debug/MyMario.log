@@ -1,2 +1,10 @@
-﻿  Mario.cpp
+﻿  BreakBrick.cpp
+  Coin.cpp
+  Fire.cpp
+  Goomba.cpp
+  Koopas.cpp
+D:\ProjectGame\MyNewMario\MyMario\MyMario\Koopas.cpp(60,12): warning C4305: '=': truncation from 'double' to 'float'
+  Mario.cpp
+  main.cpp
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

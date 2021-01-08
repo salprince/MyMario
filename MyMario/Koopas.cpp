@@ -25,13 +25,40 @@ void Koopas::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	right = x + width;
 	bottom = y + height;	
 }
+void Koopas::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	
+	CMario* player = ((BeginScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float time = GetTickCount64() - player->beginTime;
+	if ((time > this->appearTime*1000) && this->y==500 )
+		this->y = 0;
+	else 
+		this->y = 500;
+
+}
 
 void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-	vy += GRAVITY * dt;
+	CMario* player = ((BeginScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float time = GetTickCount64() - player->beginTime;
+	if ((time < this->appearTime * 1000))
+	{
+		vy = 0;
+		vx = 0;
+		this->SetState(KOOPAS_STATE_WALKING);
+		this->nx = 1;
+	}
+		
+	else
+	{
+		vy += GRAVITY * dt;
+		vx = KOOPAS_WALKING_SPEED ;
+		if(this->appearTime==15)
+			vx =0.05;
+	}
 	if (state != KOOPAS_STATE_DIE)
 	{
 		if (state == KOOPAS_STATE_HOLD)
@@ -57,7 +84,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy += gravity * dt;
 			if (startx == 0)
 				startx = x;
-			if (vx < 0 && x < 15)
+			if (vx < 0 && x < 15 )
 			{
 				vx = -vx;
 				x = 15;
@@ -80,8 +107,6 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		
 	}	
-	
-	//DebugOut(L"%f %f \n", x, startx);
 	//make koopa waling after some seconds
 	if (isShell == true && state != KOOPAS_STATE_HOLD)
 	{
@@ -207,7 +232,6 @@ void Koopas::Render()
 	}
 	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
 	else if (vx < 0) ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
-	//DebugOut(L"STATE = %d\n", this->GetState());
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();
@@ -226,7 +250,8 @@ void Koopas::SetState(int state)
 		width=16;
 		break;
 	case KOOPAS_STATE_WALKING:
-		vx = KOOPAS_WALKING_SPEED;
+		if(((BeginScene*)CGame::GetInstance()->GetCurrentScene())->typeScene != SCENE_TYPE_BEGIN)
+			vx = KOOPAS_WALKING_SPEED;
 		width = 16;
 		height = 26;
 		break;
@@ -235,10 +260,8 @@ void Koopas::SetState(int state)
 		vx = 0;
 		height = 14;
 		width = 16;
-		//DebugOut(L" SET Koopa is shell\n");
 		break;
 	case KOOPAS_STATE_WING:
-		//DebugOut(L" SET Koopa is shell\n");
 		break;
 	case KOOPAS_STATE_HOLD:
 		vy = 0;
@@ -248,7 +271,6 @@ void Koopas::SetState(int state)
 		DebugOut(L" Koopa is HOLD\n");
 		break;
 	case KOOPAS_STATE_SHELL_RUNNING:
-		//vx=-KOOPAS_WALKING_SPEED;
 		height = 14;
 		width = 16;
 		break;

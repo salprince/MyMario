@@ -1,5 +1,7 @@
 #include "Goomba.h"
 #include "Utils.h"
+#include "Mario.h"
+#include "BeginScene.h"
 CGoomba::CGoomba()
 {
 	SetState(GOOMBA_STATE_WALKING);
@@ -22,10 +24,15 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-	
+	CMario* player = ((BeginScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	float time = GetTickCount64() - player->beginTime;
+	if ((time < this->appearTime * 1000))
+		vy = 0;
+	else
+		vy += GRAVITY * dt;
 	if (state == GOOMBA_STATE_WALKING)
 	{
-		vy = 0.15f;	
+		//vy = 0.15f;	
 		if (startx == 0)
 			startx = x;
 		if (vx > 0 && x >= length + startx)
@@ -55,9 +62,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (getIsDie())
 		SetState(GOOMBA_STATE_CLEAR);
-	
-	/*int n = (getEndDying() - getStartDying());
-	DebugOut(L"aaaa %d\n ", n/ 1000);*/
 		
 	if (coEvents.size() == 0)
 	{
@@ -103,10 +107,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	//DebugOut(L"shell %d\n", isShell);
-
-
-	
 }
 
 void CGoomba::Render()
