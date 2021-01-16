@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GameObject.h"
+#define PORTAL_ANI_ALIVE	0
+#define PORTAL_ANI_DIE	1
 
 /*
 	Object that triggers scene switching

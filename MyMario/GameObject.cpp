@@ -1,6 +1,7 @@
 #include "Include.h"
 #include "BlueP.h"
 #include "BreakBrick.h"
+#include "ShootingRedTree.h"
 
 CGameObject::CGameObject()
 {
@@ -66,9 +67,7 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
-void CGameObject::CalcPotentialCollisions(
-	vector<LPGAMEOBJECT>* coObjects,
-	vector<LPCOLLISIONEVENT>& coEvents)
+void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects,	vector<LPCOLLISIONEVENT>& coEvents)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -119,34 +118,39 @@ void CGameObject::FilterCollision(
 					ny = 0;
 				}
 		}
-		if (dynamic_cast<BlueP*>(coEvents[i]->obj))
-		{
-			nx = 0;
-			if (ny == -1)
-			{
-				ny = 0;
-			}
-		}
-		if (dynamic_cast<Coin*>(coEvents[i]->obj))
+		
+		else if (dynamic_cast<BlueP*>(coEvents[i]->obj))
 		{
 			nx = 0;
 			ny = 0;
 		}
-		if (dynamic_cast<BreakBrick*>(coEvents[i]->obj))
+		else if (dynamic_cast<Coin*>(coEvents[i]->obj))
 		{
-			BreakBrick* brick = dynamic_cast<BreakBrick*>(coEvents[i]->obj);
-			if (brick->state == BREAK_BRICK_STATE_DIE || brick->state == BREAK_BRICK_STATE_COIN)
+			nx = 0;
+			ny = 0;
+		}
+		
+		else if (dynamic_cast<CPortal*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			ny = 0;
+		}
+		else if (dynamic_cast<ChimneyPortal*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			ny = 0;
+		}
+		else if (dynamic_cast<BreakBrick*>(coEvents[i]->obj))
+		{
+			if (dynamic_cast<BreakBrick*>(coEvents[i]->obj)->state == BREAK_BRICK_STATE_COIN)
 			{
 				nx = 0;
 				ny = 0;
 			}
+			
 		}
-		if (dynamic_cast<CPortal*>(coEvents[i]->obj))
-		{
-			nx = 0;
-			ny = 0;
-		}
-		if (dynamic_cast<Koopas*>(this) || dynamic_cast<Fire*>(this) )
+		
+		else if (dynamic_cast<Koopas*>(this) || dynamic_cast<Fire*>(this) )
 		{
 			if (dynamic_cast<CMario*>(coEvents[i]->obj))
 			{
@@ -155,11 +159,24 @@ void CGameObject::FilterCollision(
 				//DebugOut(L"coliis mario \n");
 			}
 		}
-		/*if (dynamic_cast<Fire*>(coEvents[i]->obj) && dynamic_cast<CMario*>(this))
+		else if (dynamic_cast<BreakBrick*>(coEvents[i]->obj) && dynamic_cast<Koopas*>(this))
 		{
-			nx = 0; ny = 0;
-		}*/
-		
+			if (dynamic_cast<BreakBrick*>(coEvents[i]->obj)->state == BREAK_BRICK_STATE_COIN)
+			{
+				nx = 0;
+				ny = 0;
+			}
+		}
+		else if (dynamic_cast<CMario*>(coEvents[i]->obj) && dynamic_cast<CMario*>(coEvents[i]->obj)->getUntouchable())
+		{
+				nx = 0;
+				ny = 0;
+		}
+		else if (dynamic_cast<MyHUB*>(coEvents[i]->obj))
+		{
+			nx = 0;
+			ny = 0;
+		}
 	}
 
 	if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);

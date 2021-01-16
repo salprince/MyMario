@@ -14,6 +14,8 @@
 
 #define FLOWER_ANI_LEFT 0
 #define FLOWER_ANI_RIGHT 1
+#define FLOWER_ANI_DIE	2
+#define FLOWER_ANI_EATER	3
 
 class ShootingRedTree : public CGameObject
 {
@@ -26,4 +28,6 @@ public:
 	double time = 0;
 	virtual void SetState(int state);
 	int treeID = -1;
+	int Movelength = 0;
+	float start_y = 0;
 };

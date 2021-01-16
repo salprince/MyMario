@@ -27,7 +27,7 @@ void MiniMario::Update()
 {
 	getMiniX(point);
 	getMiniY(point);
-	this->x = miniX * 16 + 70;
-	this->y = (miniY-1) * 16 + 70;
+	this->x = miniX * (float)16 + (float)70;
+	this->y = (miniY-1) * (float)16 + (float)70;
 }
 

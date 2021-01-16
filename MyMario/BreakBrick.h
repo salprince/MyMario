@@ -9,8 +9,8 @@
 #define BREAK_BRICK_STATE_COIN 300
 
 #define BREAK_BRICK_ANI_ALIVE 0
-#define BREAK_BRICK_ANI_DIE 1
-#define BREAK_BRICK_ANI_COIN 2
+#define BREAK_BRICK_ANI_DIE 2
+#define BREAK_BRICK_ANI_COIN 3
 
 #define BREAK_BRICK_GRAVITY 0.01f
 class BreakBrick : public CGameObject

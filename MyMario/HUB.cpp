@@ -4,16 +4,16 @@
 #include "PlayScence.h"
 void MyHUB::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + HUB_WIDTH;
-	bottom = y + HUB_HEIGHT;
+	left = 0;
+	top = 0;
+	right = 0 + HUB_WIDTH;
+	bottom = 0 + HUB_HEIGHT;
 }
 
 void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 {
 	//update position of HUD
-	if (isMove)
+	if (isMove && ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState()!= MARIO_STATE_DIE)
 	{
 		float cx, cy;
 		CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -24,21 +24,24 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 		if (cx < 15)
 		{
 			this->x = 15;
+			this->y = 260;
+		}
+		else if (cy < -140)
+		{
+			this->x = round(player->x - game->GetScreenWidth() / 2);
+			this->y = (float)round(-140 + game->GetScreenHeight() + -40);
 		}
 		else
 		{
 			this->x = round(player->x - game->GetScreenWidth() / 2);
-			//this->x = player->x - game->GetScreenWidth() / 2;
-		}
+			this->y = 260;
+		}	
+
 		if (player->y > 250)
 		{
 			this->y = 525;
-			this->x = 2350 - game->GetScreenWidth() / 2;
-			//DebugOut(L"MARIO x= %f", player->x);
+			this->x = (float)2350 - game->GetScreenWidth() / 2;
 		}
-
-		else
-			this->y = 260;
 	}
 	
 	//update point and time to HUD
@@ -84,7 +87,11 @@ void MyHUB::renderText(string s,int x, int y)
 void MyHUB::renderSpeech( int number,int x, int y)
 {
 	for (int i =0 ; i < number; i++)
-		animation_set->at(HUB_ANI_WHITE_ARROW)->Render(x + i*8, y );
+		animation_set->at(HUB_ANI_WHITE_ARROW)->Render((float)x + i*8, (float)y );
+}
+void MyHUB::renderCard(int type, int x, int y)
+{
+	animation_set->at(type)->Render((float)x , (float)y);
 }
 void MyHUB::Render()
 {
@@ -103,7 +110,7 @@ void MyHUB::Render()
 	for(int i=0 ; i <6; i++)
 		animation_set->at(HUB_ANI_BLACK_ARROW)->Render(x + 54+8*i, y + 8);
 	animation_set->at(HUB_ANI_BLACK_P)->Render(x + 104, y + 8);	
-	renderSpeech(levelSpeech, x + 54, y + 8);
+	renderSpeech(levelSpeech, (int)x + 54, (int)y + 8);
 	//render scence time 
 	renderText(timeText, (int)x+125, (int)y+16);
 	//render live of mario 
@@ -111,6 +118,9 @@ void MyHUB::Render()
 	//render number of coin - which mario have 
 	renderText(std::to_string(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber), (int)x + 133, (int)y + 8);
 	renderText(pointText, (int)x + 54, (int)y + 16);
+	if(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->isShowEndText )
+		animation_set->at(HUB_ANI_FRAME_CARD_STAR)->Render(x + 165, y);
+
 }
 
 void MyHUB::SetState(int state)

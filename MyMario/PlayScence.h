@@ -6,8 +6,8 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
-#include "Koopas.h"
 #include "HUB.h"
+#include "Koopas.h"
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
@@ -30,11 +30,14 @@
 #define OBJECT_TYPE_SHOOTING_RED_TREE		12
 #define OBJECT_TYPE_BLUE_P		13
 #define OBJECT_TYPE_BREAK_BRICK		14
+#define OBJECT_TYPE_MOVE_BRICK		15
 #define OBJECT_TYPE_CHIMNEY_PORTAL	49
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
 
+#define SCENE1_MAX_HEIGHT 2810
+#define SCENE1_MIN_HEIGHT 15
 class CPlayScene : public CScene
 {
 protected:

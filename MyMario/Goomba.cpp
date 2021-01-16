@@ -45,6 +45,14 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = -vx;
 			x = -length + startx;
 		}
+		if (type == 1 &&wing)
+		{
+			if (!isJump )
+			{
+				vy += -JUMP_SPEECH*2;
+				isJump = true;
+			}
+		}
 		CalcPotentialCollisions(coObjects, coEvents);
 		this->setStartDying((int)GetTickCount64());
 		this->setEndDying((int)GetTickCount64());
@@ -101,6 +109,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				nx = -nx;
 				vx = -vx;
 			}
+			if (isJump)
+				isJump = false;
 		}
 
 	}
@@ -117,7 +127,13 @@ void CGoomba::Render()
 	}
 	else if (state == GOOMBA_STATE_CLEAR)
 		ani = GOOMBA_ANI_CLEAR;
-	else ani = GOOMBA_ANI_WALKING_RIGHT;
+	else
+	{
+		if (type == 1 && wing)
+			ani = GOOMBA_ANI_WING;
+		else ani = GOOMBA_ANI_WALKING_RIGHT;
+			
+	}
 	/*{
 		if (nx > 0)
 			ani = GOOMBA_ANI_WALKING_RIGHT;

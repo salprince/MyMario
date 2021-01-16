@@ -74,6 +74,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void renderText(string s, int x, int y);
 	void renderSpeech(int number, int x, int y);
+	void renderCard(int type, int x, int y);
 	float time = 0;
 	string timeText="";
 	string pointText = "000000";

@@ -6,17 +6,24 @@ void BlueP::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + width;
 	b = y + height;
+	if (!isCheck)
+	{
+		l = 0;
+		t = 0;
+		r = 0;
+		b = 0;
+	}
 }
 
 void BlueP::Render()
 {
-	int ani = MICSBRICK_ANI_ALIVE;
-	if (state == MICSBRICK_STATE_ALIVE) {
-		ani = MICSBRICK_ANI_ALIVE;
+	int ani = BLUE_P_ANI_ALIVE;
+	if (state == BLUE_P_STATE_ALIVE) {
+		ani = BLUE_P_ANI_ALIVE;
 	}
-	else if (state == MICSBRICK_STATE_DIE)
+	else if (state == BLUE_P_STATE_DIE)
 	{
-		ani = MICSBRICK_ANI_DIE;
+		ani = BLUE_P_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y);
 }
@@ -27,21 +34,17 @@ void BlueP::SetState(int state)
 }
 void BlueP::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (isCheck)
-	{
-		//DebugOut(L"OLD Y %f\n", oldY);
-		if (y < oldY)
-		{
-			vy += COIN_GRAVITY;
-			y += vy * dt;
-		}
-		else y = oldY;
-	}
+
+	//DebugOut(L"coindID %d  id %d coinid= %d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID(), id, idCoin);
+	//DebugOut(L" %f  %f \n", this->x, this->y);
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
 	{
+		
 		if (isCheck == false)
 		{
-			this->vy = (float)-0.0075;
+			width = 1;
+			height = 1;
+			//this->vy = (float)-0.0075;
 			y -= 16;
 			isCheck = true;
 			this->time = (float)GetTickCount64();

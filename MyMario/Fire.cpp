@@ -1,5 +1,7 @@
 #include "Fire.h"
-
+#include "BreakBrick.h"
+//id form 1 ->5 : mario 
+//id form 10->6 : for shooting red tree
 void Fire::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
@@ -24,11 +26,11 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (this->state == FIRE_STATE_ALIVE)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
-	}
-	
+	}	
 	if (marioHandle->getIsFire())
 	{
-		for (int i = 1; i < 10; i++)
+		aliveTime = 3000;
+		for (int i = 1; i < 6; i++)
 		{
 			if (!this->isFiring && this->id == marioHandle->FireID)
 			{
@@ -47,11 +49,25 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	
-	
+	else //if (marioHandle->treeFireID !=-1)
+	{
+		if (!this->isFiring && this->id == 6)
+		{
+			aliveTime = 8000;
+			this->Reset();
+			this->nx = marioHandle->treeNx;
+			this->isFire = (int)GetTickCount64();
+			this->vx = nx*0.04;
+			this->vy +=0.02;
+			this->isFiring = true;
+			this->x = marioHandle->treeX + nx*10;
+			this->y = marioHandle->treeY;
+		
+		}
+	}
 	if (isFire != 0)
 	{
-		if ((GetTickCount64() - isFire) < 3000)
+		if ((GetTickCount64() - isFire) < aliveTime)
 		{	
 			if (y > 240 && y != 500)
 				y = 240;
@@ -61,8 +77,8 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isFire = 0;
 			this->isFiring = false;
 		}
-		
 	}
+	
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -83,25 +99,41 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isFiring = false;
 			isFire = 0;
 		}
-			
-		if (ny != 0)
-		{			
-			if (vy > 0.12 / 2)
+		//if (id != 6)
+		{
+			if (ny != 0)
 			{
-				vy = vy - abs(vy / 3);
+				if (vy > 0.12 / 2)
+				{
+					vy = vy - abs(vy / 3);
+				}
+				else if (vy < -0.12 / 2)
+				{
+					vy = vy + abs(vy / 3);
+				}
+				else
+				{
+					vy = 0;
+				}
+				ny = -ny;
+				if (id != 6)
+					vy = -vy;
 			}
-			else if (vy < -0.12/ 2)
+		}
+		/*else
+		{
+			if ((GetTickCount64() - isFire) > aliveTime)
 			{
-				vy = vy + abs(vy / 3);
+				isFiring = false;
+				isFire = 0;
+				
 			}
 			else
 			{
-				vy = 0;
+				this->y = 250;
 			}
-			ny = -ny;
-			vy = -vy;
-		}
-		if (state == FIRE_STATE_ALIVE)
+		}*/
+		if (state == FIRE_STATE_ALIVE && id!=6)
 		{
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
@@ -128,9 +160,13 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					x++;
 				}
-				else if (dynamic_cast<backRound*>(e->obj));
+				else if (dynamic_cast<BreakBrick*>(e->obj))
+				{
+					this->y = 250;
+				}
 				else if (dynamic_cast<CMario*>(e->obj))
 				{
+					//CMario* mario = dynamic_cast<CMario*>(e->obj);
 					nx = 0; ny = 0;
 					x++;
 				}
@@ -140,8 +176,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isFiring = false;
 					isFire = 0;
 					Reset();
-				}
-				
+				}				
 			}
 		}
 		
@@ -172,8 +207,17 @@ void Fire::Reset()
 	this->isFire = 0;
 	this->vx = 0;
 	this->vy = 0;
-	this->x = this->start_x;
-	this->y = this->start_y;
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario->getLevel() == MARIO_LEVEL_FIRE)
+	{
+		this->x = mario->x;
+	}
+	else
+	{
+		this->x = this->start_x;
+	}
+	
+	this->y = 500;
 	this->ax = 0;
 	this->ay = 0;
 	this->dx = 0;

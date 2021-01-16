@@ -4,15 +4,9 @@ void BreakBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + width;
-	b = y + height;
-	if (state == BREAK_BRICK_STATE_DIE)
-	{
-		l = 0;
-		t = 0;
-		r = 0;
-		b = 0;
-	}
+	r = x + 16;
+	b = y + 16;
+	
 }
 
 void BreakBrick::Render()
@@ -32,14 +26,10 @@ void BreakBrick::SetState(int state)
 	CGameObject::SetState(state);
 	if (state == BREAK_BRICK_STATE_DIE)
 	{
-		width = 0;
-		height = 0;
+		x = 0;
+		y = 0;
 	}
-	if (state == BREAK_BRICK_STATE_COIN)
-	{
-		width = 5;
-		height = 5;
-	}
+	
 }
 void BreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -51,10 +41,10 @@ void BreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// if coin is not check yet : bbox will be =0 , checked : bbox will 16 16 
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
 	{
-		if (isCheck == false)
+		if (isCheck == false )
 		{
 			this->SetState(BREAK_BRICK_STATE_COIN);
-			isCheck =true;
-		}
+			isCheck = true;
+		};
 	}
 }

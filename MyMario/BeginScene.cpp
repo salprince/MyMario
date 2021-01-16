@@ -151,7 +151,7 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() == 6)
 		{
 			int temp = (int)atof(tokens[5].c_str());
-			dynamic_cast<CGoomba*>(obj)->appearTime = temp;
+			dynamic_cast<CGoomba*>(obj)->appearTime = (float)temp;
 		}
 		break;
 	}
@@ -167,7 +167,7 @@ void BeginScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() == 8)
 		{
 			int temp = (int)atof(tokens[7].c_str());
-			dynamic_cast<Koopas*>(obj)->appearTime= temp;
+			dynamic_cast<Koopas*>(obj)->appearTime= (float)temp;
 		}
 		break;
 	}

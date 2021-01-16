@@ -1,2 +1,6 @@
-﻿  MyGrid.cpp
-  MyGrid.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyGrid.exe
+﻿Grid.obj : error LNK2019: unresolved external symbol "public: void __thiscall CGame::InitKeyboard(void)" (?InitKeyboard@CGame@@QAEXXZ) referenced in function _WinMain@16
+Grid.obj : error LNK2019: unresolved external symbol "public: void __thiscall CGame::Init(struct HWND__ *)" (?Init@CGame@@QAEXPAUHWND__@@@Z) referenced in function _WinMain@16
+Grid.obj : error LNK2019: unresolved external symbol "public: void __thiscall CGame::ProcessKeyboard(void)" (?ProcessKeyboard@CGame@@QAEXXZ) referenced in function "int __cdecl Run(void)" (?Run@@YAHXZ)
+Grid.obj : error LNK2019: unresolved external symbol "public: void __thiscall CGame::Load(wchar_t const *)" (?Load@CGame@@QAEXPB_W@Z) referenced in function _WinMain@16
+Grid.obj : error LNK2019: unresolved external symbol "public: static class CGame * __cdecl CGame::GetInstance(void)" (?GetInstance@CGame@@SAPAV1@XZ) referenced in function "void __cdecl Render(void)" (?Render@@YAXXZ)
+D:\ProjectGame\MyNewMario\MyMario\Debug\MyGrid.exe : fatal error LNK1120: 5 unresolved externals

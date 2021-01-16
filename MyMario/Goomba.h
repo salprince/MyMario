@@ -14,7 +14,8 @@
 #define GOOMBA_ANI_WALKING_LEFT 0
 #define GOOMBA_ANI_WALKING_RIGHT 0
 #define GOOMBA_ANI_DIE 1
-#define GOOMBA_ANI_CLEAR 2
+#define GOOMBA_ANI_WING 2
+#define GOOMBA_ANI_CLEAR 3
 
 class CGoomba : public CGameObject
 {
@@ -38,4 +39,7 @@ public:
 	float startx = 0;
 	void setIsDie(bool a) { isDie = a; }
 	float appearTime = 0;
+	int type = -1;
+	bool isJump = false;
+	bool wing = true;
 };

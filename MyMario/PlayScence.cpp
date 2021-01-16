@@ -1,8 +1,8 @@
 #include "Include.h"
-#include "ShootingRedTree.h"
 #include "BlueP.h"
 #include "BreakBrick.h"
-
+#include "ShootingRedTree.h"
+#include "MovableBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -142,6 +142,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CGoomba();
 		float l = (float)atof(tokens[4].c_str());
 		obj->length = l;
+		if (tokens.size() == 6)
+		{
+			int temp = (int)atof(tokens[5].c_str());
+			dynamic_cast<CGoomba*>(obj)->type = temp;
+		}
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
@@ -159,6 +164,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	
 	case OBJECT_TYPE_BACKROUND:
 	{
 		int typeAnimation= (int)atof(tokens[3].c_str());
@@ -204,6 +210,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<LevelMushroom*>(obj)->id = temp;
+			dynamic_cast<LevelMushroom*>(obj)->start_x = x;
+			dynamic_cast<LevelMushroom*>(obj)->start_y = y;
 		}
 		break;
 	}
@@ -227,19 +235,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SHOOTING_RED_TREE:
 	{
 		obj = new ShootingRedTree(); break;
-		if (tokens.size() == 5)
+		dynamic_cast<ShootingRedTree*>(obj)->start_y = y;
+		if (tokens.size() >= 5)
 		{
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<ShootingRedTree*>(obj)->treeID = temp;
 		}
+		
 	}
 	case OBJECT_TYPE_BLUE_P:
 	{
 		obj = new BlueP();
-		if (tokens.size() == 5)
+		if (tokens.size() >= 5)
 		{
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<BlueP*>(obj)->id = temp;
+		}
+		if (tokens.size() == 6)
+		{
+			int temp = (int)atof(tokens[5].c_str());
+			dynamic_cast<BlueP*>(obj)->idCoin = temp;
 		}
 		break;
 	}
@@ -250,6 +265,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<BreakBrick*>(obj)->id = temp;
+		}
+		break;
+	}
+	case OBJECT_TYPE_MOVE_BRICK:
+	{
+		obj = new MovableBrick();
+		if (tokens.size() == 5)
+		{
+			int temp = (int)atof(tokens[4].c_str());
+			dynamic_cast<MovableBrick*>(obj)->id = temp;
 		}
 		break;
 	}
@@ -332,19 +357,40 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
+	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if(abs(objects[i]->x - player->x) < game->GetScreenWidth())
+			coObjects.push_back(objects[i]);
+		else if (dynamic_cast<MyHUB*>(objects[i]))
+		{
+			//DebugOut(L"HUBBB push back \n");
+			coObjects.push_back(objects[i]);
+		}
+		else if (dynamic_cast<Fire*>(objects[i]) && dynamic_cast<Fire*>(objects[i])->id==6)
+		{
+			//DebugOut(L"HUBBB push back \n");
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		/*if (dynamic_cast<MyHUB*>(objects[i]))
-			objects[i]->Update(dt);
-		else */
+		if (abs(objects[i]->x - player->x) < game->GetScreenWidth())
 			objects[i]->Update(dt, &coObjects);
+		else if (dynamic_cast<MyHUB*>(objects[i]))
+		{
+			//DebugOut(L"HUBBB push back \n");
+			objects[i]->Update(dt, &coObjects);
+		}
+
+		else if (dynamic_cast<Fire*>(objects[i]) && dynamic_cast<Fire*>(objects[i])->id == 6)
+		{
+			//DebugOut(L"HUBBB push back \n");
+			objects[i]->Update(dt, &coObjects);
+		}
+			
 	}
 	//this->GetHUB()->Render();
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -352,34 +398,44 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	CGame* game = CGame::GetInstance();
+	
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	CGame::GetInstance()->SetCamPos(15, 0);
-	if (cx < 15)
+	
+	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->state != MARIO_STATE_DIE )
 	{
 		CGame::GetInstance()->SetCamPos(15, 0);
-	}
-		
-	else if (cy < -140)
-	{
-		for(int i=0; i <140; i++)
-			CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
-	}	
-	else if (cy > 200)
-	{
+		if (cx < 15)
+		{
+			CGame::GetInstance()->SetCamPos(15, 0);
+		}
+
+		else if (cy < -140)
+		{
+			for (int i = 0; i < 140; i++)
+				CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
+		}
+		else if (cy < -160)
+		{
+			CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+		}
+		else if (cy > 150 && cx >1900)
+		{
 			CGame::GetInstance()->SetCamPos((float)round(2145), (float)300);
+		}
+		
+		else if (cx > 2444)
+		{
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
+			CGame::GetInstance()->SetCamPos(2445, 0);
+		}
+		else
+		{
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
+			CGame::GetInstance()->SetCamPos(round(cx), 0);
+		}
 	}
-	else if (cx >2444)
-	{
-		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
-		CGame::GetInstance()->SetCamPos(2445, 0);
-	}
-	else
-	{
-		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
-		CGame::GetInstance()->SetCamPos(round(cx), 0);
-	}
+	
 		
 }
 
@@ -397,9 +453,13 @@ void CPlayScene::Render()
 	{
 		this->GetHUB()->renderText("OF COURSE CLEAR", 2650, 100);
 		this->GetHUB()->renderText("U GOT A CARD", 2650, 120);
+		this->GetHUB()->renderCard(HUB_ANI_FRAME_CARD_STAR, 2750, 110);
+		//this->GetPlayer()->SetState(MARIO_STATE_WALKING_RIGHT);
+		//this->GetPlayer()->x+=3;
+		
 	}
 	if(this->GetPlayer()->showPoint)
-		this->GetHUB()->renderText("100", this->GetPlayer()->Tx, this->GetPlayer()->Ty);
+		this->GetHUB()->renderText("100", (int)this->GetPlayer()->Tx, (int)this->GetPlayer()->Ty);
 }
 
 /*
@@ -546,10 +606,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-	if (game->IsKeyDown(DIK_S) && !mario->getIsOnSky())
+	/*if (game->IsKeyDown(DIK_S) && !mario->getIsOnSky())
 	{
 		mario->vy -= (float)0.035;
-	}
+	}*/
 		
 	
 	

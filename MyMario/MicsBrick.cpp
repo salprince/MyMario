@@ -4,8 +4,8 @@ void MicsBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + width;
-	b = y + height;
+	r = x + MICSBRICK_BBOX_WIDTH;
+	b = y + MICSBRICK_BBOX_HEIGHT;
 }
 
 void MicsBrick::Render()
@@ -19,6 +19,7 @@ void MicsBrick::Render()
 		ani = MICSBRICK_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y);
+	RenderBoundingBox();
 }
 
 void MicsBrick::SetState(int state)
@@ -27,7 +28,9 @@ void MicsBrick::SetState(int state)
 }
 void MicsBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (isCheck )
+	CGameObject::Update(dt, coObjects);
+	int coinid = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID();
+	if (isCheck && y!=oldY)
 	{
 		//DebugOut(L"OLD Y %f\n", oldY);
 		if (y < oldY)
@@ -37,9 +40,8 @@ void MicsBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else y = oldY;
 	}
-	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
-	{
-		if (isCheck == false)
+	else if(isCheck == false && coinid == id && coinid!=7)
+	{		
 		{
 			this->vy = (float)-0.0075;
 			y -= 16;

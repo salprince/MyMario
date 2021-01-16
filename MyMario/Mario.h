@@ -3,7 +3,7 @@
 //#pragma warning(disable:28159) 
 #define MARIO_WALKING_SPEED				0.08f
 //0.1f
-#define MARIO_JUMP_SPEED_Y				0.25f
+#define MARIO_JUMP_SPEED_Y				0.45f
 #define MARIO_JUMP_DEFLECT_SPEED		0.2f
 #define MARIO_GRAVITY					0.0017f
 #define MARIO_STOP_ACCELERATION			0.003f
@@ -21,6 +21,7 @@
 #define MARIO_STATE_FLY				500
 #define MARIO_STATE_HOLD				600
 #define MARIO_STATE_SHOOTING				700
+#define MARIO_STATE_IDLE_PORTAL			800
 #define MARIO_STATE_DIE				1000
 
 
@@ -96,6 +97,7 @@
 #define GREEN_MARIO_ANI_BIG_SIT_RIGHT			62
 #define GREEN_MARIO_ANI_BIG_JUMP_LEFT			63
 #define GREEN_MARIO_ANI_BIG_JUMP_RIGHT			64
+#define MARIO_ANI_TAIL_PORTAL			15
 #define MARIO_ANI_DIE				8
 
 #define	MARIO_LEVEL_SMALL	1
@@ -120,6 +122,8 @@
 #define MARIO_COLLISION_LEVELMUSHROOM 8
 #define MARIO_COLLISION_BLUE_P 13
 #define MARIO_COLLISION_BREAK_BRICK 14
+#define MARIO_COLLISION_FIRE 15
+#define MARIO_COLLISION_TREE 16
 #define MARIO_COLLISION_CHIMNEYPORTAL 49
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -140,7 +144,7 @@ class CMario : public CGameObject
 	bool isSpin = false;
 	bool isHold = false;
 	bool isFire = false;
-	int coinID = 0;
+	
 
 public:
 	CMario(float x = 0.0f, float y = 0.0f);
@@ -148,7 +152,6 @@ public:
 	void BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	void PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
-	float acceleration = 0;
 	bool readyToHoldKoopas = false;
 	void SetState(int state);
 	float relativeDistanceMarioKoopa = 0;
@@ -186,4 +189,12 @@ public:
 	bool showPoint = false;
 	float Tx = 0;
 	float Ty = 0;
+	//time to set state idle for mario when collis chimney portal 
+	float portalTime = 0;
+	int coinID = 0;
+	//val to set tree fire fired
+	int treeFireID = -1;
+	float treeX = 0;
+	float treeY = 0;
+	int treeNx = 0;
 };

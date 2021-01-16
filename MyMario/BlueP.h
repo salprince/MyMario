@@ -16,10 +16,11 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
 	float oldY = 0;
-	int width = 16;
-	int height = 16;
-	int id = 0;
+	int width = 0;
+	int height = 0;
+	int id = -1;
 	bool isCheck = false;
 	float time = 0;
+	int idCoin = -1;
 
 };

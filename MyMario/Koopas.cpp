@@ -10,6 +10,7 @@
 #include "ColorBrick.h"
 #include "Coin.h"
 #include "MicsBrick.h"
+#include "BreakBrick.h"
 Koopas::Koopas()
 {
 	SetState(KOOPAS_STATE_WALKING);
@@ -59,9 +60,10 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy += GRAVITY * dt;
 			vx = nx * KOOPAS_WALKING_SPEED;
 			if (this->appearTime == 15)
-				vx = 0.05;
+				vx = (float)0.05;
 		}
 	}
+	//type 2 is red koopas
 	
 	if (state != KOOPAS_STATE_DIE)
 	{
@@ -105,6 +107,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vx = -vx;
 					x = -length + startx;
 				}
+				this->vy += GRAVITY;
 			}
 
 			CalcPotentialCollisions(coObjects, coEvents);
@@ -118,7 +121,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetState(KOOPAS_STATE_HOLD);
 		}
-		else
+		else if(typeKoopas!=2)
 		{
 			if (getShellIn() == 0)
 			{
@@ -128,7 +131,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			else
 			{
-				if (getShellOut() - getShellIn() < 3000)
+				if (getShellOut() - getShellIn() < 5000)
 				{
 					setShellOut(getShellOut() + 10);
 				}
@@ -157,10 +160,14 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (coEvents.size() == 0)
 	{		
-		if (!isJump && this->typeKoopas==1)
+		if (!isJump && this->typeKoopas==1 )
 		{
-			vy += -JUMP_SPEECH;
-			isJump = true;
+			if (this->GetState() != KOOPAS_STATE_HOLD && this->GetState() != KOOPAS_STATE_SHELL_RUNNING && this->GetState() != KOOPAS_STATE_SHELL)
+			{
+				vy += -JUMP_SPEECH;
+				isJump = true;
+			}
+			
 		}			
 		x += dx;
 		y += dy;
@@ -189,8 +196,40 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<ColorBrick*>(e->obj))
 			{
-				if (isJump)
-					isJump = false;
+				if (e->ny < 0)
+				{
+					if (isJump)
+						isJump = false;
+				}
+				
+			}
+			else if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (e->ny < 0)
+				{
+					if (isJump)
+						isJump = false;
+				}
+
+			}
+			else if (dynamic_cast<MicsBrick*>(e->obj))
+			{
+				CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+				MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);
+				if (e->nx < 0)
+				{
+					if (micsBrick->state != MICSBRICK_STATE_DIE)
+					{
+						if (mario->coinID != micsBrick->id)
+							mario->coinID = micsBrick->id;
+						else mario->coinID = -2;
+						micsBrick->SetState(MICSBRICK_STATE_DIE);
+						//position to show text point
+						((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Tx = micsBrick->x;
+						((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Ty = micsBrick->y - 15;
+					}
+
+				}
 			}
 		}
 
@@ -215,6 +254,15 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				e->obj->y += 12;
 				e->obj->vx += (float)(0.05 * ny);
 			}
+			if (dynamic_cast<BreakBrick*>(e->obj))
+			{
+				//e->obj->SetState(GOOMBA_STATE_CLEAR);
+				e->obj->nx = -e->obj->nx;
+				if (e->obj->x == 2112 && e->obj->y == 219);
+				else 
+					e->obj->SetState(BREAK_BRICK_STATE_DIE);
+				
+			}
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -226,16 +274,36 @@ void Koopas::Render()
 		ani = GREEN_KOOPAS_ANI_DIE;
 	}
 	else if (state == KOOPAS_STATE_HOLD)
-		ani = GREEN_KOOPAS_ANI_HOLD;
-	else if (state == KOOPAS_STATE_SHELL|| state == KOOPAS_STATE_SHELL_RUNNING )
-		ani = GREEN_KOOPAS_ANI_SHELL;
+	{
+		if (this->typeKoopas == 2)
+			ani = RED_KOOPAS_ANI_HOLD;
+		else ani = GREEN_KOOPAS_ANI_HOLD;
+	}
+		
+	else if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_RUNNING)
+	{
+		if (this->typeKoopas == 2)
+			ani = RED_KOOPAS_ANI_SHELL;
+		else ani = GREEN_KOOPAS_ANI_SHELL;
+	}
+		
 	else if (this->typeKoopas==1)
 	{
 		if (vx > 0) ani = GREEN_KOOPAS_ANI_WING_RIGHT;
 		else if (vx < 0) ani = GREEN_KOOPAS_ANI_WING_LEFT;
 	}
-	else if (vx > 0) ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
-	else if (vx < 0) ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
+	else if (vx > 0)
+	{
+		if (this->typeKoopas == 2)
+			ani = RED_KOOPAS_ANI_WALKING_RIGHT;
+		else ani = GREEN_KOOPAS_ANI_WALKING_RIGHT;
+	}
+	else if (vx < 0)
+	{
+		if (this->typeKoopas == 2)
+			ani = RED_KOOPAS_ANI_WALKING_LEFT;
+		else ani = GREEN_KOOPAS_ANI_WALKING_LEFT;
+	}
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();

@@ -22,8 +22,8 @@ void Coin::SetState(int state)
 	CGameObject::SetState(state);	
 	if (state == COIN_STATE_DIE)
 	{
-		width = 0;
-		height = 0;
+		x = 0;
+		y = 0;
 	}
 }
 void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -31,7 +31,7 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//CGameObject::Update(dt);
 	if (isCheck && this->state != COIN_STATE_DIE)
 	{		
-		if ((GetTickCount64() - this->time) < 800)
+		if ((GetTickCount64() - this->time) < 500)
 		{
 			vy += COIN_GRAVITY;
 			y += vy * dt;
@@ -40,6 +40,8 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = false;
 			this->SetState(COIN_STATE_DIE);
+			this->y = 0;
+			this->x = 0;
 		}
 	}
 	// 1 micsbrick have a id to know which coin 

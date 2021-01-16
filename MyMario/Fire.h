@@ -23,6 +23,7 @@ public:
 	bool isFiring = false;
 	float start_x = 0;
 	float start_y = 0;
+	int aliveTime = 0;
 	CMario* marioHandle = NULL;
 	void Reset();
 	void setPositionAfterMario(float x, float y, int nx)

@@ -165,9 +165,11 @@
     <ClInclude Include="MicsBrick.h" />
     <ClInclude Include="MiniMapScene.h" />
     <ClInclude Include="MiniMario.h" />
+    <ClInclude Include="MovableBrick.h" />
     <ClInclude Include="PlayScence.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="RedArrowBeginScene.h" />
+    <ClInclude Include="RedKoopas.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scence.h" />
     <ClInclude Include="ShootingRedTree.h" />
@@ -198,6 +200,7 @@
     <ClCompile Include="MicsBrick.cpp" />
     <ClCompile Include="MiniMapScene.cpp" />
     <ClCompile Include="MiniMario.cpp" />
+    <ClCompile Include="MovableBrick.cpp" />
     <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="RedArrowBeginScene.cpp" />

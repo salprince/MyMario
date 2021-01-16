@@ -2,10 +2,13 @@
 #include "GameObject.h"
 
 #define MUSHROOM_STATE_ALIVE 100
-#define MUSHROOM_STATE_DIE 200
+#define MUSHROOM_STATE_1UP 200
+#define MUSHROOM_STATE_DIE 300
 
-#define MUSHROOM_ANI_ALIVE 0
-#define MUSHROOM_ANI_DIE 1
+#define MUSHROOM_ANI_ALIVE_1 0
+#define MUSHROOM_ANI_ALIVE_2 1
+#define MUSHROOM_ANI_1UP 2
+#define MUSHROOM_ANI_DIE 3
 
 #define MUSHROOM_VX 0.05f
 #define MUSHROOM_GRAVITY 0.05f
@@ -22,4 +25,8 @@ public:
 	int id = 0;
 	bool isCheck = false;
 	float time = 0;
+	float start_x=0;
+	float start_y=0;
+	bool isRun = false;
+	bool isFly = false;
 };

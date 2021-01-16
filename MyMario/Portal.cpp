@@ -14,13 +14,18 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->time != 0)
 	{
-		if ((GetTickCount64() - time) > 3000)
+		if ((GetTickCount64() - time) > 2000)
 			CGame::GetInstance()->SwitchScene(GetSceneId());
 	}
 }
 void CPortal::Render()
 {
+	int ani = PORTAL_ANI_ALIVE;
+	if (time != 0)
+		ani = PORTAL_ANI_DIE;
+	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
+
 }
 
 void CPortal::GetBoundingBox(float& l, float& t, float& r, float& b)
