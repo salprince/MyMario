@@ -124,6 +124,7 @@
 #define MARIO_COLLISION_BREAK_BRICK 14
 #define MARIO_COLLISION_FIRE 15
 #define MARIO_COLLISION_TREE 16
+#define MARIO_COLLISION_MOVE_BRICK 17
 #define MARIO_COLLISION_CHIMNEYPORTAL 49
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -197,4 +198,7 @@ public:
 	float treeX = 0;
 	float treeY = 0;
 	int treeNx = 0;
+	float firedTime = 0;
+	//val to know which move brick mario in 
+	int moveBrickID = -1;
 };

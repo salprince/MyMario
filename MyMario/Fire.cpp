@@ -20,7 +20,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += 0.005f;
 	coEvents.clear();
-	
+	DebugOut(L"firedTime %f \n", (GetTickCount64() - firedTime)/1000);
 	this->SetState(FIRE_STATE_ALIVE);
 
 	if (this->state == FIRE_STATE_ALIVE)
@@ -30,9 +30,9 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (marioHandle->getIsFire())
 	{
 		aliveTime = 3000;
-		for (int i = 1; i < 6; i++)
+		for (int i = 1; i <= 2; i++)
 		{
-			if (!this->isFiring && this->id == marioHandle->FireID)
+			if (!this->isFiring && this->id == marioHandle->FireID )
 			{
 				this->Reset();
 				this->isFire = (int)GetTickCount64();
@@ -51,7 +51,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else //if (marioHandle->treeFireID !=-1)
 	{
-		if (!this->isFiring && this->id == 6)
+		if (!this->isFiring && this->id == 6 )
 		{
 			aliveTime = 8000;
 			this->Reset();
@@ -62,7 +62,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->isFiring = true;
 			this->x = marioHandle->treeX + nx*10;
 			this->y = marioHandle->treeY;
-		
+			firedTime = GetTickCount64();
 		}
 	}
 	if (isFire != 0)
@@ -207,6 +207,7 @@ void Fire::Reset()
 	this->isFire = 0;
 	this->vx = 0;
 	this->vy = 0;
+	this->firedTime = 0;
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (mario->getLevel() == MARIO_LEVEL_FIRE)
 	{

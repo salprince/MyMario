@@ -271,10 +271,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MOVE_BRICK:
 	{
 		obj = new MovableBrick();
-		if (tokens.size() == 5)
+		if (tokens.size() >= 5)
 		{
 			int temp = (int)atof(tokens[4].c_str());
 			dynamic_cast<MovableBrick*>(obj)->id = temp;
+			int temp1 = (int)atof(tokens[5].c_str());
+			dynamic_cast<MovableBrick*>(obj)->relativePosition= temp1;
+			int temp2 = (int)atof(tokens[6].c_str());
+			dynamic_cast<MovableBrick*>(obj)->x0= temp2;
+			int temp3 = (int)atof(tokens[7].c_str());
+			dynamic_cast<MovableBrick*>(obj)->x1= temp3;
 		}
 		break;
 	}
@@ -368,7 +374,7 @@ void CPlayScene::Update(DWORD dt)
 			//DebugOut(L"HUBBB push back \n");
 			coObjects.push_back(objects[i]);
 		}
-		else if (dynamic_cast<Fire*>(objects[i]) && dynamic_cast<Fire*>(objects[i])->id==6)
+		else if (dynamic_cast<Fire*>(objects[i]))
 		{
 			//DebugOut(L"HUBBB push back \n");
 			coObjects.push_back(objects[i]);
@@ -385,7 +391,7 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 		}
 
-		else if (dynamic_cast<Fire*>(objects[i]) && dynamic_cast<Fire*>(objects[i])->id == 6)
+		else if (dynamic_cast<Fire*>(objects[i]))
 		{
 			//DebugOut(L"HUBBB push back \n");
 			objects[i]->Update(dt, &coObjects);
@@ -419,7 +425,7 @@ void CPlayScene::Update(DWORD dt)
 		{
 			CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 		}
-		else if (cy > 150 && cx >1900)
+		else if (cy > 150 && cx >1900 && switchSceneTime == 0)
 		{
 			CGame::GetInstance()->SetCamPos((float)round(2145), (float)300);
 		}
@@ -429,7 +435,7 @@ void CPlayScene::Update(DWORD dt)
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
 			CGame::GetInstance()->SetCamPos(2445, 0);
 		}
-		else
+		else 
 		{
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
 			CGame::GetInstance()->SetCamPos(round(cx), 0);

@@ -162,7 +162,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{		
 		if (!isJump && this->typeKoopas==1 )
 		{
-			if (this->GetState() != KOOPAS_STATE_HOLD && this->GetState() != KOOPAS_STATE_SHELL_RUNNING && this->GetState() != KOOPAS_STATE_SHELL)
+			if (this->GetState() != KOOPAS_STATE_HOLD && this->GetState() != KOOPAS_STATE_SHELL_RUNNING && this->GetState() != KOOPAS_STATE_SHELL && this->GetState() != KOOPAS_STATE_DIE)
 			{
 				vy += -JUMP_SPEECH;
 				isJump = true;

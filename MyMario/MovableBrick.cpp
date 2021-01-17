@@ -25,13 +25,48 @@ void MovableBrick::SetState(int state)
 		x = 0;
 		y = 0;
 	}
+	if (state == MOVE_BRICK_STATE_FALL)
+	{
+	}
 
+}
+void MovableBrick::moveBlockBrick(int id, float x0,float x1)
+{
+	if (this->id == id)
+	{
+		if (x <= x0+ 16*relativePosition)
+			nx = 1;
+		else if (x >= x1 + 16 * relativePosition)
+			nx = -1;
+		if (this->nx < 0)
+			x-=0.5;
+		else if(this->nx >0)
+			x+=0.5;
+	}
+
+}
+void MovableBrick::fallBlockBrick(int id)
+{
+	if (this->id == id)
+	{
+		x = round(x);
+		y+=0.5;
+		nx = 0;
+	}
 }
 void MovableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	int l = 20;
-	if (x <= 100)
-		x++;
-	else if (x >= 200)
-		x--;
+	CMario* mario= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	/*if (isActive == true)
+		fallBlockBrick(id);*/
+	if (mario->moveBrickID != -1)
+		fallBlockBrick(mario->moveBrickID);
+	else
+	{
+		if (isActive == true)
+			fallBlockBrick(id);
+		else moveBlockBrick(1, x0, x1);
+	}
+		
+	
 }

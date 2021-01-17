@@ -1,5 +1,6 @@
 #include "Portal.h"
 #include "Game.h"
+#include "PlayScence.h"
 
 
 CPortal::CPortal(float l, float t, float r, float b, int scene_id)
@@ -14,15 +15,17 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->time != 0)
 	{
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->switchSceneTime = time;
+		y-=1.5;
+		if(y <70)
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->isShowEndText = true;
 		if ((GetTickCount64() - time) > 2000)
 			CGame::GetInstance()->SwitchScene(GetSceneId());
 	}
 }
 void CPortal::Render()
 {
-	int ani = PORTAL_ANI_ALIVE;
-	if (time != 0)
-		ani = PORTAL_ANI_DIE;
+	int ani = PORTAL_ANI_ALIVE;	
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
 

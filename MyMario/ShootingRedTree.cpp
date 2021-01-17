@@ -63,14 +63,13 @@ void ShootingRedTree::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	
 	if (abs(dMarioTree) < 200)
-	{
-		
-		
+	{	
 		//DebugOut(L"%d	%f	%f\n", mario->treeFireID, mario->treeX, mario->treeY);
 		if (dMarioTree < 0)
 			nx = -1;
 		else nx = 1;
 		mario->treeNx = this->nx;
+		//x=1815 is eater tree 
 		if (x != 1815)
 		{
 			mario->treeFireID = this->treeID;

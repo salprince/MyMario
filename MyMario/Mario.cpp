@@ -2,6 +2,7 @@
 #include "BlueP.h"
 #include "BreakBrick.h"
 #include "ShootingRedTree.h"
+#include "MovableBrick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -157,6 +158,8 @@ void CMario::BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (this->level == MARIO_LEVEL_TAIL)
+		this->readyToHoldKoopas = false;
 	//DebugOut(L"%f    %f\n", x, y);
 	if(portalTime!=0 )
 	{
@@ -268,11 +271,38 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	float PortalTime = 0;
 	CGameObject::Update(dt);
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
 	//CGameObject::Update(dt, coObjects);
 	if (!getIsOnSky())
 		vy += MARIO_GRAVITY * dt;
 	else
 		vy += (float)(MARIO_GRAVITY * 1.25);
+	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->switchSceneTime != 0)
+	{		
+		CalcPotentialCollisions(coObjects, coEvents);
+		if (coEvents.size() == 0)
+		{
+			x += 0.5;
+			y += dy;
+			state = MARIO_STATE_WALKING_RIGHT;
+			this->isJump = false;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			x += min_tx * dx + nx * 0.4f;
+			y += min_ty * dy + ny * 0.4f;
+			x += 0.5;
+			vx = 0.05;
+			state = MARIO_STATE_WALKING_RIGHT;
+		}
+		return;
+	}
 	//make mario cant move out of left border 
 	if (vx < 0 && x < SCENE1_MIN_HEIGHT && ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->typeScene != SCENE_TYPE_BEGIN) x = 15;
 	if (vx > 0 && x > SCENE1_MAX_HEIGHT) x = SCENE1_MAX_HEIGHT;
@@ -285,9 +315,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		PlaySceneUpdate(dt);
 	}
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
+	
 	// turn off collision when die 
 	if (state != MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
@@ -343,8 +371,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				stateCollision = MARIO_COLLISION_FIRE;
 			else if (dynamic_cast<ShootingRedTree*>(e->obj) )
 				stateCollision = MARIO_COLLISION_TREE;
-			if (stateCollision != -1)
-				DebugOut(L"Collis %d \n", stateCollision);
+			else if (dynamic_cast<MovableBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_MOVE_BRICK;
+			//if (stateCollision != -1)
+				//DebugOut(L"Collis %d \n", stateCollision);
 			switch (stateCollision)
 			{
 			case MARIO_COLLISION_CHIMNEYPORTAL:
@@ -363,7 +393,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case MARIO_COLLISION_GATE:
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
-				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->isShowEndText = true;
+				
 				if (p->time == 0)
 					p->time = (float)GetTickCount64();
 						
@@ -425,6 +455,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (this->getIsOnSky())
 							this->setIsOnSky(false);
 					}
+					if (koopa->GetState() == KOOPAS_STATE_SHELL)
+					{
+						koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
+						if (x < koopa->x)
+							koopa->vx = (float)(0.15);
+						else koopa->vx = (float)-0.15;
+						return;
+					}
 					if (e->ny < 0)
 					{
 						if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
@@ -433,11 +471,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (koopa->isShell == false)
 								koopa->y += 9;
 							koopa->isShell = true;
-							vy = (float)(-MARIO_JUMP_DEFLECT_SPEED * 1.2);
+							vy = (float)(-MARIO_JUMP_DEFLECT_SPEED);
+							
+							//type 2 is red koopas
 							if (koopa->typeKoopas != 2)
 							{
-								koopa->x -= 3;
-								x -= 10;
+								if (vx < 0)
+									vx = -0.2;
+								else
+									vx = 0.2;
 							}
 							else
 							{
@@ -445,14 +487,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 									koopa->x = 2100;
 								else
 									koopa->x-=10;
-								x += 10;
+								if (nx != 0)
+									x -= 20 * nx;
+								else
+									x -= 20;
+								//vx = 0.2f;
+								//x = vx * dt;
 							}
 						}
-						else
-						{
-							x -= 10;
-							y -= 10;
-						}
+						
 					}
 					else if (e->nx != 0)
 					{
@@ -462,11 +505,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							//making kick koopas
 							if (koopa->GetState() == KOOPAS_STATE_SHELL && abs(koopa->vx) <= 0.01)
 							{
+								DebugOut(L"vx %f nx %d\n ", vx, nx);
 								if (abs(vx) > 0.06)
 								{
 									if (readyToHoldKoopas)
 										readyToHoldKoopas = false;
-									if (nx < 0)
+									if (vx>  0)
 										koopa->vx = (float)(0.15);
 									else koopa->vx = (float)-0.15;
 									koopa->SetState(KOOPAS_STATE_SHELL_RUNNING);
@@ -520,26 +564,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				break;
 			}
-			case MARIO_COLLISION_BRICK:
-			{
-				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				if (e->nx != 0)
-				{
-					//(vx = 0);
-					SetState(MARIO_STATE_IDLE);
-				}
-				if (e->ny != 0)
-				{
-					if (this->isJumping())
-						this->setJumping(false);
-					if (this->isFlying())
-						this->setFlying(false);
-					if (this->getIsOnSky())
-						this->setIsOnSky(false);
-				}
-
-				break;
-			}
+			
 			case MARIO_COLLISION_COIN:
 			{
 				Coin* coin = dynamic_cast<Coin*>(e->obj);
@@ -672,8 +697,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				break;
 			}
+			case MARIO_COLLISION_MOVE_BRICK :
+			{
+				MovableBrick* moveBrick = dynamic_cast<MovableBrick*>(e->obj);
+				if (e->ny < 0)
+				{
+					if (this->isJumping())
+						this->setJumping(false);
+					if (this->isFlying())
+						this->setFlying(false);
+					if (this->getIsOnSky())
+						this->setIsOnSky(false);
+					this->moveBrickID = moveBrick->id;
+					moveBrick->isActive = true;
+				}
+				break;
+			}
 			default:
-				if (e->ny != 0)
+				this->moveBrickID = -1;
+				if (e->ny < 0)
 				{
 					if (this->isJumping())
 						this->setJumping(false);

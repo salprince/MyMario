@@ -32,4 +32,5 @@ public:
 		this->y = y;
 		this->nx = nx;
 	}
+	float firedTime = 0;
 };
