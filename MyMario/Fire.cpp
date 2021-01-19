@@ -12,18 +12,17 @@ void Fire::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 
 void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{	
-	
+{		
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	vy += 0.005f;
 	coEvents.clear();
-	DebugOut(L"firedTime %f \n", (GetTickCount64() - firedTime)/1000);
+	//DebugOut(L"firedTime %f \n", (GetTickCount64() - firedTime)/1000);
 	this->SetState(FIRE_STATE_ALIVE);
 
-	if (this->state == FIRE_STATE_ALIVE)
+	if (this->state == FIRE_STATE_ALIVE && id!=6)
 	{
 		CalcPotentialCollisions(coObjects, coEvents);
 	}	
@@ -57,7 +56,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->Reset();
 			this->nx = marioHandle->treeNx;
 			this->isFire = (int)GetTickCount64();
-			this->vx = nx*0.04;
+			this->vx = nx*0.06;
 			this->vy +=0.02;
 			this->isFiring = true;
 			this->x = marioHandle->treeX + nx*10;
@@ -82,104 +81,95 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (coEvents.size() == 0)
 	{
 		x += dx;
-		y += dy;
+		y += dy*2;
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		CalcPotentialCollisions(coObjects, coEvents);
-		if (nx != 0)
 		{
-			Reset();
-			x = 0;
-			y = 500;
-			isFiring = false;
-			isFire = 0;
-		}
-		//if (id != 6)
-		{
-			if (ny != 0)
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+			if (id != 6)
 			{
-				if (vy > 0.12 / 2)
-				{
-					vy = vy - abs(vy / 3);
-				}
-				else if (vy < -0.12 / 2)
-				{
-					vy = vy + abs(vy / 3);
-				}
-				else
-				{
-					vy = 0;
-				}
-				ny = -ny;
-				if (id != 6)
-					vy = -vy;
+				FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+				CalcPotentialCollisions(coObjects, coEvents);
 			}
-		}
-		/*else
-		{
-			if ((GetTickCount64() - isFire) > aliveTime)
+			
+			if (nx != 0)
 			{
+				Reset();
+				x = 0;
+				y = 500;
 				isFiring = false;
 				isFire = 0;
-				
 			}
-			else
 			{
-				this->y = 250;
-			}
-		}*/
-		if (state == FIRE_STATE_ALIVE && id!=6)
-		{
-			for (UINT i = 0; i < coEventsResult.size(); i++)
-			{
-				LPCOLLISIONEVENT e = coEventsResult[i];
-				if (dynamic_cast<Koopas*>(e->obj))
+				if (ny != 0)
 				{
-					e->obj->SetState(KOOPAS_STATE_DIE);
-					e->obj->y += 12;
-					SetState(KOOPAS_STATE_DIE);
-					isFiring = false;
-					isFire = 0;
-					Reset();
+					if (vy > 0.12 / 2)
+					{
+						vy = vy - abs(vy / 3);
+					}
+					else if (vy < -0.12 / 2)
+					{
+						vy = vy + abs(vy / 3);
+					}
+					else
+					{
+						vy = 0;
+					}
+					ny = -ny;
+					if (id != 6)
+						vy = -vy;
+				}
+			}
+			if (state == FIRE_STATE_ALIVE && id != 6)
+			{
+				for (UINT i = 0; i < coEventsResult.size(); i++)
+				{
+					LPCOLLISIONEVENT e = coEventsResult[i];
+					if (dynamic_cast<Koopas*>(e->obj))
+					{
+						e->obj->SetState(KOOPAS_STATE_DIE);
+						e->obj->y += 12;
+						SetState(KOOPAS_STATE_DIE);
+						isFiring = false;
+						isFire = 0;
+						Reset();
 
+					}
+					else if (dynamic_cast<CGoomba*>(e->obj))
+					{
+						e->obj->y += 12;
+						e->obj->vx += (float)0.05 * nx;
+						isFiring = false;
+						isFire = 0;
+						Reset();
+					}
+					else if (dynamic_cast<ColorBrick*>(e->obj) || dynamic_cast<Coin*>(e->obj))
+					{
+						x++;
+					}
+					else if (dynamic_cast<BreakBrick*>(e->obj))
+					{
+						this->y = 250;
+					}
+					else if (dynamic_cast<CMario*>(e->obj))
+					{
+						//CMario* mario = dynamic_cast<CMario*>(e->obj);
+						nx = 0; ny = 0;
+						x++;
+					}
+					else if (dynamic_cast<CBrick*>(e->obj));
+					else
+					{
+						isFiring = false;
+						isFire = 0;
+						Reset();
+					}
 				}
-				else if (dynamic_cast<CGoomba*>(e->obj))
-				{
-					e->obj->y += 12;
-					e->obj->vx += (float)0.05 * nx;
-					isFiring = false;
-					isFire = 0;
-					Reset();
-				}
-				else if (dynamic_cast<ColorBrick*>(e->obj) || dynamic_cast<Coin*>(e->obj))
-				{
-					x++;
-				}
-				else if (dynamic_cast<BreakBrick*>(e->obj))
-				{
-					this->y = 250;
-				}
-				else if (dynamic_cast<CMario*>(e->obj))
-				{
-					//CMario* mario = dynamic_cast<CMario*>(e->obj);
-					nx = 0; ny = 0;
-					x++;
-				}
-				else if (dynamic_cast<CBrick*>(e->obj));
-				else 
-				{
-					isFiring = false;
-					isFire = 0;
-					Reset();
-				}				
 			}
 		}
-		
 	}
 	
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

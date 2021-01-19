@@ -279,6 +279,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_GRAVITY * dt;
 	else
 		vy += (float)(MARIO_GRAVITY * 1.25);
+	if (!isJumping())
+		oldY = y;
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->switchSceneTime != 0)
 	{		
 		CalcPotentialCollisions(coObjects, coEvents);
@@ -573,7 +575,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			case MARIO_COLLISION_MICSBRICK:
 			{
-				//DebugOut(L"go here\n\n");
+				DebugOut(L"go here\n\n");
 				MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);
 				if (this->isJumping())
 					this->setJumping(false);
@@ -581,6 +583,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->setFlying(false);
 				if (this->getIsOnSky())
 					this->setIsOnSky(false);
+				//DebugOut(L"gohere \n");
+				/*if (!this->isJumpHigh)
+					this->isJumpHigh = true;*/
 				if (e->ny >0)
 				{
 					if (micsBrick->state != MICSBRICK_STATE_DIE)
@@ -717,6 +722,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				this->moveBrickID = -1;
 				if (e->ny < 0)
 				{
+					if (this->isJumpHigh)
+						this->isJumpHigh = false;
 					if (this->isJumping())
 						this->setJumping(false);
 					if (this->isFlying())

@@ -55,6 +55,12 @@
     <Filter Include="Header Files\Others">
       <UniqueIdentifier>{bfe7e470-4170-4918-a03f-9815ef558d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Grid">
+      <UniqueIdentifier>{309e97c2-f40a-47b5-a2f2-05245faf1b2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Grid">
+      <UniqueIdentifier>{468c1a30-b224-48bb-a706-8fe38ea4cc32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mario.h">
@@ -159,6 +165,12 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files\Others</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files\Grid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -253,6 +265,12 @@
     </ClCompile>
     <ClCompile Include="MovableBrick.cpp">
       <Filter>Source Files\Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Source Files\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files\Grid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

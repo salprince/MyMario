@@ -74,7 +74,11 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects,	vecto
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
 		if (e->t > 0 && e->t <= 1.0f)
-			coEvents.push_back(e);
+		{
+			//if (!dynamic_cast<Fire*>(e->obj))
+				coEvents.push_back(e);
+		}
+			
 		else
 			delete e;
 	}
@@ -110,6 +114,7 @@ void CGameObject::FilterCollision(
 			min_ty = c->t; ny = c->ny; min_iy = i; rdy = c->dy;
 		}
 		int state = -1;
+		
 		if (dynamic_cast<ColorBrick*>(coEvents[i]->obj))
 		{
 				nx = 0;

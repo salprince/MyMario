@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyMario", "MyMario\MyMario.vcxproj", "{86883DF9-7FA2-43CF-9730-F117BAA2D782}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyGrid", "MyGrid\MyGrid.vcxproj", "{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{86883DF9-7FA2-43CF-9730-F117BAA2D782}.Release|x64.Build.0 = Release|x64
 		{86883DF9-7FA2-43CF-9730-F117BAA2D782}.Release|x86.ActiveCfg = Release|Win32
 		{86883DF9-7FA2-43CF-9730-F117BAA2D782}.Release|x86.Build.0 = Release|Win32
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Debug|x64.ActiveCfg = Debug|x64
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Debug|x64.Build.0 = Debug|x64
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Debug|x86.ActiveCfg = Debug|Win32
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Debug|x86.Build.0 = Debug|Win32
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Release|x64.ActiveCfg = Release|x64
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Release|x64.Build.0 = Release|x64
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Release|x86.ActiveCfg = Release|Win32
-		{83FFD4FE-3C6D-470D-8AB9-A562B11C0E20}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

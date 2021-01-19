@@ -482,6 +482,21 @@ void CPlayScene::Unload()
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
+void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
+{
+	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	switch (KeyCode)
+	{
+	 	case DIK_S:
+		{
+			DebugOut(L"UP\n");
+			if (!mario->jumpToken)
+				mario->jumpToken = true;
+			break;
+		}
+	}
+}
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
@@ -496,34 +511,32 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (!mario->isJumping())
 				{
 					mario->setFlying(true);
-					//if(mario->GetState()!= MARIO_STATE_FLY)
 						mario->SetState(MARIO_STATE_FLY);
-					//mario->timeFlying = GetTickCount();
 				}
 			}
-			if (!mario->isJumping() && !mario->isFlying())
+			/*if (!mario->isJumping() && !mario->isFlying())
 			{
 				mario->setJumping(true);
 				mario->SetState(MARIO_STATE_JUMP);
 			}
-			else if (mario->isJumping())
+			else */
+			if (mario->isJumping())
 			{
 				mario->setIsOnSky(true);
 				mario->vy = (float)0.00001;
 			}
-			else
+			/*			else
 			{
 
 				mario->vy = (float)-0.2;
 				//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
-			}
+			}*/
 		}		
 		else if (!mario->isJumping())
 		{
 			mario->setJumping(true);
 			mario->SetState(MARIO_STATE_JUMP);
 		}
-		//mario->SetState(MARIO_STATE_JUMP);
 		break;
 	}
 	case DIK_A:case DIK_Z:
@@ -612,11 +625,51 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-	/*if (game->IsKeyDown(DIK_S) && !mario->getIsOnSky())
-	{
-		mario->vy -= (float)0.035;
-	}*/
+	if (game->IsKeyDown(DIK_S) && mario->jumpToken)
+	{		
+		float y = mario->y;
+		float y0 = mario->oldY;
 		
-	
-	
+		
+		if (!mario->isJumping())
+		{
+			if (y > y0 - MARIO_MIN_JUMP)
+			{
+				mario->setJumping(true);
+				mario->SetState(MARIO_STATE_JUMP);
+			}
+		}
+		else
+		{
+			if (y > y0 - MARIO_MAX_JUMP && !mario->isJumpHigh)
+			{
+				if (mario->vy > 0)
+				{
+					mario->y--;
+					mario->vy = 0;
+				}
+			}
+			else
+			{
+				mario->isJumpHigh = true;
+				mario->jumpToken = false;
+				if (y < y0)
+				{
+					mario->y++;
+					mario->vy = 0;
+				}
+				else
+					mario->y = y0;
+				
+			}
+		}
+		/*if (y0 - y <= 2)
+		{
+			mario->jumpToken = false;
+			DebugOut(L" %f  %f	%d\n", y0, y, mario->isJumpHigh);
+		}*/
+			
+		
+
+	}
 }

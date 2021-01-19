@@ -3,7 +3,7 @@
 //#pragma warning(disable:28159) 
 #define MARIO_WALKING_SPEED				0.08f
 //0.1f
-#define MARIO_JUMP_SPEED_Y				0.45f
+#define MARIO_JUMP_SPEED_Y				0.38f
 #define MARIO_JUMP_DEFLECT_SPEED		0.2f
 #define MARIO_GRAVITY					0.0017f
 #define MARIO_STOP_ACCELERATION			0.003f
@@ -130,6 +130,9 @@
 
 #define SCENE_TYPE_PLAYSCENE 1
 #define SCENE_TYPE_BEGIN 0
+
+#define MARIO_MIN_JUMP	55
+#define MARIO_MAX_JUMP	75
 class CMario : public CGameObject
 {
 	int level;
@@ -201,4 +204,9 @@ public:
 	float firedTime = 0;
 	//val to know which move brick mario in 
 	int moveBrickID = -1;
+	//for making jump 
+	float oldY = 0;
+	bool isJumpHigh = false;
+	//for : when press s so long , just 1 jump , not many 
+	bool jumpToken = true;
 };
