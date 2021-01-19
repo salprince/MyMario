@@ -403,43 +403,55 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 	// Update camera to follow mario
 	float cx, cy;
+	int idScene = (int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID();
 	player->GetPosition(cx, cy);
-	
-	cx -= game->GetScreenWidth() / 2;
+	//if (idScene == 3)
+		cx -= game->GetScreenWidth() / 2;
+	//else cx++;
 	cy -= game->GetScreenHeight() / 2;
 	
+
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->state != MARIO_STATE_DIE )
 	{
-		CGame::GetInstance()->SetCamPos(15, 0);
-		if (cx < 15)
+		//if(((CPlayScene*)CGame::GetInstance()->GetCurrentScene() )
+		//DebugOut(L"%d\n ", (CPlayScene*)CGame::GetInstance()->GetCurrentSceneID());
+		//if (idScene == 3)
 		{
 			CGame::GetInstance()->SetCamPos(15, 0);
-		}
+			if (cx < 15)
+			{
+				CGame::GetInstance()->SetCamPos(15, 0);
+			}
 
-		else if (cy < -140)
-		{
-			for (int i = 0; i < 140; i++)
-				CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
+			else if (cy < -140)
+			{
+				for (int i = 0; i < 140; i++)
+					CGame::GetInstance()->SetCamPos(round(cx), (float)-i);
+			}
+			else if (cy < -160)
+			{
+				CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+			}
+			else if (cy > 150 && cx > 1900 && switchSceneTime == 0)
+			{
+				CGame::GetInstance()->SetCamPos((float)round(2145), (float)300);
+			}
+
+			else if (cx > 2444)
+			{
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
+				CGame::GetInstance()->SetCamPos(2445, 0);
+			}
+			else
+			{
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
+				CGame::GetInstance()->SetCamPos(round(cx), 0);
+			}
 		}
-		else if (cy < -160)
+		/*else if (idScene == 4)
 		{
-			CGame::GetInstance()->SetCamPos(round(cx), round(cy));
-		}
-		else if (cy > 150 && cx >1900 && switchSceneTime == 0)
-		{
-			CGame::GetInstance()->SetCamPos((float)round(2145), (float)300);
-		}
-		
-		else if (cx > 2444)
-		{
-			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = false;
-			CGame::GetInstance()->SetCamPos(2445, 0);
-		}
-		else 
-		{
-			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUB()->isMove = true;
-			CGame::GetInstance()->SetCamPos(round(cx), 0);
-		}
+			
+		}*/
 	}
 	
 		
@@ -504,6 +516,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
+		DebugOut(L"DOWN\n");
 		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{
 			if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state == MARIO_STATE_FLY)
@@ -514,23 +527,22 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 						mario->SetState(MARIO_STATE_FLY);
 				}
 			}
-			/*if (!mario->isJumping() && !mario->isFlying())
+			if (!mario->isJumping() && !mario->isFlying())
 			{
 				mario->setJumping(true);
 				mario->SetState(MARIO_STATE_JUMP);
 			}
-			else */
-			if (mario->isJumping())
+			else if (mario->isJumping())
 			{
 				mario->setIsOnSky(true);
 				mario->vy = (float)0.00001;
 			}
-			/*			else
+			else
 			{
 
 				mario->vy = (float)-0.2;
 				//mario->SetState(MARIO_STATE_JUMP_WAVE_TAIL);
-			}*/
+			}
 		}		
 		else if (!mario->isJumping())
 		{
@@ -625,7 +637,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-	if (game->IsKeyDown(DIK_S) && mario->jumpToken)
+	/*if (game->IsKeyDown(DIK_S) && mario->jumpToken)
 	{		
 		float y = mario->y;
 		float y0 = mario->oldY;
@@ -641,13 +653,13 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		}
 		else
 		{
-			if (y > y0 - MARIO_MAX_JUMP && !mario->isJumpHigh)
+			if (y0 -y < MARIO_MAX_JUMP && !mario->isJumpHigh)
 			{
-				if (mario->vy > 0)
+				if (mario->vy > -0.05)
 				{
-					mario->y--;
-					mario->vy = 0;
+					mario->vy = -0.07;
 				}
+				
 			}
 			else
 			{
@@ -663,13 +675,5 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				
 			}
 		}
-		/*if (y0 - y <= 2)
-		{
-			mario->jumpToken = false;
-			DebugOut(L" %f  %f	%d\n", y0, y, mario->isJumpHigh);
-		}*/
-			
-		
-
-	}
+	}*/
 }

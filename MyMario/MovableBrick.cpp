@@ -49,6 +49,8 @@ void MovableBrick::fallBlockBrick(int id)
 {
 	if (this->id == id)
 	{
+		if (!isActive)
+			isActive = true;
 		x = round(x);
 		y+=0.5;
 		nx = 0;

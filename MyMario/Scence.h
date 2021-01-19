@@ -19,6 +19,8 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
 	int typeScene = 1;
+	int maxX = 0;
+	int maxY = 0;
 };
 typedef CScene* LPSCENE;
 

@@ -168,9 +168,6 @@
     <ClInclude Include="Grid.h">
       <Filter>Header Files\Grid</Filter>
     </ClInclude>
-    <ClInclude Include="Cell.h">
-      <Filter>Header Files\Grid</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -265,9 +262,6 @@
     </ClCompile>
     <ClCompile Include="MovableBrick.cpp">
       <Filter>Source Files\Brick</Filter>
-    </ClCompile>
-    <ClCompile Include="Cell.cpp">
-      <Filter>Source Files\Grid</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files\Grid</Filter>

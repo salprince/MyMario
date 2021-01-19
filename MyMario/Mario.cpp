@@ -269,7 +269,10 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(MARIO_STATE_HOLD);
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{	float PortalTime = 0;
+{
+	//DebugOut(L"%f", x);
+	DebugOut(L" %d  %d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxX, ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxY);
+	float PortalTime = 0;
 	CGameObject::Update(dt);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -351,14 +354,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			int stateCollision = -1;
 			if (dynamic_cast<CGoomba*>(e->obj))
 				stateCollision = MARIO_COLLISION_GOOMBA;
+			else if (dynamic_cast<MicsBrick*>(e->obj))
+				stateCollision = MARIO_COLLISION_MICSBRICK;
 			else if (dynamic_cast<BlueP*>(e->obj))
 				stateCollision = MARIO_COLLISION_BLUE_P;
 			else if (dynamic_cast<LevelMushroom*>(e->obj))
 				stateCollision = MARIO_COLLISION_LEVELMUSHROOM;
 			else if (dynamic_cast<Coin*>(e->obj))
 				stateCollision = MARIO_COLLISION_COIN;
-			else if (dynamic_cast<MicsBrick*>(e->obj))
-				stateCollision = MARIO_COLLISION_MICSBRICK;
 			else if (dynamic_cast<CPortal*>(e->obj))
 				stateCollision = MARIO_COLLISION_GATE;
 			else if (dynamic_cast<ColorBrick*>(e->obj))
@@ -563,6 +566,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setFlying(false);
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
+					if (!this->jumpToken)
+						jumpToken = true;
+					if (this->isJumpHigh)
+						isJumpHigh= false;
 				}
 				break;
 			}
@@ -584,8 +591,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (this->getIsOnSky())
 					this->setIsOnSky(false);
 				//DebugOut(L"gohere \n");
-				/*if (!this->isJumpHigh)
-					this->isJumpHigh = true;*/
+				if (!this->isJumpHigh)
+					this->isJumpHigh = true;
 				if (e->ny >0)
 				{
 					if (micsBrick->state != MICSBRICK_STATE_DIE)

@@ -1,5 +1,2 @@
-﻿  Mario.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(303,13): warning C4305: '=': truncation from 'double' to 'float'
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(482,19): warning C4305: '=': truncation from 'double' to 'float'
-D:\ProjectGame\MyNewMario\MyMario\MyMario\Mario.cpp(484,18): warning C4305: '=': truncation from 'double' to 'float'
+﻿  Game.cpp
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe
