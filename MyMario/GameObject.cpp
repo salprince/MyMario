@@ -23,6 +23,12 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	this->dt = dt;
 	dx = vx * dt;
 	dy = vy * dt ;
+	if ((int)x % 32 == 0)
+		gridX = x / 32;
+	else gridX = x / 32 + 1;
+	if ((int)y % 32 == 0)
+		gridY = y / 32;
+	else gridY = y / 32 + 1;
 	
 }
 

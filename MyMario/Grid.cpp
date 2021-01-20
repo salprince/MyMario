@@ -7,6 +7,7 @@ void MyGrid::LoadFile(string path0)
 	LPCWSTR path = ToLPCWSTR(path0);
 	ifstream f;
 	f.open(path);
+	resultpath = path0.insert(0, "GRID_");
 	// current resource section flag
 	int section = SCENE_SECTION_UNKNOWN;
 
@@ -84,15 +85,33 @@ void MyGrid::_ParseSection_NOT_OBJECT(string line)
 void MyGrid::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-	//tokens.insert(tokens.begin(), "99999");
-	if(tokens.size() >=3)
-		line.insert(0, "99999\t");
+	int gridX = -1, gridY = -1;
+	
+	if (tokens.size() >= 3)
+	{
+		int object_type = atoi(tokens[0].c_str());
+		int x = (float)atof(tokens[1].c_str());
+		int  y = (float)atof(tokens[2].c_str());
+		if (x% 32 == 0)
+			gridX = x/ 32;
+		else gridX = x / 32 + 1;
+		if (y % 32 == 0)
+			gridY = y/ 32;
+		else gridY = y / 32 + 1;
+		string s = std::to_string(gridX) + "\t" + std::to_string(gridY) + "\t";
+		line.insert(0, s);
+	}		
 	ofstream MyFile;
 	MyFile.open(resultpath, std::ios_base::app);
 	MyFile << line << endl;
 	MyFile.close();
 }
-void MyGrid::getMaxXY()
+void MyGrid::getMaxXY(int maxScreenX, int maxScreenY)
 {
-
+	if (maxScreenX % 32 == 0)
+		this->maxX = maxScreenX / 32;
+	else this->maxX = maxScreenX / 32 +1;
+	if (maxScreenY % 32 == 0)
+		this->maxY = maxScreenY / 32;
+	else this->maxY = maxScreenY / 32 + 1;
 }

@@ -11,6 +11,9 @@
 #define GOOMBA_STATE_DIE 200
 #define GOOMBA_STATE_CLEAR 300
 
+#define GOOMBA_LEVEL_NORMAL 1
+#define GOOMBA_LEVEL_WING	2 
+
 #define GOOMBA_ANI_WALKING_LEFT 0
 #define GOOMBA_ANI_WALKING_RIGHT 0
 #define GOOMBA_ANI_DIE 1
@@ -27,6 +30,7 @@ class CGoomba : public CGameObject
 	int startDying = 0;
 	int endDying = 0;
 	bool isDie = false;
+	
 
 public:
 	CGoomba();
@@ -39,7 +43,7 @@ public:
 	float startx = 0;
 	void setIsDie(bool a) { isDie = a; }
 	float appearTime = 0;
-	int type = -1;
 	bool isJump = false;
 	bool wing = true;
+	int level = 1;
 };

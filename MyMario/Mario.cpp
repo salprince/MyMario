@@ -271,8 +271,9 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOut(L"%f", x);
-	DebugOut(L" %d  %d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxX, ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxY);
+	//DebugOut(L" %d  %d\n", ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxX, ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->maxY);
 	float PortalTime = 0;
+
 	CGameObject::Update(dt);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -412,9 +413,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
-						/*if (goomba->type == 1)
-							goomba->wing ==false;
-						else */
+						if (goomba->level == 2)
+							goomba->level--;
+						else 
 							goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
@@ -472,33 +473,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (koopa->GetState() != KOOPAS_STATE_DIE && koopa->GetState() != KOOPAS_STATE_SHELL)
 						{
+							if (koopa->level == 2)
+								koopa->level--;
+							else
 							koopa->SetState(KOOPAS_STATE_SHELL);
 							if (koopa->isShell == false)
 								koopa->y += 9;
 							koopa->isShell = true;
-							vy = (float)(-MARIO_JUMP_DEFLECT_SPEED);
-							
-							//type 2 is red koopas
-							if (koopa->typeKoopas != 2)
-							{
-								if (vx < 0)
-									vx = -0.2;
-								else
-									vx = 0.2;
-							}
+							vy = (float)(-MARIO_JUMP_DEFLECT_SPEED);							
+							if (vx < 0)
+								vx = -0.2;
 							else
-							{
-								if (koopa->y < 220 && koopa->y > 216)
-									koopa->x = 2100;
-								else
-									koopa->x-=10;
-								if (nx != 0)
-									x -= 20 * nx;
-								else
-									x -= 20;
-								//vx = 0.2f;
-								//x = vx * dt;
-							}
+								vx = 0.2;
 						}
 						
 					}

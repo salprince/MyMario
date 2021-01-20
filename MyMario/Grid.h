@@ -15,6 +15,6 @@ public :
 	void LoadFile(string path0);
 	void _ParseSection_NOT_OBJECT(string line);
 	void _ParseSection_OBJECTS(string line);
-	void getMaxXY();
+	void getMaxXY(int maxScreenX, int maxScreenY);
 };
 

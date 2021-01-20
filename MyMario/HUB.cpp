@@ -16,32 +16,41 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 	if (isMove && ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetState()!= MARIO_STATE_DIE)
 	{
 		float cx, cy;
-		CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		player->GetPosition(cx, cy);
+		CPlayScene* scene = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene());
+		CMario* player = scene->GetPlayer();
 		CGame* game = CGame::GetInstance();
-		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;
-		if (cx < 15)
-		{
-			this->x = 15;
-			this->y = 260;
-		}
-		else if (cy < -140)
-		{
-			this->x = round(player->x - game->GetScreenWidth() / 2);
-			this->y = (float)round(-140 + game->GetScreenHeight() + -40);
-		}
-		else
-		{
-			this->x = round(player->x - game->GetScreenWidth() / 2);
-			this->y = 260;
-		}	
 
-		if (player->y > 250)
+		x = scene->cx;
+		cy= game->GetScreenHeight() / 2;
+		DebugOut(L"%f\n", x);
+		if (game->GetCurrentSceneID() == 3)
 		{
-			this->y = 525;
-			this->x = (float)2350 - game->GetScreenWidth() / 2;
+			player->GetPosition(cx, cy);
+			cx -= game->GetScreenWidth() / 2;
+			cy -= game->GetScreenHeight() / 2;
+			if (cx < 15)
+			{
+				this->x = 15;
+				this->y = 260;
+			}
+			else if (cy < -140)
+			{
+				this->x = round(player->x - game->GetScreenWidth() / 2);
+				this->y = (float)round(-140 + game->GetScreenHeight() + -40);
+			}
+			else
+			{
+				this->x = round(player->x - game->GetScreenWidth() / 2);
+				this->y = 260;
+			}
+
+			if (player->y > 250)
+			{
+				this->y = 525;
+				this->x = (float)2350 - game->GetScreenWidth() / 2;
+			}
 		}
+		
 	}
 	
 	//update point and time to HUD

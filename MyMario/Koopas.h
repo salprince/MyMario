@@ -30,6 +30,8 @@
 
 #define GRAVITY 0.001f
 #define JUMP_SPEECH 0.12f
+#define KOOPAS_LEVEL_NORMAL	1
+#define KOOPAS_LEVEL_WING	2
 
 class Koopas : public CGameObject
 {
@@ -73,6 +75,7 @@ public:
 		
 	}
 	int typeKoopas = 0;
+	int level = 1;
 	bool isJump = false;
 	float appearTime = 0;
 	void BeginSceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);

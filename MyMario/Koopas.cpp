@@ -64,7 +64,6 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//type 2 is red koopas
-	
 	if (state != KOOPAS_STATE_DIE)
 	{
 		if (state == KOOPAS_STATE_HOLD)
@@ -109,7 +108,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				this->vy += GRAVITY;
 			}
-
+			
 			CalcPotentialCollisions(coObjects, coEvents);
 		}
 		
@@ -121,7 +120,7 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetState(KOOPAS_STATE_HOLD);
 		}
-		else if(typeKoopas!=2)
+		else /*if(typeKoopas!=2)*/
 		{
 			if (getShellIn() == 0)
 			{
@@ -160,15 +159,15 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (coEvents.size() == 0)
 	{		
-		if (!isJump && this->typeKoopas==1 )
+		if (!isJump && this->level == 2)
 		{
 			if (this->GetState() != KOOPAS_STATE_HOLD && this->GetState() != KOOPAS_STATE_SHELL_RUNNING && this->GetState() != KOOPAS_STATE_SHELL && this->GetState() != KOOPAS_STATE_DIE)
 			{
 				vy += -JUMP_SPEECH;
 				isJump = true;
 			}
-			
-		}			
+
+		}
 		x += dx;
 		y += dy;
 	}
@@ -231,6 +230,16 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				}
 			}
+			else if (dynamic_cast<BreakBrick*>(e->obj))
+			{
+				CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+				BreakBrick* breakBrick = dynamic_cast<BreakBrick*>(e->obj);
+				if (breakBrick->state == BREAK_BRICK_STATE_COIN)
+				{
+					if(y<220)
+						y++;
+				}
+			}
 		}
 
 	}
@@ -256,11 +265,10 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<BreakBrick*>(e->obj))
 			{
-				//e->obj->SetState(GOOMBA_STATE_CLEAR);
 				e->obj->nx = -e->obj->nx;
-				if (e->obj->x == 2112 && e->obj->y == 219);
-				else 
-					e->obj->SetState(BREAK_BRICK_STATE_DIE);
+				/*if (e->obj->x == 2112 && e->obj->y == 219);
+				else */
+				e->obj->SetState(BREAK_BRICK_STATE_DIE);
 				
 			}
 		}
@@ -287,7 +295,7 @@ void Koopas::Render()
 		else ani = GREEN_KOOPAS_ANI_SHELL;
 	}
 		
-	else if (this->typeKoopas==1)
+	else if (this->level==2)
 	{
 		if (vx > 0) ani = GREEN_KOOPAS_ANI_WING_RIGHT;
 		else if (vx < 0) ani = GREEN_KOOPAS_ANI_WING_LEFT;

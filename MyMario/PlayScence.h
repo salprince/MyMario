@@ -67,6 +67,7 @@ public:
 	vector <int> pointList = { 100,200,400,800,1000,2000,4000,8000 };
 	bool isShowEndText = false;
 	float switchSceneTime = 0;
+	float cx = 0;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

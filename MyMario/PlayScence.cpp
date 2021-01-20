@@ -106,13 +106,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
-	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 5) return; // skip invalid lines - an object set must have at least id, x, y
+	int gridx= atoi(tokens[0].c_str());
+	int gridy = atoi(tokens[1].c_str());
+	int object_type = atoi(tokens[2].c_str());
+	float x = (float)atof(tokens[3].c_str());
+	float y = (float)atof(tokens[4].c_str());
 
-	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
-
-	int ani_set_id = atoi(tokens[3].c_str());
+	int ani_set_id = atoi(tokens[5].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
@@ -140,34 +141,40 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: 
 	{
 		obj = new CGoomba();
-		float l = (float)atof(tokens[4].c_str());
+		float l = (float)atof(tokens[6].c_str());
 		obj->length = l;
-		if (tokens.size() == 6)
+		if (tokens.size() == 8)
 		{
-			int temp = (int)atof(tokens[5].c_str());
-			dynamic_cast<CGoomba*>(obj)->type = temp;
+			int temp = (int)atof(tokens[7].c_str());
+			dynamic_cast<CGoomba*>(obj)->level = temp;
 		}
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS:
 	{
-		float l = (float)atof(tokens[4].c_str());
-		float nx0 = (float)atof(tokens[5].c_str());
+		float l = (float)atof(tokens[6].c_str());
+		float nx0 = (float)atof(tokens[7].c_str());
 		obj = new Koopas();
 		obj->length = l;
 		obj->nx = (int)nx0;
-		if (tokens.size() == 7)
+		if (tokens.size() >= 9)
 		{
-			int temp = (int)atof(tokens[6].c_str());
+			int temp = (int)atof(tokens[8].c_str());
 			dynamic_cast<Koopas*>(obj)->typeKoopas = temp;
+			
+		}
+		if (tokens.size() == 10)
+		{
+			int temp = (int)atof(tokens[9].c_str());
+			dynamic_cast<Koopas*>(obj)->level = temp;
 		}
 		break;
 	}
 	
 	case OBJECT_TYPE_BACKROUND:
 	{
-		int typeAnimation= (int)atof(tokens[3].c_str());
+		int typeAnimation= (int)atof(tokens[5].c_str());
 		obj = new backRound();
 		if (CGame::GetInstance()->GetCurrentScene()->typeScene !=0)
 		{
@@ -180,14 +187,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: 
 	{
 		obj = new Coin();
-		if (tokens.size() == 5)
+		if (tokens.size() == 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<Coin*>(obj)->id = temp;
 		}
-		if (tokens.size() == 6)
+		if (tokens.size() == 8)
 		{
-			int temp1 = (int)atof(tokens[5].c_str());
+			int temp1 = (int)atof(tokens[7].c_str());
 			dynamic_cast<Coin*>(obj)->isMicsBrick = temp1;
 		}
 		break;
@@ -195,9 +202,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MICSBRICK: 
 	{
 		obj = new MicsBrick();
-		if (tokens.size() == 5)
+		if (tokens.size() == 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<MicsBrick*>(obj)->oldY = y;
 			dynamic_cast<MicsBrick*>(obj)->id = temp;
 		}
@@ -206,9 +213,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_LEVELMUSHROOM:
 	{
 		obj = new LevelMushroom();
-		if (tokens.size() == 5)
+		if (tokens.size() == 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<LevelMushroom*>(obj)->id = temp;
 			dynamic_cast<LevelMushroom*>(obj)->start_x = x;
 			dynamic_cast<LevelMushroom*>(obj)->start_y = y;
@@ -219,7 +226,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{		
 		
 		obj = new Fire(); 
-		int l = (int)atof(tokens[4].c_str());
+		int l = (int)atof(tokens[6].c_str());
 		dynamic_cast<Fire*>(obj)->id = l;
 		dynamic_cast<Fire*>(obj)->start_x = obj->x;
 		dynamic_cast<Fire*>(obj)->start_y = obj->y;
@@ -236,9 +243,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new ShootingRedTree(); break;
 		dynamic_cast<ShootingRedTree*>(obj)->start_y = y;
-		if (tokens.size() >= 5)
+		if (tokens.size() >= 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<ShootingRedTree*>(obj)->treeID = temp;
 		}
 		
@@ -246,14 +253,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLUE_P:
 	{
 		obj = new BlueP();
-		if (tokens.size() >= 5)
+		if (tokens.size() >= 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<BlueP*>(obj)->id = temp;
 		}
-		if (tokens.size() == 6)
+		if (tokens.size() == 8)
 		{
-			int temp = (int)atof(tokens[5].c_str());
+			int temp = (int)atof(tokens[7].c_str());
 			dynamic_cast<BlueP*>(obj)->idCoin = temp;
 		}
 		break;
@@ -261,9 +268,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BREAK_BRICK:
 	{
 		obj = new BreakBrick();
-		if (tokens.size() == 5)
+		if (tokens.size() == 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<BreakBrick*>(obj)->id = temp;
 		}
 		break;
@@ -271,15 +278,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MOVE_BRICK:
 	{
 		obj = new MovableBrick();
-		if (tokens.size() >= 5)
+		if (tokens.size() >= 7)
 		{
-			int temp = (int)atof(tokens[4].c_str());
+			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<MovableBrick*>(obj)->id = temp;
-			int temp1 = (int)atof(tokens[5].c_str());
+			int temp1 = (int)atof(tokens[7].c_str());
 			dynamic_cast<MovableBrick*>(obj)->relativePosition= temp1;
-			int temp2 = (int)atof(tokens[6].c_str());
+			int temp2 = (int)atof(tokens[8].c_str());
 			dynamic_cast<MovableBrick*>(obj)->x0= temp2;
-			int temp3 = (int)atof(tokens[7].c_str());
+			int temp3 = (int)atof(tokens[9].c_str());
 			dynamic_cast<MovableBrick*>(obj)->x1= temp3;
 		}
 		break;
@@ -288,9 +295,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = (float)atof(tokens[4].c_str());
-		float b = (float)atof(tokens[5].c_str());
-		int scene_id = atoi(tokens[6].c_str());
+		float r = (float)atof(tokens[6].c_str());
+		float b = (float)atof(tokens[7].c_str());
+		int scene_id = atoi(tokens[8].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
@@ -302,7 +309,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-
+	obj->gridX = gridx;
+	obj->gridY = gridy;
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
@@ -365,25 +373,30 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
+	int lengthX = 0, lengthY = 0;
+	if ((int)game->GetScreenWidth() % 32 == 0)
+		lengthX = game->GetScreenWidth() / 32;
+	else lengthX = game->GetScreenWidth() / 32 + 1;
+	if ((int)game->GetScreenHeight() % 32 == 0)
+		lengthY = game->GetScreenHeight() / 32;
+	else lengthY = game->GetScreenHeight() / 32 + 1;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		if(abs(objects[i]->x - player->x) < game->GetScreenWidth())
+		if((abs(objects[i]->gridX - player->gridX)) < lengthX && (abs(objects[i]->gridY - player->gridY) < lengthY))
 			coObjects.push_back(objects[i]);
 		else if (dynamic_cast<MyHUB*>(objects[i]))
 		{
-			//DebugOut(L"HUBBB push back \n");
 			coObjects.push_back(objects[i]);
 		}
 		else if (dynamic_cast<Fire*>(objects[i]))
 		{
-			//DebugOut(L"HUBBB push back \n");
 			coObjects.push_back(objects[i]);
 		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (abs(objects[i]->x - player->x) < game->GetScreenWidth())
+		if ((abs(objects[i]->gridX - player->gridX)) < lengthX && (abs(objects[i]->gridY - player->gridY)<lengthY))
 			objects[i]->Update(dt, &coObjects);
 		else if (dynamic_cast<MyHUB*>(objects[i]))
 		{
@@ -402,20 +415,26 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 	// Update camera to follow mario
-	float cx, cy;
+	float cy;
 	int idScene = (int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID();
-	player->GetPosition(cx, cy);
-	//if (idScene == 3)
-		cx -= game->GetScreenWidth() / 2;
-	//else cx++;
-	cy -= game->GetScreenHeight() / 2;
-	
 
+	
+	if (idScene == 3)
+	{
+		player->GetPosition(cx, cy);
+		cy -= game->GetScreenHeight() / 2;
+		cx -= game->GetScreenWidth() / 2;
+	}
+		
+	else cx++;
+	
+	
+	//DebugOut(L"%f %d\n", cx, idScene);
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->state != MARIO_STATE_DIE )
 	{
 		//if(((CPlayScene*)CGame::GetInstance()->GetCurrentScene() )
 		//DebugOut(L"%d\n ", (CPlayScene*)CGame::GetInstance()->GetCurrentSceneID());
-		//if (idScene == 3)
+		if (idScene == 3)
 		{
 			CGame::GetInstance()->SetCamPos(15, 0);
 			if (cx < 15)
@@ -448,10 +467,10 @@ void CPlayScene::Update(DWORD dt)
 				CGame::GetInstance()->SetCamPos(round(cx), 0);
 			}
 		}
-		/*else if (idScene == 4)
+		else /*if (idScene == 4)*/
 		{
-			
-		}*/
+			CGame::GetInstance()->SetCamPos(round(cx), 0);
+		}
 	}
 	
 		
@@ -501,7 +520,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	{
 	 	case DIK_S:
 		{
-			DebugOut(L"UP\n");
+			//DebugOut(L"UP\n");
 			if (!mario->jumpToken)
 				mario->jumpToken = true;
 			break;
@@ -516,7 +535,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
-		DebugOut(L"DOWN\n");
+		//DebugOut(L"DOWN\n");
 		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{
 			if (abs(mario->vx) >= MARIO_MAX_WALKING_SPEED || mario->state == MARIO_STATE_FLY)
