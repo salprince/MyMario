@@ -1,4 +1,5 @@
 #include "ChimneyPortal.h"
+#include "PlayScence.h"
 ChimneyPortal::ChimneyPortal()
 {
 	
@@ -10,6 +11,10 @@ void ChimneyPortal::GetBoundingBox(float& left, float& top, float& right, float&
 	top = y;
 	right = x + width;
 	bottom = y + height;
+	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->portalTime != 0)
+	{
+		left = top=right = bottom = 0;
+	}
 }
 
 

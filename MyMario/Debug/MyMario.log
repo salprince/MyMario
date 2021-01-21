@@ -1,6 +1,5 @@
-﻿  PlayScence.cpp
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(293,42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(295,42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(494,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\ProjectGame\MyNewMario\MyMario\MyMario\PlayScence.cpp(756,25): warning C4305: '=': truncation from 'double' to 'float'
+﻿  Fire.cpp
+  Mario.cpp
+  PlayScence.cpp
+  Generating Code...
   MyMario.vcxproj -> D:\ProjectGame\MyNewMario\MyMario\Debug\MyMario.exe

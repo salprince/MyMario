@@ -19,7 +19,7 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 		CPlayScene* scene = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene());
 		CMario* player = scene->GetPlayer();
 		CGame* game = CGame::GetInstance();
-		DebugOut(L"%f\n", scene->cx);
+		//DebugOut(L"%f\n", scene->cx);
 		x = round(scene->cx);
 		if (scene->cx > 2182)
 			x = 2182;

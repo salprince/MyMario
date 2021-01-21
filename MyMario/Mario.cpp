@@ -172,6 +172,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (y < 100)
 				{
 					y += (float)0.5;
+					vy = 0;
 					x = 2282;
 				}
 				else
@@ -186,7 +187,8 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				//if (y < 200)
 				{
-					y += (float)0.1;
+					y += (float)0.5;
+					vy = 0;
 					x = 1940;
 				}
 			}
@@ -325,7 +327,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			x += min_tx * dx + nx * 0.4f;
 			y += min_ty * dy + ny * 0.4f;
 			x += 0.5;
-			vx = 0.05;
+			vx = (float)0.05;
 			state = MARIO_STATE_WALKING_RIGHT;
 		}
 		return;
@@ -506,9 +508,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							koopa->isShell = true;
 							vy = (float)(-MARIO_JUMP_DEFLECT_SPEED);							
 							if (vx < 0)
-								vx = -0.2;
+								vx = (float)-0.2;
 							else
-								vx = 0.2;
+								vx = (float)0.2;
 						}
 						
 					}
@@ -520,7 +522,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							//making kick koopas
 							if (koopa->GetState() == KOOPAS_STATE_SHELL && abs(koopa->vx) <= 0.01)
 							{
-								DebugOut(L"vx %f nx %d\n ", vx, nx);
+								//DebugOut(L"vx %f nx %d\n ", vx, nx);
 								if (abs(vx) > 0.06)
 								{
 									if (readyToHoldKoopas)
@@ -592,7 +594,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			case MARIO_COLLISION_MICSBRICK:
 			{
-				DebugOut(L"go here\n\n");
+				//DebugOut(L"go here\n\n");
 				MicsBrick* micsBrick = dynamic_cast<MicsBrick*>(e->obj);
 				if (this->isJumping())
 					this->setJumping(false);
@@ -682,7 +684,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						brick->SetState(BREAK_BRICK_STATE_DIE);
 					
 				}
-				DebugOut(L"%d	%d\n", nx, ny);
+				//DebugOut(L"%d	%d\n", nx, ny);
 				break;
 				//return;
 				
@@ -1077,7 +1079,7 @@ void CMario::SetState(int state)
 		{
 			if(level!=MARIO_LEVEL_TAIL)
 				vy = -MARIO_JUMP_SPEED_Y;
-			else vy = -MARIO_JUMP_SPEED_Y*1.4;
+			else vy = (float)(-MARIO_JUMP_SPEED_Y*1.4);
 		}
 			
 		ny = -1;
@@ -1089,7 +1091,7 @@ void CMario::SetState(int state)
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		if (vy >= -0.8)
 			vy = -MARIO_FLY_SPEED_Y;
-		else vy = -0.8;
+		else vy = (float)-0.8;
 		ny = -1;
 		break;
 	case MARIO_STATE_IDLE:

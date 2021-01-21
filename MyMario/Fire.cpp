@@ -56,12 +56,12 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			this->Reset();
 			this->nx = marioHandle->treeNx;
 			this->isFire = (int)GetTickCount64();
-			this->vx = nx*0.06;
-			this->vy +=0.02;
+			this->vx = (float)(nx*0.06);
+			this->vy +=(float)0.02;
 			this->isFiring = true;
 			this->x = marioHandle->treeX + nx*10;
 			this->y = marioHandle->treeY;
-			firedTime = GetTickCount64();
+			firedTime = (float)GetTickCount64();
 		}
 	}
 	if (isFire != 0)
@@ -86,7 +86,7 @@ void Fire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		{
-			float min_tx, min_ty, nx = 0, ny;
+			float min_tx, min_ty, nx = 0, ny=0;
 			float rdx = 0;
 			float rdy = 0;
 			if (id != 6)

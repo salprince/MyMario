@@ -290,9 +290,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int temp1 = (int)atof(tokens[7].c_str());
 			dynamic_cast<MovableBrick*>(obj)->relativePosition= temp1;
 			int temp2 = (int)atof(tokens[8].c_str());
-			dynamic_cast<MovableBrick*>(obj)->x0= temp2;
+			dynamic_cast<MovableBrick*>(obj)->x0= (float)temp2;
 			int temp3 = (int)atof(tokens[9].c_str());
-			dynamic_cast<MovableBrick*>(obj)->x1= temp3;
+			dynamic_cast<MovableBrick*>(obj)->x1= (float)temp3;
 		}
 		break;
 	}
@@ -432,15 +432,15 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 	// Update camera to follow mario
-	float cy;
+	float cy=0;
 	if (idScene == 3)
 	{
 		player->GetPosition(cx, cy);
 		cy -= game->GetScreenHeight() / 2;
 		cx -= game->GetScreenWidth() / 2;
 	}
-	/*else if(cx<1640)
-		cx+=0.5;*/
+	else if(cx<1640)
+		cx+=0.5;
 	else if (cx > 2182)
 		cx = 2182;
 	else
@@ -491,7 +491,7 @@ void CPlayScene::Update(DWORD dt)
 		else /*if (idScene == 4)*/
 		{
 			if (cx > 2182)
-				CGame::GetInstance()->SetCamPos(round(2182), 0);
+				CGame::GetInstance()->SetCamPos((float)2182, 0);
 			else	CGame::GetInstance()->SetCamPos(round(cx), 0);
 		}
 	}
@@ -619,7 +619,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				mario->setIsFire(true);
 
 				mario->timeShooting =(int) GetTickCount64();
-				if(mario->FireID<10)
+				if(mario->FireID<2)
 					mario->FireID++;
 				else 
 					mario->FireID=1;
@@ -753,7 +753,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 					{
 						if (mario->vy > -0.05)
 						{
-							mario->vy = -0.07;
+							mario->vy = (float)-0.07;
 						}
 
 					}
