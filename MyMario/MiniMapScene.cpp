@@ -295,11 +295,17 @@ void MinimapSceneScenceKeyHandler::OnKeyDown(int KeyCode)
 			case 11: mario->point += 2; break;
 			}
 			mario->Update();
+		
 			break;
 		}
 		case DIK_W:
 		{
-			CGame::GetInstance()->SwitchScene(3);
+			if (mario->point == 7)
+				idNewScene = 4;
+			else if (mario->point == 2)
+				idNewScene = 3;
+			else idNewScene = 2;
+			CGame::GetInstance()->SwitchScene(this->idNewScene);
 		}
 	}
 }

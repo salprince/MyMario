@@ -39,11 +39,21 @@ void BreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// whenmario collis mics brick mario will return a value : id of micsbrick 
 	// val isCheck : to know if the coin is check or not 
 	// if coin is not check yet : bbox will be =0 , checked : bbox will 16 16 
+	if (state == BREAK_BRICK_STATE_COIN && (GetTickCount64() - time) > 5000)
+	{
+		SetState(BREAK_BRICK_STATE_ALIVE);
+		time = 0;
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->coinID = -1;
+		isCheck = false;
+	}
+
 	if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
 	{
 		if (isCheck == false )
 		{
 			this->SetState(BREAK_BRICK_STATE_COIN);
+			if (time == 0)
+				time = GetTickCount64();
 			isCheck = true;
 		};
 	}

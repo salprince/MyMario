@@ -22,7 +22,7 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 
 		x = scene->cx;
 		cy= game->GetScreenHeight() / 2;
-		DebugOut(L"%f\n", x);
+		//DebugOut(L"%f\n", x);
 		if (game->GetCurrentSceneID() == 3)
 		{
 			player->GetPosition(cx, cy);

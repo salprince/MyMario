@@ -392,6 +392,10 @@ void CPlayScene::Update(DWORD dt)
 		{
 			coObjects.push_back(objects[i]);
 		}
+		else if (dynamic_cast<CPortal*>(objects[i]))
+		{
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -405,6 +409,11 @@ void CPlayScene::Update(DWORD dt)
 		}
 
 		else if (dynamic_cast<Fire*>(objects[i]))
+		{
+			//DebugOut(L"HUBBB push back \n");
+			objects[i]->Update(dt, &coObjects);
+		}
+		else if (dynamic_cast<CPortal*>(objects[i]))
 		{
 			//DebugOut(L"HUBBB push back \n");
 			objects[i]->Update(dt, &coObjects);
@@ -426,7 +435,7 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetScreenWidth() / 2;
 	}
 		
-	else cx++;
+	//else cx++;
 	
 	
 	//DebugOut(L"%f %d\n", cx, idScene);
@@ -543,7 +552,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (!mario->isJumping())
 				{
 					mario->setFlying(true);
-						mario->SetState(MARIO_STATE_FLY);
+					mario->SetState(MARIO_STATE_FLY);
 				}
 			}
 			if (!mario->isJumping() && !mario->isFlying())
@@ -656,43 +665,101 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-	/*if (game->IsKeyDown(DIK_S) && mario->jumpToken)
+	if (game->IsKeyDown(DIK_S))
 	{		
-		float y = mario->y;
-		float y0 = mario->oldY;
-		
-		
-		if (!mario->isJumping())
+		if (mario->getLevel() == MARIO_LEVEL_TAIL)
 		{
-			if (y > y0 - MARIO_MIN_JUMP)
+			/*if (mario->state == MARIO_STATE_FLY || mario->isFlying())
 			{
-				mario->setJumping(true);
-				mario->SetState(MARIO_STATE_JUMP);
+				/*if (!mario->isJumping())
+				{
+					mario->setFlying(true);
+					mario->SetState(MARIO_STATE_FLY);
+				}
 			}
+			else if (mario->jumpToken)
+			{
+				float y = mario->y;
+				float y0 = mario->oldY;
+				if (!mario->isJumping())
+				{
+					if (y > y0 - MARIO_MIN_JUMP)
+					{
+						mario->setJumping(true);
+						mario->SetState(MARIO_STATE_JUMP);
+						//mario->setIsOnSky(true);
+						//mario->jumpToken = false;
+					}
+				}
+				else
+				{
+					if (y0 - y < MARIO_MAX_JUMP && !mario->isJumpHigh)
+					{
+						if (mario->vy > -0.05)
+						{
+							mario->vy = -0.07;
+						}
+
+					}
+					else
+					{
+						mario->isJumpHigh = true;
+						mario->jumpToken = false;
+						if (y < y0)
+						{
+							mario->y++;
+							mario->vy = 0;
+						}
+						else
+							mario->y = y0;
+
+					}
+				}
+			}*/
 		}
 		else
 		{
-			if (y0 -y < MARIO_MAX_JUMP && !mario->isJumpHigh)
+			if (mario->jumpToken)
 			{
-				if (mario->vy > -0.05)
+				float y = mario->y;
+				float y0 = mario->oldY;
+
+				if (!mario->isJumping())
 				{
-					mario->vy = -0.07;
-				}
-				
-			}
-			else
-			{
-				mario->isJumpHigh = true;
-				mario->jumpToken = false;
-				if (y < y0)
-				{
-					mario->y++;
-					mario->vy = 0;
+					if (y > y0 - MARIO_MIN_JUMP)
+					{
+						mario->setJumping(true);
+						mario->SetState(MARIO_STATE_JUMP);
+					}
 				}
 				else
-					mario->y = y0;
-				
+				{
+					if (y0 - y < MARIO_MAX_JUMP && !mario->isJumpHigh)
+					{
+						if (mario->vy > -0.05)
+						{
+							mario->vy = -0.07;
+						}
+
+					}
+					else
+					{
+						mario->isJumpHigh = true;
+						mario->jumpToken = false;
+						if (y < y0)
+						{
+							mario->y++;
+							mario->vy = 0;
+						}
+						else
+							mario->y = y0;
+
+					}
+				}
 			}
+
 		}
-	}*/
+		
+		
+	}
 }

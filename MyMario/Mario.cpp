@@ -931,7 +931,7 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_TAIL_SPIN_RIGHT;
 			}
-			else if (isFlying())
+			else if (isFlying()|| state==MARIO_STATE_FLY)
 			{
 				if (nx > 0)
 				{
@@ -1042,15 +1042,14 @@ void CMario::SetState(int state)
 			vy = -MARIO_JUMP_SPEED_Y;
 		ny = -1;
 		break;
-	case MARIO_STATE_JUMP_WAVE_TAIL:
-		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		//vy -= 0.02;
-		//vy = -MARIO_JUMP_SPEED_Y;
+	case MARIO_STATE_JUMP_WAVE_TAIL:		
 		ny = -1;
 		break;
 	case MARIO_STATE_FLY:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = -MARIO_JUMP_SPEED_Y* (float)1.5;
+		if (vy >= -0.8)
+			vy = -MARIO_FLY_SPEED_Y;
+		else vy = -0.8;
 		ny = -1;
 		break;
 	case MARIO_STATE_IDLE:

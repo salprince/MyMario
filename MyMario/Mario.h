@@ -3,7 +3,8 @@
 //#pragma warning(disable:28159) 
 #define MARIO_WALKING_SPEED				0.08f
 //0.1f
-#define MARIO_JUMP_SPEED_Y				/*0.38f*/	0.5f
+#define MARIO_JUMP_SPEED_Y				0.38f	/*0.5f*/
+#define MARIO_FLY_SPEED_Y				0.15f
 #define MARIO_JUMP_DEFLECT_SPEED		0.2f
 #define MARIO_GRAVITY					0.0017f
 #define MARIO_STOP_ACCELERATION			0.003f

@@ -31,7 +31,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
+	
 	MiniMario* getMiniMario() { return miniMario; }
 };
 
@@ -42,6 +42,7 @@ public:
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode) {};
 	MinimapSceneScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
+	int idNewScene = 3;
 };
 
 
