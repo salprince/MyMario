@@ -81,8 +81,9 @@ void MyHUB::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
 		levelSpeech = 5;
 	else if (abs(mario->vx) >= 0.15 && abs(mario->vx) <= 0.36)
 		levelSpeech = 6;
-	if(mario->getIsOnSky() || mario->isFlying())
+	if(mario->getIsOnSky() || mario->isFlying() || !mario->isMoveFast)
 		levelSpeech = 0;
+	
 }
 void MyHUB::renderText(string s,int x, int y)
 {

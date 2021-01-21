@@ -10,6 +10,7 @@
 #define MARIO_STOP_ACCELERATION			0.003f
 #define MARIO_ACCELERATION				/*0.00025f*/	0.00019f
 #define MARIO_DIE_DEFLECT_SPEED			0.5f
+#define MARIO_MIN_WALKING_SPEED			0.08f
 #define MARIO_MAX_WALKING_SPEED			0.16f
 #define MARIO_MAX_RUNNING_SPEED			0.32f
 
@@ -212,4 +213,6 @@ public:
 	bool isJumpHigh = false;
 	//for : when press s so long , just 1 jump , not many 
 	bool jumpToken = true;
+	//val : run fast when hold a & left/ right
+	bool isMoveFast = false;
 };

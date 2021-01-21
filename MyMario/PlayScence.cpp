@@ -548,6 +548,13 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 				mario->jumpToken = true;
 			break;
 		}
+		case DIK_A:
+		{
+			//DebugOut(L"UP\n");
+			if (mario->isMoveFast)
+				mario->isMoveFast =false;
+			break;
+		}
 	}
 }
 
@@ -658,25 +665,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
+	if (game->IsKeyDown(DIK_A))
+		mario->isMoveFast = true;
 	if (game->IsKeyDown(DIK_RIGHT))
 	{		
-		if (game->IsKeyDown(DIK_A) && mario->vx == MARIO_MAX_WALKING_SPEED)
-		{
-			mario->SetState(MARIO_STATE_RUN);
-			mario->nx = 1;
-		}
-			
-		else mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 		
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		if (game->IsKeyDown(DIK_A) && mario->vx == -MARIO_MAX_WALKING_SPEED)
-		{
-			mario->SetState(MARIO_STATE_RUN);
-			mario->nx = -1;
-		}
-		else mario->SetState(MARIO_STATE_WALKING_LEFT);
+		 mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);

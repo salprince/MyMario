@@ -160,7 +160,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->level == MARIO_LEVEL_TAIL)
 		this->readyToHoldKoopas = false;
-	//DebugOut(L"%f    %f\n", x, y);
+	DebugOut(L"%f   \n", vx);
 	if(portalTime!=0 )
 	{
 		
@@ -223,35 +223,42 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	} 
 	if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT)
 	{
-		if (vx > MARIO_MAX_WALKING_SPEED)
-			vx = MARIO_MAX_WALKING_SPEED;
-		else if (vx < -MARIO_MAX_WALKING_SPEED)
-			vx = -MARIO_MAX_WALKING_SPEED;
-		else
+		if (isMoveFast)
 		{
-			vx += ((int)nx) * (MARIO_ACCELERATION*dt );
-		}		
-	}
-	else if (state == MARIO_STATE_RUN )
-	{
-		if (vx > MARIO_MAX_RUNNING_SPEED)
-			vx = MARIO_MAX_RUNNING_SPEED;
-		else if (vx < -MARIO_MAX_RUNNING_SPEED)
-			vx = -MARIO_MAX_RUNNING_SPEED;
-		else
-		{
-			vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+			if (vx > MARIO_MAX_WALKING_SPEED)
+				vx = MARIO_MAX_WALKING_SPEED;
+			else if (vx < -MARIO_MAX_WALKING_SPEED)
+				vx = -MARIO_MAX_WALKING_SPEED;
+			else
+			{
+				vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+			}
 		}
+		else
+		{
+			if (vx > MARIO_MAX_WALKING_SPEED/2)
+				vx = MARIO_MAX_WALKING_SPEED/2;
+			else if (vx < -MARIO_MAX_WALKING_SPEED/2)
+				vx = -MARIO_MAX_WALKING_SPEED/2;
+			else
+			{
+				vx += ((int)nx) * (MARIO_ACCELERATION * dt);
+			}
+		}
+	}
+	else if (abs(vx)== MARIO_MAX_WALKING_SPEED)
+	{
+		this->SetState(MARIO_STATE_RUN);
 	}
 	else if (state == MARIO_STATE_IDLE)
 	{
 		if (vx > MARIO_STOP_ACCELERATION / 2)
 		{
-			vx = vx - abs(vx / 5);
+			vx = vx - abs(vx / 15);
 		}
 		else if (vx < -MARIO_STOP_ACCELERATION / 2)
 		{
-			vx = vx + abs(vx / 5);
+			vx = vx + abs(vx / 15);
 		}
 		else
 		{
