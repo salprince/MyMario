@@ -22,5 +22,5 @@ public:
 	int id = 0;
 	bool isCheck = false;
 	float time = 0;
-	
+	int numberOfCoin = 1;
 };

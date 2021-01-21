@@ -20,7 +20,7 @@ void LevelMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y -=5;
 			isCheck = true;
 		}
-		if (id == 10)
+		if (id >= 10 )
 			this->SetState(MUSHROOM_STATE_1UP);
 		if (((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->getLevel() < MARIO_LEVEL_BIG || id==10)
 		{

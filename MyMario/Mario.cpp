@@ -167,33 +167,54 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if ((GetTickCount64() - portalTime) < 1500)
 		{
 			this->SetState(MARIO_STATE_IDLE_PORTAL);
-			if (y < 100)
+			if ((int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID() == 3)
 			{
-				y += (float)0.5;
-				x = 2282;
+				if (y < 100)
+				{
+					y += (float)0.5;
+					x = 2282;
+				}
+				else
+				{
+					y -= (float)0.5;
+					//y = 360;
+					vy = 0;
+					x = 2505;
+				}
 			}
 			else
-			{		
-				y -= (float)0.5;
-				//y = 360;
-				vy = 0;
-				x = 2505;
+			{
+				//if (y < 200)
+				{
+					y += (float)0.1;
+					x = 1940;
+				}
 			}
 			return;
 		}
 		else
 		{
-			if (y < 100)
+			if ((int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID() == 3)
 			{
-				y = 360;
-				portalTime = 0;
-				return;
+				if (y < 100)
+				{
+					y = 360;
+					portalTime = 0;
+					return;
+				}
+				else if (y > 250)
+				{
+					y = 190;
+					portalTime = 0;
+					x -= 153;
+					return;
+				}
 			}
-			else if (y > 250)
+			else
 			{
-				y = 190;
+				y = 180;
 				portalTime = 0;
-				x -= 153;
+				x = 2192;
 				return;
 			}
 		}
@@ -391,6 +412,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->setFlying(false);
 				if (this->getIsOnSky())
 					this->setIsOnSky(false);
+				if (this->isJumpHigh)
+					this->isJumpHigh = false;
 				if (portalTime == 0)
 					portalTime = (float)GetTickCount64();
 				
@@ -453,7 +476,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{					
 					if (e->ny < 0)
 					{
-
+						if (this->isJumpHigh)
+							this->isJumpHigh = false;
 						if (this->isJumping())
 							this->setJumping(false);
 						if (this->isFlying())
@@ -579,19 +603,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//DebugOut(L"gohere \n");
 				if (!this->isJumpHigh)
 					this->isJumpHigh = true;
-				if (e->ny >0)
+				if (e->ny >0 || (level==MARIO_LEVEL_TAIL && getIsSpin()))
 				{
 					if (micsBrick->state != MICSBRICK_STATE_DIE)
 					{
 						if (this->coinID != micsBrick->id)
 							this->coinID = micsBrick->id;
 						else this->coinID = -2;
-						micsBrick->SetState(MICSBRICK_STATE_DIE);
+						if(this->numberOfCoin >= micsBrick->numberOfCoin)
+							micsBrick->SetState(MICSBRICK_STATE_DIE);
+						else if(this->coinID == micsBrick->id)
+							numberOfCoin++;
+						//DebugOut(L"%d   %d\n", numberOfCoin, micsBrick->numberOfCoin);
 						//position to show text point
 						((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Tx = micsBrick->x;
 						((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Ty = micsBrick->y - 15;
 					}
-					
 				}				
 				break;
 			}
@@ -602,16 +629,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if ( mushroom->GetState()== MUSHROOM_STATE_1UP)
 					{
-
-						//((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Tx = mushroom->x;
-						//((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->Ty = mushroom->y - 15;
-						//DebugOut(L"Level UP!");
-						//((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = true;
 						((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->live++;
 					}
-					mushroom->SetState(MUSHROOM_STATE_DIE);
-					if (level < MARIO_LEVEL_TAIL)
-						level++;
+					else
+					{
+						if (level < MARIO_LEVEL_TAIL)
+							level++;
+					}
+					mushroom->SetState(MUSHROOM_STATE_DIE);					
 					this->y -= 5;
 				}
 				//return;
@@ -632,6 +657,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			case MARIO_COLLISION_BREAK_BRICK:
 			{
+				if (this->isJumpHigh)
+				this->isJumpHigh = false;
 				if (this->isJumping())
 					this->setJumping(false);
 				if (this->isFlying())
@@ -645,11 +672,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point += 100;
 					brick->SetState(BREAK_BRICK_STATE_DIE);
 				}
-				else if (this->level == MARIO_LEVEL_TAIL && getIsSpin())
+				else if (ny > 0)
 				{
 					brick->SetState(BREAK_BRICK_STATE_DIE);
 				}
-				
+				if (this->level == MARIO_LEVEL_TAIL && getIsSpin() && ny==0)
+				{
+					//if(ny<0)
+						brick->SetState(BREAK_BRICK_STATE_DIE);
+					
+				}
+				DebugOut(L"%d	%d\n", nx, ny);
 				break;
 				//return;
 				
@@ -700,6 +733,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				MovableBrick* moveBrick = dynamic_cast<MovableBrick*>(e->obj);
 				if (e->ny < 0)
 				{
+					if (this->isJumpHigh)
+						this->isJumpHigh = false;
 					if (this->isJumping())
 						this->setJumping(false);
 					if (this->isFlying())
@@ -1039,7 +1074,12 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_JUMP:
 		if (CGame::GetInstance()->GetCurrentScene()->typeScene == 1)
-			vy = -MARIO_JUMP_SPEED_Y;
+		{
+			if(level!=MARIO_LEVEL_TAIL)
+				vy = -MARIO_JUMP_SPEED_Y;
+			else vy = -MARIO_JUMP_SPEED_Y*1.4;
+		}
+			
 		ny = -1;
 		break;
 	case MARIO_STATE_JUMP_WAVE_TAIL:		

@@ -16,5 +16,6 @@ public :
 	void _ParseSection_NOT_OBJECT(string line);
 	void _ParseSection_OBJECTS(string line);
 	void getMaxXY(int maxScreenX, int maxScreenY);
+	int moveBrick_GridX = -1, brickBlock = -1;
 };
 

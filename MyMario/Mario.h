@@ -196,7 +196,9 @@ public:
 	float Ty = 0;
 	//time to set state idle for mario when collis chimney portal 
 	float portalTime = 0;
+	//val to get coin id of micbrick
 	int coinID = 0;
+	int numberOfCoin = 1;
 	//val to set tree fire fired
 	int treeFireID = -1;
 	float treeX = 0;

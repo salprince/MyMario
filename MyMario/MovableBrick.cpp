@@ -61,13 +61,14 @@ void MovableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario= ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	/*if (isActive == true)
 		fallBlockBrick(id);*/
+	moveBlockBrick(id, x0, x1);
 	if (mario->moveBrickID != -1)
 		fallBlockBrick(mario->moveBrickID);
 	else
 	{
 		if (isActive == true)
 			fallBlockBrick(id);
-		else moveBlockBrick(1, x0, x1);
+		//else moveBlockBrick(id, x0, x1);
 	}
 		
 	

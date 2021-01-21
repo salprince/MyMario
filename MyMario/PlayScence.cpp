@@ -187,26 +187,31 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: 
 	{
 		obj = new Coin();
-		if (tokens.size() == 7)
+		if (tokens.size() >= 7)
 		{
 			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<Coin*>(obj)->id = temp;
 		}
-		if (tokens.size() == 8)
+		if (tokens.size() >= 8)
 		{
 			int temp1 = (int)atof(tokens[7].c_str());
-			dynamic_cast<Coin*>(obj)->isMicsBrick = temp1;
+			dynamic_cast<Coin*>(obj)->idCoinInBrick = temp1;
 		}
 		break;
 	}
 	case OBJECT_TYPE_MICSBRICK: 
 	{
 		obj = new MicsBrick();
-		if (tokens.size() == 7)
+		if (tokens.size() >= 7)
 		{
 			int temp = (int)atof(tokens[6].c_str());
 			dynamic_cast<MicsBrick*>(obj)->oldY = y;
 			dynamic_cast<MicsBrick*>(obj)->id = temp;
+		}
+		if (tokens.size() >= 8)
+		{
+			int temp = (int)atoi(tokens[7].c_str());
+			dynamic_cast<MicsBrick*>(obj)->numberOfCoin = temp;
 		}
 		break;
 	}		 
@@ -373,10 +378,13 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	CGame* game = CGame::GetInstance();
 	vector<LPGAMEOBJECT> coObjects;
+	int idScene = (int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID();
 	int lengthX = 0, lengthY = 0;
 	if ((int)game->GetScreenWidth() % 32 == 0)
 		lengthX = game->GetScreenWidth() / 32;
 	else lengthX = game->GetScreenWidth() / 32 + 1;
+	if (idScene == 4) 
+		lengthX = 8;
 	if ((int)game->GetScreenHeight() % 32 == 0)
 		lengthY = game->GetScreenHeight() / 32;
 	else lengthY = game->GetScreenHeight() / 32 + 1;
@@ -425,17 +433,21 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 	// Update camera to follow mario
 	float cy;
-	int idScene = (int)(CPlayScene*)CGame::GetInstance()->GetCurrentSceneID();
-
-	
 	if (idScene == 3)
 	{
 		player->GetPosition(cx, cy);
 		cy -= game->GetScreenHeight() / 2;
 		cx -= game->GetScreenWidth() / 2;
 	}
-		
-	//else cx++;
+	/*else if(cx<1640)
+		cx+=0.5;*/
+	else if (cx > 2182)
+		cx = 2182;
+	else
+	{
+		player->GetPosition(cx, cy);
+		cx -= game->GetScreenWidth() / 2;
+	}
 	
 	
 	//DebugOut(L"%f %d\n", cx, idScene);
@@ -478,7 +490,9 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else /*if (idScene == 4)*/
 		{
-			CGame::GetInstance()->SetCamPos(round(cx), 0);
+			if (cx > 2182)
+				CGame::GetInstance()->SetCamPos(round(2182), 0);
+			else	CGame::GetInstance()->SetCamPos(round(cx), 0);
 		}
 	}
 	
@@ -559,6 +573,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			{
 				mario->setJumping(true);
 				mario->SetState(MARIO_STATE_JUMP);
+				//mario->vy = -MARIO_JUMP_SPEED_Y;
 			}
 			else if (mario->isJumping())
 			{

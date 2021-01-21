@@ -31,5 +31,5 @@ public:
 	int id = -1;
 	bool isCheck = false;
 	float time = 0;
-	int isMicsBrick = 0;
+	int idCoinInBrick = 1;
 };

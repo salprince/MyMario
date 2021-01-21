@@ -87,6 +87,8 @@ void MyGrid::_ParseSection_OBJECTS(string line)
 	vector<string> tokens = split(line);
 	int gridX = -1, gridY = -1;
 	
+	
+	
 	if (tokens.size() >= 3)
 	{
 		int object_type = atoi(tokens[0].c_str());
@@ -98,6 +100,17 @@ void MyGrid::_ParseSection_OBJECTS(string line)
 		if (y % 32 == 0)
 			gridY = y/ 32;
 		else gridY = y / 32 + 1;
+		if (object_type == OBJECT_TYPE_MOVE_BRICK)
+		{
+			int brickBlockId = atoi(tokens[4].c_str());
+			int brickId = atoi(tokens[5].c_str());
+			if (brickId == 0)
+			{
+				brickBlock = brickBlockId;
+				moveBrick_GridX = gridX;
+			}				
+			gridX = moveBrick_GridX;
+		}
 		string s = std::to_string(gridX) + "\t" + std::to_string(gridY) + "\t";
 		line.insert(0, s);
 	}		

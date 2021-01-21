@@ -28,6 +28,7 @@ void Coin::SetState(int state)
 }
 void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	//CGameObject::Update(dt);
 	if (isCheck && this->state != COIN_STATE_DIE)
 	{		
@@ -48,18 +49,19 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// whenmario collis mics brick mario will return a value : id of micsbrick 
 	// val isCheck : to know if the coin is check or not 
 	// if coin is not check yet : bbox will be =0 , checked : bbox will 16 16 
-	if ( ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetCoinID() == id)
+	
+	if ( mario->GetCoinID() == id  && mario->numberOfCoin== this->idCoinInBrick)
 	{		
-		if (isCheck == false && isMicsBrick==0)
+		if (isCheck == false)
 		{		
-			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->showPoint = true;
-			
+			mario->showPoint = true;
 			this->vy = (float)-0.15;
 			y -= 16;
 			isCheck = true;
 			this->time = (float)GetTickCount64();	
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point += 100;
 			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber++;
+
 		}
 	}
 }
