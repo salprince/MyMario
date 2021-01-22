@@ -30,6 +30,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = 0;
 	else
 		vy += GRAVITY * dt;
+	
 	if (state == GOOMBA_STATE_WALKING)
 	{
 		//vy = 0.15f;	
@@ -45,14 +46,20 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = -vx;
 			x = -length + startx;
 		}
-		/*if (type == 1 &&wing)
+		//if ((GetTickCount64() - jumpTime) < 10000 && jumpTime !=0)
 		{
-			if (!isJump )
+			if (this->level == 2 && wing)
 			{
-				vy += -JUMP_SPEECH*2;
-				isJump = true;
+				if (!isJump)
+				{
+					vy += -JUMP_SPEECH * 2;
+					isJump = true;
+				}
 			}
-		}*/
+		}
+		/*else
+			jumpTime = GetTickCount64();*/
+		DebugOut(L"%f\n", (GetTickCount64() - jumpTime)/1000);
 		CalcPotentialCollisions(coObjects, coEvents);
 		this->setStartDying((int)GetTickCount64());
 		this->setEndDying((int)GetTickCount64());

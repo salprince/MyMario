@@ -8,11 +8,11 @@ class CScene
 protected:
 	CKeyEventHandler* key_handler;
 	int id;
-	LPCWSTR sceneFilePath;
+	LPCWSTR sceneFilePath, sceneFilePathCell;
 
 public:
 	CScene(int id, LPCWSTR filePath);
-
+	//vector<LPGAMEOBJECT> objectsScene;
 	CKeyEventHandler* GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;
 	virtual void Unload() = 0;

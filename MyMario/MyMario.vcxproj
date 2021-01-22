@@ -148,7 +148,9 @@
     <ClInclude Include="BeginScene.h" />
     <ClInclude Include="BlueP.h" />
     <ClInclude Include="BreakBrick.h" />
+    <ClInclude Include="breakBrickAni.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="ChimneyPortal.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="ColorBrick.h" />
@@ -185,7 +187,9 @@
     <ClCompile Include="BeginScene.cpp" />
     <ClCompile Include="BlueP.cpp" />
     <ClCompile Include="BreakBrick.cpp" />
+    <ClCompile Include="breakBrickAni.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="ChimneyPortal.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="ColorBrick.cpp" />

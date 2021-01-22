@@ -160,7 +160,7 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (this->level == MARIO_LEVEL_TAIL)
 		this->readyToHoldKoopas = false;
-	DebugOut(L"%f   \n", vx);
+	//DebugOut(L"%f   \n", vx);
 	if(portalTime!=0 )
 	{
 		
@@ -246,19 +246,15 @@ void CMario::PlaySceneUpdate(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	else if (abs(vx)== MARIO_MAX_WALKING_SPEED)
-	{
-		this->SetState(MARIO_STATE_RUN);
-	}
 	else if (state == MARIO_STATE_IDLE)
 	{
 		if (vx > MARIO_STOP_ACCELERATION / 2)
 		{
-			vx = vx - abs(vx / 15);
+			vx = vx - abs(vx / 5);
 		}
 		else if (vx < -MARIO_STOP_ACCELERATION / 2)
 		{
-			vx = vx + abs(vx / 15);
+			vx = vx + abs(vx / 5);
 		}
 		else
 		{
@@ -585,8 +581,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						this->setFlying(false);
 					if (this->getIsOnSky())
 						this->setIsOnSky(false);
-					if (!this->jumpToken)
-						jumpToken = true;
+					/*if (!this->jumpToken)
+						jumpToken = true;*/
 					if (this->isJumpHigh)
 						isJumpHigh= false;
 				}
@@ -597,6 +593,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				Coin* coin = dynamic_cast<Coin*>(e->obj);
 				coin->SetState(COIN_STATE_DIE);
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point += 100;
+				((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber++;
 				break;
 			}
 			case MARIO_COLLISION_MICSBRICK:
@@ -680,15 +678,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->coinNumber++;
 					((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->point += 100;
 					brick->SetState(BREAK_BRICK_STATE_DIE);
+					this->isSawBreakBrick = true;
 				}
 				else if (ny > 0)
 				{
 					brick->SetState(BREAK_BRICK_STATE_DIE);
+					this->isSawBreakBrick = true;
 				}
 				if (this->level == MARIO_LEVEL_TAIL && getIsSpin() && ny==0)
 				{
 					//if(ny<0)
 						brick->SetState(BREAK_BRICK_STATE_DIE);
+						this->isSawBreakBrick = true;
 					
 				}
 				//DebugOut(L"%d	%d\n", nx, ny);
@@ -757,6 +758,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			default:
 				this->moveBrickID = -1;
+				isSawBreakBrick = false;
 				if (e->ny < 0)
 				{
 					if (this->isJumpHigh)

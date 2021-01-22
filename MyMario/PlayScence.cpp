@@ -3,12 +3,14 @@
 #include "BreakBrick.h"
 #include "ShootingRedTree.h"
 #include "MovableBrick.h"
+#include "breakBrickAni.h"
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
+CPlayScene::CPlayScene(int id, LPCWSTR filePath, LPCWSTR filePathcell) :
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
+	this->sceneFilePathCell = filePathcell;
 }
 
 /*
@@ -296,6 +298,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	case OBJECT_TYPE_BB_ANI:
+	{
+		obj = new breakBrickAni();
+		if (tokens.size() >= 7)
+		{
+			int temp = (int)atof(tokens[6].c_str());
+			dynamic_cast<breakBrickAni*>(obj)->id = temp;
+		}
+		break;
+	}
+
 	case OBJECT_TYPE_CHIMNEY_PORTAL: obj = new ChimneyPortal(); break;
 	//case OBJECT_TYPE_GREEN_FLOWER: obj = new GreenFlower(); break;
 	case OBJECT_TYPE_PORTAL:
@@ -312,7 +325,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	// General object setup
+	// General object setupz
 	obj->SetPosition(x, y);
 	obj->gridX = gridx;
 	obj->gridY = gridy;
@@ -368,7 +381,7 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
+	this->LoadCell();
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -388,6 +401,40 @@ void CPlayScene::Update(DWORD dt)
 	if ((int)game->GetScreenHeight() % 32 == 0)
 		lengthY = game->GetScreenHeight() / 32;
 	else lengthY = game->GetScreenHeight() / 32 + 1;
+	/*for (size_t i = 0; i <= 5; i++)
+	{
+		int pos = objects.size() - 1 - i;
+		coObjects.push_back(objects[pos]);
+		objects[pos]->Update(dt, &coObjects);
+	}*/
+	
+	//DebugOut(L"{LOAD OBJECT %d\n}", objects.size());
+	/*for (int i = 0; i < cell.size(); i++)
+	{
+		if (cell[i]->x < lengthX && cell[i]->y < lengthY)
+		{
+			for (int j = 0; j < cell[i]->list.size(); j++)
+			{
+				coObjects.push_back(objects[cell[i]->list[j]]);
+				
+				break;
+			}
+		}
+	}
+	//coObjects.push_back(player);
+	for (int i = 0; i < cell.size(); i++)
+	{
+		if (cell[i]->x < lengthX && cell[i]->y < lengthY)
+		{
+			for (int j = 0; j < cell[i]->list.size(); j++)
+			{
+				objects[cell[i]->list[j]]->Update(dt, &coObjects);
+				break;
+			}
+		}
+	}*/
+	
+	//player->Update(dt, &coObjects);
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		if((abs(objects[i]->gridX - player->gridX)) < lengthX && (abs(objects[i]->gridY - player->gridY) < lengthY))
@@ -408,7 +455,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if ((abs(objects[i]->gridX - player->gridX)) < lengthX && (abs(objects[i]->gridY - player->gridY)<lengthY))
+		if ((abs(objects[i]->gridX - player->gridX)) < lengthX && (abs(objects[i]->gridY - player->gridY) < lengthY))
 			objects[i]->Update(dt, &coObjects);
 		else if (dynamic_cast<MyHUB*>(objects[i]))
 		{
@@ -426,8 +473,13 @@ void CPlayScene::Update(DWORD dt)
 			//DebugOut(L"HUBBB push back \n");
 			objects[i]->Update(dt, &coObjects);
 		}
-			
+		else if (dynamic_cast<breakBrickAni*>(objects[i]))
+		{
+			//DebugOut(L"HUBBB push back \n");
+			objects[i]->Update(dt, &coObjects);
+		}
 	}
+
 	//this->GetHUB()->Render();
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
@@ -775,4 +827,35 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		
 		
 	}
+}
+void CPlayScene::LoadCell()
+{
+	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePathCell);
+
+	ifstream f;
+	f.open(sceneFilePathCell);
+
+	// current resource section flag
+	int section = SCENE_SECTION_UNKNOWN;
+	
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+		vector<string> tokens = split(line);
+		if (tokens.size() > 2)
+		{
+			int objectX = atoi(tokens[0].c_str());
+			int objectY = atoi(tokens[1].c_str());
+			vector <int> temp;
+			for (int i = 2; i < tokens.size(); i++)
+				temp.push_back(atoi(tokens[i].c_str()));
+			this->cell.push_back(new Cell(objectX, objectY, temp));
+		}
+			
+	}
+
+	f.close();
+
+	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePathCell);
 }

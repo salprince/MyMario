@@ -352,10 +352,9 @@ void CGame::_ParseSection_SCENES(string line)
 		MyGrid* mygrid = new MyGrid();
 		mygrid->maxX = (int)atoi(tokens[3].c_str());
 		mygrid->maxY = (int)atoi(tokens[4].c_str());
-		mygrid->LoadFile(tokens[1]);		
-
+		mygrid->LoadFile(tokens[1]);
 		path = ToLPCWSTR(mygrid->resultpath);
-		scene = new CPlayScene(id, path);
+		scene = new CPlayScene(id, path, ToLPCWSTR(mygrid->cellpath1));
 		if (tokens.size() >= 5)
 		{
 			scene->maxX = (int)atoi(tokens[3].c_str());

@@ -215,4 +215,8 @@ public:
 	bool jumpToken = true;
 	//val : run fast when hold a & left/ right
 	bool isMoveFast = false;
+	//for ani break brick
+	bool isSawBreakBrick = false;
+	//for wave tail 
+	bool readyToWave = false;
 };

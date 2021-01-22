@@ -8,6 +8,7 @@
 #include "Goomba.h"
 #include "HUB.h"
 #include "Koopas.h"
+#include "Cell.h"
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
@@ -31,6 +32,7 @@
 #define OBJECT_TYPE_BLUE_P		13
 #define OBJECT_TYPE_BREAK_BRICK		14
 #define OBJECT_TYPE_MOVE_BRICK		15
+#define OBJECT_TYPE_BB_ANI		16
 #define OBJECT_TYPE_CHIMNEY_PORTAL	49
 #define OBJECT_TYPE_PORTAL	50
 
@@ -49,14 +51,15 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-
+	vector < Cell* > cell;
 
 public:
-	CPlayScene(int id, LPCWSTR filePath);
+	CPlayScene(int id, LPCWSTR filePath, LPCWSTR filePathCell);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	void LoadCell();
 	CMario* GetPlayer() { return player; };
 	MyHUB* GetHUB() { return hub; };
 	float time = 0;

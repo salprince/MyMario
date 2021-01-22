@@ -96,15 +96,24 @@ void Koopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (state != KOOPAS_STATE_SHELL_RUNNING)
 			{
-				if (vx > 0 && x >= length + startx)
+				if (this->level == 1)
 				{
-					vx = -vx;
-					x = length + startx;
+					if (vx > 0 && x >= length + startx)
+					{
+						vx = -vx;
+						x = length + startx;
+					}
+					if (vx < 0 && x <= startx - length)
+					{
+						vx = -vx;
+						x = -length + startx;
+					}
 				}
-				if (vx < 0 && x <= startx - length)
+				else
 				{
-					vx = -vx;
-					x = -length + startx;
+					//if (x <= startx - length)
+						//y = 500;
+					nx = -1;
 				}
 				this->vy += GRAVITY;
 			}

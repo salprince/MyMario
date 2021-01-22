@@ -46,4 +46,5 @@ public:
 	bool isJump = false;
 	bool wing = true;
 	int level = 1;
+	float jumpTime = 0;
 };
